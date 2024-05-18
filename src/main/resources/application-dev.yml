@@ -2,7 +2,7 @@ spring:
   application:
     name: meet
   datasource:
-    url: jdbc:mysql://localhost:3308/meet?serverTimezone=UTC
+    url: jdbc:mysql://13.125.161.163:3308/meet?serverTimezone=UTC
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
