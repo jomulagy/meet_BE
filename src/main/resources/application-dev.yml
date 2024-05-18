@@ -4,8 +4,8 @@ spring:
   datasource:
     url: jdbc:mysql://13.125.161.163:3306/meet?serverTimezone=UTC
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    username: ${{ DB_USERNAME }}
+    password: ${{ DB_PASSWORD} }
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
@@ -21,5 +21,5 @@ logging:
           descriptor:
             sql: TRACE
 jwt:
-  secret: ${JWT_SECRET}
+  secret: ${{ JWT_SECRET }}
 
