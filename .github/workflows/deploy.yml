@@ -70,9 +70,9 @@ jobs:
         key: ${{ secrets.KEY }}
         envs: GITHUB_SHA
         script: |
-          docker stop $(docker ps -a -q)
-          docker rm $(docker ps -a -q -f status=exited)
-          docker rm $(docker ps -a -q -f status=created)
-          docker rmi $(docker images -q)
+          docker stop $(docker ps -a -q) || true
+          docker rm $(docker ps -a -q -f status=exited) || true
+          docker rm $(docker ps -a -q -f status=created) || true
+          docker rmi $(docker images -q) || true
           docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
           docker run -d -p 443:80 -p 80:80 -p 8080:8080 -v /home/ubuntu/data:/data --name meetServer ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
