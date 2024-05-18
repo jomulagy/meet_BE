@@ -45,7 +45,8 @@ jobs:
     # docker hub login
     - name: Login to Docker hub
       run: |
-        docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+        echo "your_access_token" |
+        docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}      
 
     # dockerfile을 통해 이미지를 빌드하고, 이를 docker repo로 push 합니다.
     # 이 때 사용되는 ${{ secrets.DOCKER_REPO }}/directors-dev 가 위에서 만든 도커 repository 입니다.
