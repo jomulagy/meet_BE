@@ -3,6 +3,7 @@ package com.example.meet.common;
 import com.example.meet.common.variables.ErrorCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
 
 @Getter
 @NoArgsConstructor
@@ -30,4 +31,6 @@ public class CommonResponse<T> {
     }
 
     public static <T> CommonResponse<T> fail(ErrorCode e){ return of(e.getHttpStatus().toString(),e.getMessage(),null);}
+    public static <T> CommonResponse<T> fail(HttpStatus status, String message){ return of(status.toString(),message,null);}
+
 }

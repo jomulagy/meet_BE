@@ -1,11 +1,15 @@
 package com.example.meet.common.filter;
 
+import com.example.meet.common.CommonResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.example.meet.common.auth.JwtTokenProvider;
+import com.example.meet.common.exception.BusinessException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -29,17 +33,39 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
             return;
         }
 
-        // 1. Request Header에서 JWT 토큰 추출
-        String token = resolveToken((HttpServletRequest) request);
+        try{
+            // 1. Request Header에서 JWT 토큰 추출
+            String token = resolveToken((HttpServletRequest) request);
 
-        // 2. validateToken으로 토큰 유효성 검사
-        if (token != null && jwtTokenProvider.validateToken(token)) {
-            // 토큰이 유효할 경우 토큰에서 Authentication 객체를 가지고 와서 SecurityContext에 저장
-            Authentication authentication = jwtTokenProvider.getAuthentication(token);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            // 2. validateToken으로 토큰 유효성 검사
+            if (token != null && jwtTokenProvider.validateToken(token)) {
+                // 토큰이 유효할 경우 토큰에서 Authentication 객체를 가지고 와서 SecurityContext에 저장
+                Authentication authentication = jwtTokenProvider.getAuthentication(token);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
+
+            chain.doFilter(request, response);
+        } catch (BusinessException e) {
+            handleException(response, e);
         }
+        
+    }
 
-        chain.doFilter(request, response);
+    private void handleException(ServletResponse response, BusinessException e) throws IOException, ServletException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        if (response instanceof ServletResponse) {
+            HttpServletResponse httpResponse = (HttpServletResponse) response;
+            httpResponse.setHeader("Content-Type", "application/json; charset=UTF-8");
+            httpResponse.setStatus(e.getErrorCode().getHttpStatus().value());
+            httpResponse.setCharacterEncoding("UTF-8");
+
+
+            String jsonResponse = objectMapper.writeValueAsString(CommonResponse.fail(e.getErrorCode()));
+            httpResponse.getWriter().write(jsonResponse);
+            httpResponse.getWriter().flush();
+        } else {
+            throw new ServletException("Expected HttpServletResponse but got " + response.getClass().getName());
+        }
     }
 
     // Request Header에서 토큰 정보 추출
