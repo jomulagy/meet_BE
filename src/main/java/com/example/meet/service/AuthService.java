@@ -15,7 +15,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Service
@@ -26,7 +25,6 @@ public class AuthService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
 
-    @Transactional
     public JwtTokenResponseDto login(KakaoTokenRequestDto request) {
         KakaoUserInfoResponseDto kakaoUserInfoResponseDto = getUserInfo(request.getAccessToken());
 
@@ -47,8 +45,11 @@ public class AuthService {
     }
 
     private void register(KakaoUserInfoResponseDto kakaoUserInfoResponseDto) {
-        Member member = new Member(kakaoUserInfoResponseDto.getUserID(),kakaoUserInfoResponseDto.getProperties().getNickname(),
-                MemberPrevillege.denied);
+        Member member = new Member(
+                kakaoUserInfoResponseDto.getUserID(),
+                kakaoUserInfoResponseDto.getProperties().getNickname(),
+                MemberPrevillege.denied
+        );
         memberRepository.save(member);
     }
 
