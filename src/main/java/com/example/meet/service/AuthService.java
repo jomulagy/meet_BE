@@ -61,15 +61,21 @@ public class AuthService {
         WebClient webClient = WebClient.builder().build();
         String url = "https://kapi.kakao.com/v2/user/me";
 
-        KakaoUserInfoResponseDto response = webClient.get()
-                .uri(url)    // 요청 경로 설정
-                .header("Content-type", "application/x-www-form-urlencoded;charset=utf-8")
-                .header("Authorization",accessToken)
-                // body도 메소드에 따라 추가
-                .retrieve()    // 여기 전까지가 요청을 정의 한 부분
-                // 여기부터 정의하는건 응답을 어떻게 처리할 것인지
-                .bodyToMono(KakaoUserInfoResponseDto.class)    // 응답이 한번 돌아오고, 응답의 body를 String으로 해석
-                .block();
-        return response;
+        try{
+            KakaoUserInfoResponseDto response = webClient.get()
+                    .uri(url)    // 요청 경로 설정
+                    .header("Content-type", "application/x-www-form-urlencoded;charset=utf-8")
+                    .header("Authorization",accessToken)
+                    // body도 메소드에 따라 추가
+                    .retrieve()    // 여기 전까지가 요청을 정의 한 부분
+                    // 여기부터 정의하는건 응답을 어떻게 처리할 것인지
+                    .bodyToMono(KakaoUserInfoResponseDto.class)    // 응답이 한번 돌아오고, 응답의 body를 String으로 해석
+                    .block();
+            return response;
+        } catch (BusinessException e){
+            log.error("AuthService : kakao API returned Exception");
+            return null;
+        }
+        
     }
 }

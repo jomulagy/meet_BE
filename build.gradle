@@ -40,6 +40,10 @@ dependencies {
 	//MySQL
 	implementation 'mysql:mysql-connector-java:8.0.29'
 
+	//Mapstructure
+	implementation 'org.mapstruct:mapstruct:1.5.2.Final'
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.2.Final'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 }
