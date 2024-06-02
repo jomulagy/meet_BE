@@ -29,8 +29,10 @@ public class AuthService {
     public JwtTokenResponseDto login(KakaoTokenRequestDto request) {
         KakaoUserInfoResponseDto kakaoUserInfoResponseDto = getUserInfo(request.getAccessToken());
 
+        String uuid = getUserUUId(kakaoUserInfoResponseDto.getUserID().toString(), request.getAccessToken());
+        
         if(!isUserExists(kakaoUserInfoResponseDto.getUserID())){
-            register(kakaoUserInfoResponseDto);
+            register(kakaoUserInfoResponseDto, uuid);
         }
 
         Long userId = kakaoUserInfoResponseDto.getUserID();
@@ -45,7 +47,7 @@ public class AuthService {
         return jwtToken;
     }
 
-    private void register(KakaoUserInfoResponseDto kakaoUserInfoResponseDto) {
+    private void register(KakaoUserInfoResponseDto kakaoUserInfoResponseDto, String uuid) {
         Member member = new Member(
                 kakaoUserInfoResponseDto.getUserID(),
                 kakaoUserInfoResponseDto.getProperties().getNickname(),
