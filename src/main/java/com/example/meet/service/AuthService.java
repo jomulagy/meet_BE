@@ -48,6 +48,7 @@ public class AuthService {
         Member member = new Member(
                 kakaoUserInfoResponseDto.getUserID(),
                 kakaoUserInfoResponseDto.getProperties().getNickname(),
+                kakaoUserInfoResponseDto.getKakaoAccount().getEmail(),
                 MemberPrevillege.denied
         );
         memberRepository.save(member);

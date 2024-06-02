@@ -24,6 +24,13 @@ public class Member {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "email", nullable = false)
+    private String email;
+
     @Column(name = "previllege",nullable = false)
     private MemberPrevillege previllege = MemberPrevillege.denied;
+
+    public void updatePrevillege(MemberPrevillege previllege){
+        this.previllege = previllege;
+    }
 }
