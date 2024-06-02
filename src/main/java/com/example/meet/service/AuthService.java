@@ -29,7 +29,7 @@ public class AuthService {
     public JwtTokenResponseDto login(KakaoTokenRequestDto request) {
         KakaoUserInfoResponseDto kakaoUserInfoResponseDto = getUserInfo(request.getAccessToken());
 
-        String uuid = getUserUUId(kakaoUserInfoResponseDto.getUserID().toString(), request.getAccessToken());
+        //String uuid = getUserUUId(kakaoUserInfoResponseDto.getUserID().toString(), request.getAccessToken());
         
         if(!isUserExists(kakaoUserInfoResponseDto.getUserID())){
             register(kakaoUserInfoResponseDto, uuid);
