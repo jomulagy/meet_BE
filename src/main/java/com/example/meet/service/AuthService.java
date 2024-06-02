@@ -71,7 +71,7 @@ public class AuthService {
                     // 여기부터 정의하는건 응답을 어떻게 처리할 것인지
                     .bodyToMono(KakaoUserInfoResponseDto.class)    // 응답이 한번 돌아오고, 응답의 body를 String으로 해석
                     .block();
-            log.info("response : {}",response);
+            log.info("response : {}",response.getKakaoAccount());
             return response;
         } catch (BusinessException e){
             log.error("AuthService : kakao API returned Exception");
