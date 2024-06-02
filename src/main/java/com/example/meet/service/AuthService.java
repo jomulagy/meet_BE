@@ -3,6 +3,7 @@ package com.example.meet.service;
 import com.example.meet.common.auth.JwtTokenProvider;
 import com.example.meet.common.dto.request.KakaoTokenRequestDto;
 import com.example.meet.common.auth.JwtTokenResponseDto;
+import com.example.meet.common.dto.response.KakaoFriendsInfoResponseDto;
 import com.example.meet.common.dto.response.KakaoUserInfoResponseDto;
 import com.example.meet.common.exception.BusinessException;
 import com.example.meet.common.variables.ErrorCode;
@@ -72,12 +73,35 @@ public class AuthService {
                     // 여기부터 정의하는건 응답을 어떻게 처리할 것인지
                     .bodyToMono(KakaoUserInfoResponseDto.class)    // 응답이 한번 돌아오고, 응답의 body를 String으로 해석
                     .block();
-            log.info("response : {}",response.getKakaoAccount().getEmail());
             return response;
         } catch (BusinessException e){
             log.error("AuthService : kakao API returned Exception");
             return null;
         }
         
+    }
+
+    private String getUserUUId(String userId, String accessToken){
+        WebClient webClient = WebClient.builder().build();
+        String url = "https://kapi.kakao.com/v1/api/talk/friends";
+        KakaoFriendsInfoResponseDto response;
+        try{
+            response = webClient.get()
+                    .uri(url)    // 요청 경로 설정
+                    .header("Content-type", "application/x-www-form-urlencoded;charset=utf-8")
+                    .header("Authorization",accessToken)
+                    // body도 메소드에 따라 추가
+                    .retrieve()    // 여기 전까지가 요청을 정의 한 부분
+                    // 여기부터 정의하는건 응답을 어떻게 처리할 것인지
+                    .bodyToMono(KakaoFriendsInfoResponseDto.class)    // 응답이 한번 돌아오고, 응답의 body를 String으로 해석
+                    .block();
+        } catch (BusinessException e){
+            log.error("AuthService : kakao API returned Exception");
+            return null;
+        }
+
+        log.info("response.getElements() = {}",response.getElements());
+
+        return null;
     }
 }
