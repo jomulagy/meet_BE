@@ -1,6 +1,6 @@
 package com.example.meet.common.dto.response;
 
-import com.example.meet.common.variables.MemberPrevillege;
+import com.example.meet.common.enumulation.MemberPrevillege;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

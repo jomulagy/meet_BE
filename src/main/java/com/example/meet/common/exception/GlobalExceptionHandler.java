@@ -1,9 +1,7 @@
 package com.example.meet.common.exception;
 
 import com.example.meet.common.CommonResponse;
-import com.example.meet.common.variables.ErrorCode;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 

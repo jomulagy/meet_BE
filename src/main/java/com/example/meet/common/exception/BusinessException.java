@@ -1,6 +1,6 @@
 package com.example.meet.common.exception;
 
-import com.example.meet.common.variables.ErrorCode;
+import com.example.meet.common.enumulation.ErrorCode;
 import lombok.Getter;
 
 @Getter

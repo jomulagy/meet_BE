@@ -1,4 +1,4 @@
-package com.example.meet.common.variables;
+package com.example.meet.common.enumulation;
 
 import lombok.Getter;
 

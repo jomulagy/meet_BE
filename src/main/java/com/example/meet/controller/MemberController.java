@@ -7,7 +7,6 @@ import com.example.meet.common.dto.request.EditMemberPrevillegeRequestDto;
 import com.example.meet.common.dto.request.MemberListRequestDto;
 import com.example.meet.common.dto.response.MemberPrevillegeResponseDto;
 import com.example.meet.common.dto.response.MemberResponseDto;
-import com.example.meet.common.variables.EditMemberPrevillegeOption;
 import com.example.meet.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

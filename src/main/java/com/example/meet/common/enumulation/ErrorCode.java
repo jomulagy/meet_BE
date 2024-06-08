@@ -1,6 +1,5 @@
-package com.example.meet.common.variables;
+package com.example.meet.common.enumulation;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,8 +17,15 @@ public enum ErrorCode {
     MEMBER_NOT_EXISTS(HttpStatus.NOT_FOUND,"존재하지 않는 유저 입니다."),
 
     //기타
-    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"서버 에러")
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"서버 에러"),
+
+    //카카오 메세지 API
+    JSON_CONVERT_ERROR(HttpStatus.BAD_REQUEST,"Failed to process JSON")
     ;
+
+
+
+
     private final HttpStatus httpStatus;
     private final String message;
 }

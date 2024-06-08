@@ -1,7 +1,7 @@
 package com.example.meet.common.auth;
 
 import com.example.meet.common.exception.BusinessException;
-import com.example.meet.common.variables.ErrorCode;
+import com.example.meet.common.enumulation.ErrorCode;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
@@ -14,9 +14,7 @@ import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.SecurityException;
 import io.jsonwebtoken.io.Decoders;
 
-import java.util.Collections;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

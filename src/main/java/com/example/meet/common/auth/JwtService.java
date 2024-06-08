@@ -1,7 +1,7 @@
 package com.example.meet.common.auth;
 
 import com.example.meet.common.exception.BusinessException;
-import com.example.meet.common.variables.ErrorCode;
+import com.example.meet.common.enumulation.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;

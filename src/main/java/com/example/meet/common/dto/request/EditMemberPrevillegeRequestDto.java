@@ -1,6 +1,6 @@
 package com.example.meet.common.dto.request;
 
-import com.example.meet.common.variables.EditMemberPrevillegeOption;
+import com.example.meet.common.enumulation.EditMemberPrevillegeOption;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,4 +15,5 @@ public class EditMemberPrevillegeRequestDto {
     private Long userId;
     private Long memberId;
     private EditMemberPrevillegeOption option;
+    private String uuid;
 }
