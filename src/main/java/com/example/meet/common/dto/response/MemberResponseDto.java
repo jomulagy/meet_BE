@@ -14,4 +14,6 @@ public class MemberResponseDto {
     private String id;
     private String name;
     private String previllege;
+    private String email;
+    private String isFirst;
 }
