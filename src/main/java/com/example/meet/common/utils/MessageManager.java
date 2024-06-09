@@ -12,7 +12,6 @@ import com.example.meet.repository.TokenRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,10 +35,10 @@ public class MessageManager {
     private final TokenRepository tokenRepository;
     private final ObjectMapper objectMapper;
 
-    public Mono<String> send(Message msg){
+    public Mono<String> sendAll(Message msg){
         WebClient webClient = WebClient.builder().build();
         String url = "https://kapi.kakao.com/v1/api/talk/friends/message/send";
-        List<String> uuids = getUUIDs();
+        List<String> uuids = getAllUUIDs();
 
         MessageRequestDto messageRequestDto = MessageRequestDto.builder()
                 .receiverUuids(uuids)
@@ -108,7 +107,7 @@ public class MessageManager {
         return kakaoToken;
     }
 
-    private List<String> getUUIDs(){
+    private List<String> getAllUUIDs(){
         return memberRepository.findByPrevillegeGreaterThan(MemberPrevillege.denied)
                 .stream()
                 .map(Member::getUuid)

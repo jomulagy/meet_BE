@@ -1,6 +1,5 @@
 package com.example.meet.service;
 
-import com.example.meet.common.CommonResponse;
 import com.example.meet.common.dto.TemplateArgs;
 import com.example.meet.common.enumulation.Message;
 import com.example.meet.common.utils.MessageManager;
@@ -21,7 +20,7 @@ public class TestService {
                 .scheduleType(null)
                 .build();
         Message.VOTE.setTemplateArgs(templateArgs);
-        Mono<String> response = messageManager.send(Message.VOTE);
+        Mono<String> response = messageManager.sendAll(Message.VOTE);
         log.info(response.toString());
         return response;
     }
