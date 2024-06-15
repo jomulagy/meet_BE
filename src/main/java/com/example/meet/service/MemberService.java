@@ -26,7 +26,6 @@ public class MemberService {
         if(!user.isPresent()){
             throw new BusinessException(ErrorCode.MEMBER_NOT_EXISTS);
         }
-        System.out.println("user.get().getPrevillege() = " + user.get().getPrevillege());
         return new MemberPrevillegeResponseDto(user.get().getPrevillege());
 
     }

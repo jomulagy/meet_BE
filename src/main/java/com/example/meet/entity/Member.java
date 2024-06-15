@@ -3,8 +3,13 @@ package com.example.meet.entity;
 import com.example.meet.common.enumulation.MemberPrevillege;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import java.util.List;
+import java.util.ArrayList;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,6 +23,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "member")
 public class Member {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "name", nullable = false)
@@ -31,6 +37,18 @@ public class Member {
 
     @Column(name = "previllege",nullable = false)
     private MemberPrevillege previllege = MemberPrevillege.denied;
+
+    @ManyToMany(mappedBy = "scheduleVoters")
+    private List<ScheduleVoteItem> scheduleVoters = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "placeVoters")
+    private List<PlaceVoteItem> placeVoteItems = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "participateVoters")
+    private List<ParticipateVoteItem> participateVoters = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "participants")
+    private List<Meet> meets = new ArrayList<>();
 
     public void updatePrevillege(MemberPrevillege previllege){
         this.previllege = previllege;

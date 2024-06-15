@@ -3,7 +3,17 @@ package com.example.meet.controller;
 import com.example.meet.common.CommonResponse;
 import com.example.meet.common.dto.request.KakaoTokenRequestDto;
 import com.example.meet.common.auth.JwtTokenResponseDto;
+import com.example.meet.common.exception.BusinessException;
 import com.example.meet.service.AuthService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +30,23 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
+    @Tag(name = "Auth", description = "인증")
+    @SecurityRequirement(name = "accessToken")
+    @Operation(summary = "로그인",
+            responses = {@ApiResponse(responseCode = "200",
+                    description = "성공",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = JwtTokenResponseDto.class)
+                    )
+            ),
+            @ApiResponse(responseCode = "403",
+                    description = "권한 없음",
+                    content = @Content(
+                        mediaType = "application/json"
+                    )
+            )}
+    )
     public CommonResponse<JwtTokenResponseDto> login(@RequestBody KakaoTokenRequestDto request){
         JwtTokenResponseDto jwtTokenResponseDto = authService.login(request);
         return CommonResponse.success(jwtTokenResponseDto);

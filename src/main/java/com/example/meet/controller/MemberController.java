@@ -3,11 +3,18 @@ package com.example.meet.controller;
 import static java.lang.Long.parseLong;
 
 import com.example.meet.common.CommonResponse;
+import com.example.meet.common.auth.JwtTokenResponseDto;
 import com.example.meet.common.dto.request.EditMemberPrevillegeRequestDto;
 import com.example.meet.common.dto.request.MemberListRequestDto;
 import com.example.meet.common.dto.response.MemberPrevillegeResponseDto;
 import com.example.meet.common.dto.response.MemberResponseDto;
 import com.example.meet.service.MemberService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -28,12 +35,53 @@ public class MemberController {
     private final MemberService memberService;
 
     @GetMapping("/previllege")
+    @Tag(name = "Member", description = "회원")
+    @Operation(summary = "멤버 권한 조회",
+            description = "Authorization header require",
+            responses = {@ApiResponse(responseCode = "200",
+                    description = "성공",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = MemberPrevillegeResponseDto.class)
+                    )
+            ),
+                    @ApiResponse(responseCode = "404",
+                            description = "존재하지 않는 멤버",
+                            content = @Content(
+                                    mediaType = "application/json"
+                            )
+                    )}
+    )
     public CommonResponse<MemberPrevillegeResponseDto> searchMemberPrevillege(){
         String userId = SecurityContextHolder.getContext().getAuthentication().getName();
         return CommonResponse.success(memberService.searchMemberPrevillege(Long.valueOf(userId)));
     }
 
     @PutMapping("/previllege")
+    @Tag(name = "Member", description = "회원")
+    @Operation(summary = "멤버 권한 수정",
+            description = "Authorization header require",
+            responses = {
+            @ApiResponse(responseCode = "200",
+                    description = "성공",
+                    content = @Content(
+                            mediaType = "application/json"
+                    )
+            ),
+            @ApiResponse(responseCode = "404",
+                    description = "존재하지 않는 멤버",
+                    content = @Content(
+                            mediaType = "application/json"
+                    )
+            ),
+            @ApiResponse(responseCode = "403",
+                    description = "관리자 권한이 없음",
+                    content = @Content(
+                    mediaType = "application/json"
+                    )
+            )
+
+    })
     public CommonResponse<Void> editMemberPrevillege(@RequestBody EditMemberPrevillegeRequestDto requestDto){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -49,6 +97,31 @@ public class MemberController {
     }
 
     @GetMapping("/list")
+    @Tag(name = "Member", description = "회원")
+    @Operation(summary = "멤버 리스트 조회",
+            description = "Authorization header require",
+            responses = {
+                    @ApiResponse(responseCode = "200",
+                            description = "성공",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = MemberResponseDto.class))
+                            )
+                    ),
+                    @ApiResponse(responseCode = "404",
+                            description = "존재하지 않는 멤버",
+                            content = @Content(
+                                    mediaType = "application/json"
+                            )
+                    ),
+                    @ApiResponse(responseCode = "403",
+                            description = "관리자 권한이 없음",
+                            content = @Content(
+                                    mediaType = "application/json"
+                            )
+                    )
+
+    })
     public CommonResponse<List<MemberResponseDto>> findMemberList(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
