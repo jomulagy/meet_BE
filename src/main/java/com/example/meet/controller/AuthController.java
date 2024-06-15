@@ -61,6 +61,7 @@ public class AuthController {
     @GetMapping("/admin/accessToken")
     @Tag(name = "Auth", description = "인증")
     @Operation(summary = "관리자 accessToken 조회",
+            description = "Authorization header require",
             responses = {
                     @ApiResponse(responseCode = "200",
                             description = "성공",
