@@ -1,8 +1,11 @@
 package com.example.meet.controller;
 
+import static java.lang.Long.parseLong;
+
 import com.example.meet.common.CommonResponse;
 import com.example.meet.common.dto.request.KakaoTokenRequestDto;
 import com.example.meet.common.auth.JwtTokenResponseDto;
+import com.example.meet.common.dto.response.AdminAccessTokenResponseDto;
 import com.example.meet.common.exception.BusinessException;
 import com.example.meet.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,6 +19,10 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +38,6 @@ public class AuthController {
 
     @PostMapping("/login")
     @Tag(name = "Auth", description = "인증")
-    @SecurityRequirement(name = "accessToken")
     @Operation(summary = "로그인",
             responses = {@ApiResponse(responseCode = "200",
                     description = "성공",
@@ -40,15 +46,46 @@ public class AuthController {
                             schema = @Schema(implementation = JwtTokenResponseDto.class)
                     )
             ),
-            @ApiResponse(responseCode = "403",
-                    description = "권한 없음",
-                    content = @Content(
-                        mediaType = "application/json"
-                    )
-            )}
+                    @ApiResponse(responseCode = "403",
+                            description = "권한 없음",
+                            content = @Content(
+                                    mediaType = "application/json"
+                            )
+                    )}
     )
-    public CommonResponse<JwtTokenResponseDto> login(@RequestBody KakaoTokenRequestDto request){
+    public CommonResponse<JwtTokenResponseDto> login(@RequestBody KakaoTokenRequestDto request) {
         JwtTokenResponseDto jwtTokenResponseDto = authService.login(request);
         return CommonResponse.success(jwtTokenResponseDto);
+    }
+
+    @GetMapping("/admin/accessToken")
+    @Tag(name = "Auth", description = "인증")
+    @Operation(summary = "관리자 accessToken 조회",
+            responses = {
+                    @ApiResponse(responseCode = "200",
+                            description = "성공",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = JwtTokenResponseDto.class)
+                            )
+                    ),
+                    @ApiResponse(responseCode = "403",
+                            description = "권한 없음",
+                            content = @Content(
+                                    mediaType = "application/json"
+                            )
+                    ),
+                    @ApiResponse(responseCode = "400",
+                            description = "잘못된 accessToken",
+                            content = @Content(
+                                    mediaType = "application/json"
+                            )
+                    )}
+    )
+    public CommonResponse<AdminAccessTokenResponseDto> findAdminAccessToken() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        return CommonResponse.success(authService.findAdminAccessToken(parseLong(userDetails.getUsername())));
     }
 }

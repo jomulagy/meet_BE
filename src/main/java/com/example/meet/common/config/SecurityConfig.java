@@ -50,7 +50,7 @@ public class SecurityConfig {
                             "default-src 'self'; script-src 'self' 'unsafe-inline'; object-src 'none'; frame-ancestors 'self' http://localhost:5173;"));
                 })
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/auth/login","auth/token/refresh").permitAll()
                         .requestMatchers("/v2/api-docs", "/v3/api-docs", "/v3/api-docs/**", "/swagger-resources",
                          "/swagger-resources/**", "/configuration/ui", "/configuration/security", "/swagger-ui/**",
                          "/webjars/**", "/swagger-ui.html").permitAll()

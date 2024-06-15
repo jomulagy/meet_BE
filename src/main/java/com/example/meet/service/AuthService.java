@@ -3,10 +3,12 @@ package com.example.meet.service;
 import com.example.meet.common.auth.JwtTokenProvider;
 import com.example.meet.common.dto.request.KakaoTokenRequestDto;
 import com.example.meet.common.auth.JwtTokenResponseDto;
+import com.example.meet.common.dto.response.AdminAccessTokenResponseDto;
 import com.example.meet.common.dto.response.KakaoUserInfoResponseDto;
 import com.example.meet.common.exception.BusinessException;
 import com.example.meet.common.enumulation.ErrorCode;
 import com.example.meet.common.enumulation.MemberPrevillege;
+import com.example.meet.common.utils.MessageManager;
 import com.example.meet.entity.Member;
 import com.example.meet.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,7 @@ public class AuthService {
     private final MemberRepository memberRepository;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
+    private final MessageManager messageManager;
 
     public JwtTokenResponseDto login(KakaoTokenRequestDto request) {
         KakaoUserInfoResponseDto kakaoUserInfoResponseDto = getUserInfo(request.getAccessToken());
@@ -78,5 +81,21 @@ public class AuthService {
             return null;
         }
         
+    }
+
+    public AdminAccessTokenResponseDto findAdminAccessToken(Long userId) {
+        //로그인 한 유저 확인
+        Member user = memberRepository.findById(userId).orElseThrow(
+                () -> new BusinessException(ErrorCode.MEMBER_NOT_EXISTS)
+        );
+
+        //로그인 한 유저의 권한 확인 (관리자 여부)
+        if(!user.getPrevillege().equals(MemberPrevillege.admin)){
+            throw new BusinessException(ErrorCode.MEMBER_PERMITION_REQUIRED);
+        }
+
+        return AdminAccessTokenResponseDto.builder()
+                .adminAccessToken(messageManager.getAccessToken())
+                .build();
     }
 }
