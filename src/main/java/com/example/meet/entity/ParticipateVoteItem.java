@@ -20,7 +20,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "schedule_vote_item")
+@Table(name = "participate_vote_item")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -31,7 +31,7 @@ public class ParticipateVoteItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "isParticipate")
+    @Column(name = "isParticipate", nullable = false)
     private Boolean isParticipate;
 
     @ManyToOne(fetch = FetchType.LAZY)

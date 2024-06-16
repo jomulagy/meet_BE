@@ -77,4 +77,16 @@ public class Meet {
     void setParticipateNum(){
         this.participantsNum = this.participateVote.getTotalNum();
     }
+
+    public void setScheduleVote(ScheduleVote scheduleVote){
+        this.scheduleVote = scheduleVote;
+    }
+
+    public void setPlaceVote(PlaceVote placeVote) {
+        this.placeVote = placeVote;
+    }
+
+    public void setParticipateVote(ParticipateVote participateVote) {
+        this.participateVote = participateVote;
+    }
 }

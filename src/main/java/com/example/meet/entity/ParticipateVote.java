@@ -43,6 +43,7 @@ public class ParticipateVote {
     private Meet meet;
 
     @OneToMany(mappedBy = "participateVote", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<ParticipateVoteItem> participateVoteItems = new ArrayList<>();
 
     public void setTotalNum(){

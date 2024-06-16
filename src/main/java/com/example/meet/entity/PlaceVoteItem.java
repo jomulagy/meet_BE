@@ -31,7 +31,7 @@ public class PlaceVoteItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "place")
+    @Column(name = "place", nullable = false)
     private String place;
 
     @ManyToOne(fetch = FetchType.LAZY)

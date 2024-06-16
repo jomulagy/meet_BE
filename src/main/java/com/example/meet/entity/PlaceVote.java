@@ -44,6 +44,7 @@ public class PlaceVote {
     private Meet meet;
 
     @OneToMany(mappedBy = "placeVote", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<PlaceVoteItem> placeVoteItems = new ArrayList<>();
 
     public void setPlaceResult(){

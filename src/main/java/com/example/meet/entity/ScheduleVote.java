@@ -46,6 +46,7 @@ public class ScheduleVote {
     private Meet meet;
 
     @OneToMany(mappedBy = "scheduleVote", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<ScheduleVoteItem> scheduleVoteItems = new ArrayList<>();
 
     public void setDateResult(){
