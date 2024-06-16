@@ -82,7 +82,7 @@ public class MeetController {
     @GetMapping("")
     @Tag(name = "Meet", description = "모임")
     @Operation(summary = "모임 조회",
-            description = "Authorization header require",
+            description = "Authorization header require<br>type - Routine은 정기 모임 입니다.",
             responses = {
                     @ApiResponse(responseCode = "200",
                             description = "성공",
@@ -169,7 +169,7 @@ public class MeetController {
     @DeleteMapping("")
     @Tag(name = "Meet", description = "모임")
     @Operation(summary = "모임 삭제",
-            description = "Authorization header require<br> 투표료 결정된 필드는 수정 할 수 없습니다.<br>변경되지 않은 필드도 전송합니다.",
+            description = "Authorization header require",
             responses = {
                     @ApiResponse(responseCode = "200",
                             description = "성공",
