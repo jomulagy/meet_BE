@@ -55,7 +55,7 @@ public class MemberService {
                             .id(m.getId().toString())
                             .name(m.getName())
                             .email(m.getEmail())
-                            .previllege(m.getPrevillege().getName())
+                            .previllege(m.getPrevillege().toString())
                             .isFirst(isFirst.toString())
                             .build();
                 })
