@@ -42,7 +42,7 @@ public class MeetController {
                             description = "성공",
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = CreateMeetRequestDto.class)
+                                    schema = @Schema(implementation = CreateMeetResponseDto.class)
                             )
                     ),
                     @ApiResponse(responseCode = "404",
