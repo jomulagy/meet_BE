@@ -2,6 +2,7 @@ package com.example.meet.mapper;
 
 import com.example.meet.common.dto.request.CreateMeetRequestDto;
 import com.example.meet.common.dto.response.CreateMeetResponseDto;
+import com.example.meet.common.dto.response.EditMeetResponseDto;
 import com.example.meet.common.dto.response.FindMeetResponseDto;
 import com.example.meet.entity.Meet;
 import com.example.meet.entity.Member;
@@ -18,7 +19,7 @@ public interface MeetMapper {
     MeetMapper INSTANCE = Mappers.getMapper(MeetMapper.class);
     DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-    default Meet dtoToEntity(CreateMeetRequestDto dto){
+    default Meet dtoToEntity(CreateMeetRequestDto dto, Member author){
         LocalDateTime date = null;
 
         if(dto.getDate() != null){
@@ -31,6 +32,7 @@ public interface MeetMapper {
                 .date(date)
                 .place(dto.getPlace())
                 .content(dto.getContent())
+                .author(author)
                 .build();
     }
 
@@ -54,6 +56,34 @@ public interface MeetMapper {
             participants.add(m.getName());
         }
         return FindMeetResponseDto.builder()
+                .id(entity.getId())
+                .title(entity.getTitle())
+                .content(entity.getContent())
+                .type(entity.getType())
+                .date(date)
+                .place(entity.getPlace())
+                .participantsNum(String.valueOf(participantsNum))
+                .participants(participants)
+                .build();
+    }
+
+    default EditMeetResponseDto EntityToUpdateDto(Meet entity){
+        String date = null;
+
+        if(entity.getDate() != null){
+            date = entity.getDate().format(DATE_TIME_FORMATTER);
+        }
+        Long participantsNum = entity.getParticipantsNum();
+        if(entity.getParticipantsNum() == null){
+            participantsNum = 0L;
+        }
+
+        List<String> participants = new ArrayList<>();
+
+        for(Member m : entity.getParticipants()){
+            participants.add(m.getName());
+        }
+        return EditMeetResponseDto.builder()
                 .id(entity.getId())
                 .title(entity.getTitle())
                 .content(entity.getContent())

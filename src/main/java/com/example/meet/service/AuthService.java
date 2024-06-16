@@ -38,7 +38,7 @@ public class AuthService {
         Long userId = kakaoUserInfoResponseDto.getUserID();
         Member member = memberRepository.findById(userId).get();
         if(member.getPrevillege() == MemberPrevillege.denied){
-            throw new BusinessException(ErrorCode.MEMBER_PERMITION_REQUIRED);
+            throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
         }
         // jwt 토큰 반환
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userId,"");
@@ -91,7 +91,7 @@ public class AuthService {
 
         //로그인 한 유저의 권한 확인 (관리자 여부)
         if(!user.getPrevillege().equals(MemberPrevillege.admin)){
-            throw new BusinessException(ErrorCode.MEMBER_PERMITION_REQUIRED);
+            throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
         }
 
         return AdminAccessTokenResponseDto.builder()

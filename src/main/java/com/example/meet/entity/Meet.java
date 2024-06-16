@@ -1,18 +1,22 @@
 package com.example.meet.entity;
 
+import com.example.meet.common.dto.request.EditMeetRequestDto;
 import com.example.meet.common.enumulation.MeetType;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -59,6 +63,10 @@ public class Meet {
     @OneToOne(mappedBy = "meet", cascade = CascadeType.ALL, orphanRemoval = true)
     private ParticipateVote participateVote;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "author", nullable = false)
+    private Member author;
+
     @ManyToMany
     @JoinTable(
             name = "participants",
@@ -89,5 +97,14 @@ public class Meet {
 
     public void setParticipateVote(ParticipateVote participateVote) {
         this.participateVote = participateVote;
+    }
+
+    public void update(EditMeetRequestDto inDto) {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime date = date = LocalDateTime.parse(inDto.getDate()+" 19:00", dateTimeFormatter);;
+        this.title = inDto.getTitle();
+        this.content = inDto.getContent();
+        this.date = date;
+        this.place = inDto.getPlace();
     }
 }

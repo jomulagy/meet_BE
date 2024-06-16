@@ -38,7 +38,7 @@ public class MemberService {
 
         //로그인 한 유저의 권한 확인 (관리자 여부)
         if(!member.getPrevillege().equals(MemberPrevillege.admin)){
-            throw new BusinessException(ErrorCode.MEMBER_PERMITION_REQUIRED);
+            throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
         }
 
         List<Member> resultList = memberRepository.findAll();
@@ -70,7 +70,7 @@ public class MemberService {
 
         //로그인 한 유저의 권한 확인 (관리자 여부)
         if(!user.getPrevillege().equals(MemberPrevillege.admin)){
-            throw new BusinessException(ErrorCode.MEMBER_PERMITION_REQUIRED);
+            throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
         }
 
         Member member = memberRepository.findById(inDto.getMemberId()).orElseThrow(
