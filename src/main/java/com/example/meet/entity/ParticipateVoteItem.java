@@ -34,6 +34,9 @@ public class ParticipateVoteItem {
     @Column(name = "isParticipate", nullable = false)
     private Boolean isParticipate;
 
+    @Column(name = "editable", nullable = false)
+    private Boolean editable;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "participateVote_id")
     private ParticipateVote participateVote;

@@ -144,7 +144,7 @@ public class MeetService {
         List<LocalDate> fridaysAndSaturdays = ScheduleManager.getFridaysAndSaturdays(firstDayOfNextQuarterMonth, lastDayOfNextQuarterMonth);
 
         for(LocalDate date : fridaysAndSaturdays){
-            ScheduleVoteItem scheduleVoteItem = ScheduleVoteItem.builder().date(date).scheduleVote(scheduleVote).build();
+            ScheduleVoteItem scheduleVoteItem = ScheduleVoteItem.builder().date(date).scheduleVote(scheduleVote).editable(false).build();
             scheduleVoteItemRepository.save(scheduleVoteItem);
             scheduleVote.getScheduleVoteItems().add(scheduleVoteItem);
         }
@@ -156,12 +156,14 @@ public class MeetService {
         PlaceVoteItem placeVoteItem1 = PlaceVoteItem.builder()
                 .place("강남역")
                 .placeVote(placeVote)
+                .editable(false)
                 .build();
         placeVoteItemRepository.save(placeVoteItem1);
 
         PlaceVoteItem placeVoteItem2 = PlaceVoteItem.builder()
                 .place("종각역")
                 .placeVote(placeVote)
+                .editable(false)
                 .build();
         placeVoteItemRepository.save(placeVoteItem2);
 
@@ -174,12 +176,14 @@ public class MeetService {
         ParticipateVoteItem participateVoteItem1 = ParticipateVoteItem.builder()
                 .isParticipate(true)
                 .participateVote(participateVote)
+                .editable(false)
                 .build();
         participateVoteItemRepository.save(participateVoteItem1);
 
         ParticipateVoteItem participateVoteItem2 = ParticipateVoteItem.builder()
                 .isParticipate(false)
                 .participateVote(participateVote)
+                .editable(false)
                 .build();
         participateVoteItemRepository.save(participateVoteItem2);
 

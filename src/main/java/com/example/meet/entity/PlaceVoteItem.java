@@ -34,6 +34,9 @@ public class PlaceVoteItem {
     @Column(name = "place", nullable = false)
     private String place;
 
+    @Column(name = "editable", nullable = false)
+    private Boolean editable;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "placeVote_id")
     private PlaceVote placeVote;

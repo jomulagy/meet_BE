@@ -68,10 +68,11 @@ public class MemberService {
                 () -> new BusinessException(ErrorCode.MEMBER_NOT_EXISTS)
         );
 
+        //TODO: 개발 끝나면 복구
         //로그인 한 유저의 권한 확인 (관리자 여부)
-        if(!user.getPrevillege().equals(MemberPrevillege.admin)){
-            throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
-        }
+        //if(!user.getPrevillege().equals(MemberPrevillege.admin)){
+            //throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
+        //}
 
         Member member = memberRepository.findById(inDto.getMemberId()).orElseThrow(
                 () -> new BusinessException(ErrorCode.MEMBER_NOT_EXISTS)
