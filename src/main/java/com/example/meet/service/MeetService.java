@@ -1,6 +1,7 @@
 package com.example.meet.service;
 
 import com.example.meet.common.dto.request.CreateMeetRequestDto;
+import com.example.meet.common.dto.request.DeleteMeetRequestDto;
 import com.example.meet.common.dto.request.EditMeetRequestDto;
 import com.example.meet.common.dto.request.FindMeetRequestDto;
 import com.example.meet.common.dto.response.CreateMeetResponseDto;
@@ -242,5 +243,29 @@ public class MeetService {
         meet.update(inDto);
 
         return meetMapper.EntityToUpdateDto(meet);
+    }
+
+    public void deleteMeet(DeleteMeetRequestDto inDto) {
+        //로그인 한 유저 확인
+        Member user = memberRepository.findById(inDto.getUserId()).orElseThrow(
+                () -> new BusinessException(ErrorCode.MEMBER_NOT_EXISTS)
+        );
+
+        //로그인 한 유저의 권한 확인 (관리자, 멤버 여부)
+        if(user.getPrevillege().equals(MemberPrevillege.denied)){
+            throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
+        }
+
+        //모임 조회
+        Meet meet = meetRepository.findById(inDto.getMeetId()).orElseThrow(
+                () -> new BusinessException(ErrorCode.MEET_NOT_EXISTS)
+        );
+
+        //작성자 or 관리자 인지 확인
+        if(!(user.getPrevillege().equals(MemberPrevillege.admin) || meet.getAuthor() == user)){
+            throw new BusinessException(ErrorCode.MEET_EDIT_PERMISSION_REQUIRED);
+        }
+
+        meetRepository.delete(meet);
     }
 }
