@@ -39,7 +39,7 @@ public class Meet {
     private MeetType type;
 
     @Column(name = "content")
-    private MeetType content;
+    private String content;
 
     @Column(name = "date")
     private LocalDateTime date;
