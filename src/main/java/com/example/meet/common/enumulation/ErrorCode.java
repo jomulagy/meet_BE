@@ -20,8 +20,8 @@ public enum ErrorCode {
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"서버 에러"),
 
     //카카오 메세지 API
-    JSON_CONVERT_ERROR(HttpStatus.BAD_REQUEST,"Failed to process JSON")
-    ;
+    JSON_CONVERT_ERROR(HttpStatus.BAD_REQUEST,"Failed to process JSON"),
+    MEET_NOT_EXISTS(HttpStatus.NOT_FOUND, "존재하지 않는 모임 id 입니다.");
 
 
 

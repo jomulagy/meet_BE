@@ -65,6 +65,7 @@ public class Meet {
             joinColumns = @JoinColumn(name = "meet_id"),
             inverseJoinColumns = @JoinColumn(name = "member_id")
     )
+    @Builder.Default
     private List<Member> participants = new ArrayList<>();
 
     void setDate(){

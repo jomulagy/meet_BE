@@ -1,7 +1,9 @@
 package com.example.meet.service;
 
 import com.example.meet.common.dto.request.CreateMeetRequestDto;
+import com.example.meet.common.dto.request.FindMeetRequestDto;
 import com.example.meet.common.dto.response.CreateMeetResponseDto;
+import com.example.meet.common.dto.response.FindMeetResponseDto;
 import com.example.meet.common.enumulation.ErrorCode;
 import com.example.meet.common.enumulation.MeetType;
 import com.example.meet.common.enumulation.MemberPrevillege;
@@ -181,5 +183,24 @@ public class MeetService {
         participateVote.getParticipateVoteItems().add(participateVoteItem2);
 
         participateVoteRepository.save(participateVote);
+    }
+
+    public FindMeetResponseDto findMeet(FindMeetRequestDto inDto) {
+        //로그인 한 유저 확인
+        Member user = memberRepository.findById(inDto.getUserId()).orElseThrow(
+                () -> new BusinessException(ErrorCode.MEMBER_NOT_EXISTS)
+        );
+
+        //로그인 한 유저의 권한 확인 (관리자, 멤버 여부)
+        if(user.getPrevillege().equals(MemberPrevillege.denied)){
+            throw new BusinessException(ErrorCode.MEMBER_PERMITION_REQUIRED);
+        }
+
+        //모임 조회
+        Meet meet = meetRepository.findById(inDto.getMeetId()).orElseThrow(
+                () -> new BusinessException(ErrorCode.MEET_NOT_EXISTS)
+        );
+
+        return meetMapper.EntityToDto(meet);
     }
 }
