@@ -89,7 +89,7 @@ public class MeetController {
                             )
                     ),
                     @ApiResponse(responseCode = "404",
-                            description = "존재하지 않는 멤버",
+                            description = "존재하지 않는 멤버, 존재하지 않는 모임",
                             content = @Content(
                                     mediaType = "application/json"
                             )
