@@ -3,15 +3,17 @@ package com.example.meet.controller;
 import static java.lang.Long.parseLong;
 
 import com.example.meet.common.CommonResponse;
-import com.example.meet.common.dto.request.CreateMeetRequestDto;
-import com.example.meet.common.dto.request.DeleteMeetRequestDto;
-import com.example.meet.common.dto.request.EditMeetRequestDto;
-import com.example.meet.common.dto.request.EditMemberPrevillegeRequestDto;
-import com.example.meet.common.dto.request.FindMeetRequestDto;
-import com.example.meet.common.dto.response.CreateMeetResponseDto;
-import com.example.meet.common.dto.response.EditMeetResponseDto;
+import com.example.meet.common.dto.request.CreateScheduleVoteItemRequestDto;
+import com.example.meet.common.dto.request.DeleteScheduleVoteItemRequestDto;
+import com.example.meet.common.dto.request.FindScheduleVoteRequestDto;
+import com.example.meet.common.dto.request.FindUserScheduleVoteRequestDto;
+import com.example.meet.common.dto.request.UpdateScheduleVoteRequestDto;
+import com.example.meet.common.dto.response.CreateScheduleVoteItemResponseDto;
+import com.example.meet.common.dto.response.DeleteScheduleVoteItemResponseDto;
 import com.example.meet.common.dto.response.FindMeetResponseDto;
-import com.example.meet.service.MeetService;
+import com.example.meet.common.dto.response.FindScheduleVoteResponseDto;
+import com.example.meet.common.dto.response.FindUserScheduleVoteResponseDto;
+import com.example.meet.service.ScheduleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -30,58 +32,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/meet")
-public class MeetController {
-    private final MeetService meetService;
+@RequestMapping("/meet/schedule")
+public class ScheduleController {
+    private final ScheduleService scheduleService;
 
-    @PostMapping("")
-    @Tag(name = "Meet", description = "모임")
-    @Operation(summary = "모임 생성",
-            description = "Authorization header require",
-            responses = {
-                    @ApiResponse(responseCode = "200",
-                            description = "성공",
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = CreateMeetResponseDto.class)
-                            )
-                    ),
-                    @ApiResponse(responseCode = "404",
-                            description = "존재하지 않는 멤버",
-                            content = @Content(
-                                    mediaType = "application/json"
-                            )
-                    ),
-                    @ApiResponse(responseCode = "403",
-                            description = "멤버 권한이 없음",
-                            content = @Content(
-                                    mediaType = "application/json"
-                            )
-                    )
-
-            })
-    public CommonResponse<CreateMeetResponseDto> createMeet(@RequestBody CreateMeetRequestDto requestDto){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
-        CreateMeetRequestDto inDto = CreateMeetRequestDto.builder()
-                .userId(parseLong(userDetails.getUsername()))
-                .title(requestDto.getTitle())
-                .type(requestDto.getType())
-                .date(requestDto.getDate())
-                .place(requestDto.getPlace())
-                .content(requestDto.getContent())
-                .build();
-
-        return CommonResponse.success(meetService.createMeet(inDto));
-    }
-
-    @GetMapping("")
-    @Tag(name = "Meet", description = "모임")
-    @Operation(summary = "모임 조회",
+    @GetMapping("/item/list")
+    @Tag(name = "schedule vote", description = "모임 일정 투표")
+    @Operation(summary = "날짜 투표 리스트 조회",
             description = "Authorization header require<br>type - Routine",
             responses = {
                     @ApiResponse(responseCode = "200",
@@ -105,28 +66,144 @@ public class MeetController {
                     )
             })
     @Parameter(name = "meetId", description = "모임 id", example = "1")
-    public CommonResponse<FindMeetResponseDto> findMeet(@RequestParam String meetId){
+    public CommonResponse<List<FindScheduleVoteResponseDto>> findScheduleVoteItemList(@RequestParam String meetId){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        FindMeetRequestDto inDto = FindMeetRequestDto.builder()
+        FindScheduleVoteRequestDto inDto = FindScheduleVoteRequestDto.builder()
                 .userId(parseLong(userDetails.getUsername()))
                 .meetId(parseLong(meetId))
                 .build();
 
-        return CommonResponse.success(meetService.findMeet(inDto));
+        return CommonResponse.success(scheduleService.findScheduleVoteItemList(inDto));
+    }
+
+    @GetMapping("/item/list/user")
+    @Tag(name = "schedule vote", description = "모임 일정 투표")
+    @Operation(summary = " 사용자 투표 내역 조회",
+            description = "Authorization header require<br>type - Routine",
+            responses = {
+                    @ApiResponse(responseCode = "200",
+                            description = "성공",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = FindMeetResponseDto.class)
+                            )
+                    ),
+                    @ApiResponse(responseCode = "404",
+                            description = "존재하지 않는 멤버, 존재하지 않는 모임",
+                            content = @Content(
+                                    mediaType = "application/json"
+                            )
+                    ),
+                    @ApiResponse(responseCode = "403",
+                            description = "멤버 권한이 없음",
+                            content = @Content(
+                                    mediaType = "application/json"
+                            )
+                    )
+            })
+    @Parameter(name = "meetId", description = "모임 id", example = "1")
+    public CommonResponse<FindUserScheduleVoteResponseDto> findUserScheduleVoteItemList(@RequestParam String meetId){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        FindUserScheduleVoteRequestDto inDto = FindUserScheduleVoteRequestDto.builder()
+                .userId(parseLong(userDetails.getUsername()))
+                .meetId(parseLong(meetId))
+                .build();
+
+        return CommonResponse.success(scheduleService.findUserScheduleVoteItemList(inDto));
+    }
+
+    @PostMapping("/item")
+    @Tag(name = "schedule vote", description = "모임 일정 투표")
+    @Operation(summary = "투표항목 추가",
+            description = "Authorization header require<br>type - Routine",
+            responses = {
+                    @ApiResponse(responseCode = "200",
+                            description = "성공",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = FindMeetResponseDto.class)
+                            )
+                    ),
+                    @ApiResponse(responseCode = "404",
+                            description = "존재하지 않는 멤버, 존재하지 않는 모임",
+                            content = @Content(
+                                    mediaType = "application/json"
+                            )
+                    ),
+                    @ApiResponse(responseCode = "403",
+                            description = "멤버 권한이 없음",
+                            content = @Content(
+                                    mediaType = "application/json"
+                            )
+                    )
+            })
+    @Parameter(name = "meetId", description = "모임 id", example = "1")
+    @Parameter(name = "date", description = "날짜", example = "2024-06-27")
+    public CommonResponse<CreateScheduleVoteItemResponseDto> createScheduleVoteItem(@RequestBody CreateScheduleVoteItemRequestDto request){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        CreateScheduleVoteItemRequestDto inDto = CreateScheduleVoteItemRequestDto.builder()
+                .userId(parseLong(userDetails.getUsername()))
+                .meetId(request.getMeetId())
+                .date(request.getDate())
+                .build();
+
+        return CommonResponse.success(scheduleService.createScheduleVoteItem(inDto));
+    }
+
+    @DeleteMapping("/item")
+    @Tag(name = "schedule vote", description = "모임 일정 투표")
+    @Operation(summary = "투표항목 삭제",
+            description = "Authorization header require<br>type - Routine",
+            responses = {
+                    @ApiResponse(responseCode = "200",
+                            description = "성공",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = FindMeetResponseDto.class)
+                            )
+                    ),
+                    @ApiResponse(responseCode = "404",
+                            description = "존재하지 않는 멤버, 존재하지 않는 모임",
+                            content = @Content(
+                                    mediaType = "application/json"
+                            )
+                    ),
+                    @ApiResponse(responseCode = "403",
+                            description = "멤버 권한이 없음",
+                            content = @Content(
+                                    mediaType = "application/json"
+                            )
+                    )
+            })
+    @Parameter(name = "scheduleVoteItemId", description = "투표항목 id", example = "1")
+    public CommonResponse<DeleteScheduleVoteItemResponseDto> deleteScheduleVoteItem(@RequestBody String scheduleVoteItemId){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        DeleteScheduleVoteItemRequestDto inDto = DeleteScheduleVoteItemRequestDto.builder()
+                .userId(parseLong(userDetails.getUsername()))
+                .scheduleVoteItemId(parseLong(scheduleVoteItemId))
+                .build();
+
+        return CommonResponse.success(scheduleService.deleteScheduleVoteItem(inDto));
     }
 
     @PutMapping("")
-    @Tag(name = "Meet", description = "모임")
-    @Operation(summary = "모임 수정",
-            description = "Authorization header require<br> 투표료 결정된 필드는 수정 할 수 없습니다.<br>변경되지 않은 필드도 전송합니다.",
+    @Tag(name = "schedule vote", description = "모임 일정 투표")
+    @Operation(summary = "날짜 투표 저장",
+            description = "Authorization header require<br>type - Routine",
             responses = {
                     @ApiResponse(responseCode = "200",
                             description = "성공",
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = EditMeetResponseDto.class)
+                                    schema = @Schema(implementation = FindMeetResponseDto.class)
                             )
                     ),
                     @ApiResponse(responseCode = "404",
@@ -136,73 +213,23 @@ public class MeetController {
                             )
                     ),
                     @ApiResponse(responseCode = "403",
-                            description = "멤버 권한이 없음, 관리자와 작성자만 편집 할 수 있음",
-                            content = @Content(
-                                    mediaType = "application/json"
-                            )
-                    ),
-                    @ApiResponse(responseCode = "400",
-                            description = "투표한 필드는 편집 할 수 없음",
-                            content = @Content(
-                                    mediaType = "application/json"
-                            )
-                    )
-
-            })
-    @Parameter(name = "meetId", description = "모임 id", example = "1")
-    public CommonResponse<EditMeetResponseDto> editMeet(@RequestParam String meetId, @RequestBody EditMeetRequestDto requestDto){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
-        EditMeetRequestDto inDto = EditMeetRequestDto.builder()
-                .userId(parseLong(userDetails.getUsername()))
-                .meetId(parseLong(meetId))
-                .title(requestDto.getTitle())
-                .content(requestDto.getContent())
-                .date(requestDto.getDate())
-                .place(requestDto.getPlace())
-                .build();
-
-        return CommonResponse.success(meetService.editMeet(inDto));
-    }
-
-    @DeleteMapping("")
-    @Tag(name = "Meet", description = "모임")
-    @Operation(summary = "모임 삭제",
-            description = "Authorization header require",
-            responses = {
-                    @ApiResponse(responseCode = "200",
-                            description = "성공",
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = EditMeetResponseDto.class)
-                            )
-                    ),
-                    @ApiResponse(responseCode = "404",
-                            description = "존재하지 않는 멤버, 존재하지 않는 모임",
-                            content = @Content(
-                                    mediaType = "application/json"
-                            )
-                    ),
-                    @ApiResponse(responseCode = "403",
-                            description = "멤버 권한이 없음, 관리자와 작성자만 삭제 할 수 있음",
+                            description = "멤버 권한이 없음",
                             content = @Content(
                                     mediaType = "application/json"
                             )
                     )
             })
     @Parameter(name = "meetId", description = "모임 id", example = "1")
-    public CommonResponse<Void> deleteMeet(@RequestParam String meetId){
+    @Parameter(name = "scheduleVoteItemList", description = "투표한 항목 id 리스트", example = "[1, 2]")
+    public CommonResponse<UpdateScheduleVoteResponseDto> updateScheduleVote(@RequestBody UpdateScheduleVoteRequestDto requestDto){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        DeleteMeetRequestDto inDto = DeleteMeetRequestDto.builder()
+        UpdateScheduleVoteRequestDto inDto = UpdateScheduleVoteRequestDto.builder()
                 .userId(parseLong(userDetails.getUsername()))
-                .meetId(parseLong(meetId))
+                .scheduleVoteItemList(requestDto.getScheduleVoteItemList())
                 .build();
-        meetService.deleteMeet(inDto);
-        return CommonResponse.success();
+
+        return CommonResponse.success(scheduleService.updateScheduleVote(inDto));
     }
-
-
 }
