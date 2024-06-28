@@ -15,9 +15,11 @@ import com.example.meet.common.dto.response.FindMeetResponseDto;
 import com.example.meet.common.dto.response.FindScheduleVoteItemResponseDto;
 import com.example.meet.common.dto.response.FindScheduleVoteResponseDto;
 import com.example.meet.common.dto.response.FindUserScheduleVoteResponseDto;
+import com.example.meet.common.dto.response.MemberResponseDto;
 import com.example.meet.service.ScheduleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -51,7 +53,7 @@ public class ScheduleController {
                             description = "성공",
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = FindMeetResponseDto.class)
+                                    schema = @Schema(implementation = FindScheduleVoteResponseDto.class)
                             )
                     ),
                     @ApiResponse(responseCode = "404",
@@ -89,7 +91,7 @@ public class ScheduleController {
                             description = "성공",
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = FindMeetResponseDto.class)
+                                    array = @ArraySchema(schema = @Schema(implementation = FindScheduleVoteItemResponseDto.class))
                             )
                     ),
                     @ApiResponse(responseCode = "404",
@@ -127,7 +129,7 @@ public class ScheduleController {
                             description = "성공",
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = FindMeetResponseDto.class)
+                                    schema = @Schema(implementation = FindUserScheduleVoteResponseDto.class)
                             )
                     ),
                     @ApiResponse(responseCode = "404",
@@ -165,7 +167,7 @@ public class ScheduleController {
                             description = "성공",
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = FindMeetResponseDto.class)
+                                    schema = @Schema(implementation = CreateScheduleVoteItemResponseDto.class)
                             )
                     ),
                     @ApiResponse(responseCode = "404",
@@ -205,7 +207,7 @@ public class ScheduleController {
                             description = "성공",
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = FindMeetResponseDto.class)
+                                    schema = @Schema(implementation = DeleteScheduleVoteItemResponseDto.class)
                             )
                     ),
                     @ApiResponse(responseCode = "404",
@@ -243,7 +245,7 @@ public class ScheduleController {
                             description = "성공",
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = FindMeetResponseDto.class)
+                                    schema = @Schema(implementation = UpdateScheduleVoteResponseDto.class)
                             )
                     ),
                     @ApiResponse(responseCode = "404",
