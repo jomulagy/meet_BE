@@ -51,7 +51,7 @@ public class MessageManager {
             String receiverUuidsJson = convertListToJson(messageRequestDto.getReceiverUuids());
             String templateArgsJson = objectMapper.writeValueAsString(messageRequestDto.getTemplateArgs());
 
-            return webClient.post()
+            Mono<String> response = webClient.post()
                     .uri(url)
                     .headers(headers -> {
                         headers.setBearerAuth(getAccessToken());
@@ -64,8 +64,18 @@ public class MessageManager {
                     .retrieve()
                     .bodyToMono(String.class)
                     .doOnError(WebClientResponseException.class, ex -> {
-                        System.err.println("Error response: " + ex.getResponseBodyAsString());
+                        try {
+                            String errorBody = ex.getResponseBodyAsString();
+                            System.err.println("Error response: " + errorBody);
+                        } catch (Exception e) {
+                            System.err.println("Error reading response body: " + e.getMessage());
+                        }
+                    })
+                    .onErrorResume(WebClientResponseException.class, ex -> {
+                        System.err.println("Caught WebClientResponseException: " + ex.getMessage());
+                        return Mono.error(ex);
                     });
+            return response;
         } catch (JsonProcessingException e) {
             throw new BusinessException(ErrorCode.JSON_CONVERT_ERROR);
         }

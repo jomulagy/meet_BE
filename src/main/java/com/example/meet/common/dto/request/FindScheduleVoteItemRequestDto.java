@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class FindScheduleVoteRequestDto {
-    private Long userId;
+public class FindScheduleVoteItemRequestDto {
     private Long meetId;
+    private Long userId;
 }

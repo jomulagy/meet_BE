@@ -17,7 +17,7 @@ public class TestService {
     public Mono<String> kakaoMessageTest() {
         TemplateArgs templateArgs = TemplateArgs.builder()
                 .title("test")
-                .scheduleType(null)
+                .scheduleType("정기")
                 .build();
         Message.VOTE.setTemplateArgs(templateArgs);
         Mono<String> response = messageManager.sendAll(Message.VOTE);

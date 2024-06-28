@@ -1,6 +1,7 @@
 package com.example.meet.controller;
 
 import com.example.meet.common.CommonResponse;
+import com.example.meet.service.ScheduleService;
 import com.example.meet.service.TestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -15,9 +16,15 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/test")
 public class TestController {
     private final TestService testService;
+    private final ScheduleService scheduleService;
 
     @GetMapping("/kakao/message")
     public Mono<String> kakaoMessageTest(){
         return testService.kakaoMessageTest();
+    }
+
+    @GetMapping("")
+    public void test(){
+        scheduleService.terminateScheduleVote();
     }
 }

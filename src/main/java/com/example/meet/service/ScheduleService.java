@@ -2,12 +2,15 @@ package com.example.meet.service;
 
 import static java.lang.Long.parseLong;
 
+import com.example.meet.common.CommonResponse;
 import com.example.meet.common.dto.request.CreateScheduleVoteItemRequestDto;
 import com.example.meet.common.dto.request.DeleteScheduleVoteItemRequestDto;
+import com.example.meet.common.dto.request.FindScheduleVoteItemRequestDto;
 import com.example.meet.common.dto.request.FindScheduleVoteRequestDto;
 import com.example.meet.common.dto.request.FindUserScheduleVoteRequestDto;
 import com.example.meet.common.dto.request.UpdateScheduleVoteRequestDto;
 import com.example.meet.common.dto.response.DeleteScheduleVoteItemResponseDto;
+import com.example.meet.common.dto.response.FindScheduleVoteItemResponseDto;
 import com.example.meet.common.dto.response.FindScheduleVoteResponseDto;
 import com.example.meet.common.dto.response.FindUserScheduleVoteResponseDto;
 import com.example.meet.common.dto.response.SimpleMemberResponseDto;
@@ -19,18 +22,24 @@ import com.example.meet.common.dto.response.CreateScheduleVoteItemResponseDto;
 import com.example.meet.controller.UpdateScheduleVoteResponseDto;
 import com.example.meet.entity.Meet;
 import com.example.meet.entity.Member;
+import com.example.meet.entity.ScheduleVote;
 import com.example.meet.entity.ScheduleVoteItem;
 import com.example.meet.mapper.ScheduleVoteItemMapper;
 import com.example.meet.repository.MeetRepository;
 import com.example.meet.repository.MemberRepository;
 import com.example.meet.repository.ScheduleVoteItemRepository;
 import com.example.meet.repository.ScheduleVoteRepository;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -42,7 +51,19 @@ public class ScheduleService {
     private final ScheduleVoteItemRepository scheduleVoteItemRepository;
 
     private final ScheduleVoteItemMapper scheduleVoteItemMapper = ScheduleVoteItemMapper.INSTANCE;
-    public List<FindScheduleVoteResponseDto> findScheduleVoteItemList(FindScheduleVoteRequestDto inDto) {
+
+    @Scheduled(cron = "0 0 8 2 3,6,9,12 ?")
+    @Transactional
+    public void terminateScheduleVote(){
+        LocalDate currentDate = LocalDate.now();
+        List<ScheduleVote> scheduleVoteList = scheduleVoteRepository.findEventsWithNullDateResultAndEndDateBefore(currentDate);
+
+        for(ScheduleVote scheduleVote : scheduleVoteList){
+            scheduleVote.setDateResult();
+            scheduleVote.getMeet().setDateResult(scheduleVote.getDateResult());
+        }
+    }
+    public List<FindScheduleVoteItemResponseDto> findScheduleVoteItemList(FindScheduleVoteItemRequestDto inDto) {
 
         //로그인 한 유저 확인
         Member user = memberRepository.findById(inDto.getUserId()).orElseThrow(
@@ -60,7 +81,7 @@ public class ScheduleService {
 
         List<ScheduleVoteItem> scheduleVoteItemList = meet.getScheduleVote().getScheduleVoteItems();
 
-        List<FindScheduleVoteResponseDto> outDtoList = new ArrayList<>();
+        List<FindScheduleVoteItemResponseDto> outDtoList = new ArrayList<>();
         for(ScheduleVoteItem item : scheduleVoteItemList){
             List<SimpleMemberResponseDto> memberList = new ArrayList<>();
             item.getScheduleVoters().forEach(member -> {
@@ -71,7 +92,7 @@ public class ScheduleService {
                     }
             );
             outDtoList.add(
-                    FindScheduleVoteResponseDto.builder()
+                    FindScheduleVoteItemResponseDto.builder()
                             .date(item.getDate().toString())
                             .memberList(memberList)
                             .build()
@@ -220,4 +241,26 @@ public class ScheduleService {
 
         return null;
     }
+
+    public FindScheduleVoteResponseDto findScheduleVote(FindScheduleVoteRequestDto inDto) {
+        //로그인 한 유저 확인
+        Member user = memberRepository.findById(inDto.getUserId()).orElseThrow(
+                () -> new BusinessException(ErrorCode.MEMBER_NOT_EXISTS)
+        );
+
+        //로그인 한 유저의 권한 확인
+        if(user.getPrevillege().equals(MemberPrevillege.denied)){
+            throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
+        }
+
+        Meet meet = meetRepository.findById(inDto.getMeetId()).orElseThrow(
+                () -> new BusinessException(ErrorCode.MEET_NOT_EXISTS)
+        );
+
+        return FindScheduleVoteResponseDto.builder()
+                .meetTitle(meet.getTitle())
+                .endDate(meet.getScheduleVote().getEndDate().toString())
+                .build();
+    }
+
 }

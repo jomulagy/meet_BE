@@ -15,6 +15,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -106,5 +107,11 @@ public class Meet {
         this.content = inDto.getContent();
         this.date = date;
         this.place = inDto.getPlace();
+    }
+
+    public void setDateResult(LocalDate dateResult) {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime date = LocalDateTime.parse(dateResult+" 19:00", dateTimeFormatter);
+        this.date = date;
     }
 }

@@ -1,5 +1,8 @@
 package com.example.meet.service;
 
+import static java.lang.Long.parseLong;
+
+import com.example.meet.common.dto.TemplateArgs;
 import com.example.meet.common.dto.request.CreateMeetRequestDto;
 import com.example.meet.common.dto.request.DeleteMeetRequestDto;
 import com.example.meet.common.dto.request.EditMeetRequestDto;
@@ -10,7 +13,9 @@ import com.example.meet.common.dto.response.FindMeetResponseDto;
 import com.example.meet.common.enumulation.ErrorCode;
 import com.example.meet.common.enumulation.MeetType;
 import com.example.meet.common.enumulation.MemberPrevillege;
+import com.example.meet.common.enumulation.Message;
 import com.example.meet.common.exception.BusinessException;
+import com.example.meet.common.utils.MessageManager;
 import com.example.meet.common.utils.ScheduleManager;
 import com.example.meet.entity.Meet;
 import com.example.meet.entity.Member;
@@ -36,8 +41,10 @@ import java.time.YearMonth;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Mono;
 
 @Slf4j
 @Service
@@ -53,6 +60,27 @@ public class MeetService {
     private final ParticipateVoteRepository participateVoteRepository;
     private final ParticipateVoteItemRepository participateVoteItemRepository;
 
+    private final MessageManager messageManager;
+
+    @Scheduled(cron = "0 0 8 1 3,6,9,12 ?")
+    public void createRoutineMeet(){
+        LocalDate date = LocalDate.now();
+        List<Integer> quarterList = List.of(2,3,4,1);
+        int year = date.getYear();
+        int month = date.getMonthValue();
+        int quarter = quarterList.get((month - 1) / 3);
+
+        String title = String.format("%d년도 %d 분기 정기 회식", year, quarter);
+
+        log.info("정기 회식 생성");
+        CreateMeetRequestDto inDto = CreateMeetRequestDto.builder()
+                .userId(parseLong("2927398983"))
+                .title(title)
+                .type(MeetType.Routine)
+                .build();
+
+        createMeet(inDto);
+    }
     public CreateMeetResponseDto createMeet(CreateMeetRequestDto inDto) {
         //로그인 한 유저 확인
         Member user = memberRepository.findById(inDto.getUserId()).orElseThrow(
@@ -93,16 +121,22 @@ public class MeetService {
 
         meetRepository.save(entity);
 
+        TemplateArgs templateArgs = TemplateArgs.builder()
+                .title(entity.getTitle())
+                .scheduleType(null)
+                .build();
+        Message.SCHEDULE.setTemplateArgs(templateArgs);
+        messageManager.sendAll(Message.SCHEDULE).block();
+
         return meetMapper.entityToCreateDto(entity);
     }
 
     private ScheduleVote createScheduleVote(Meet meet) {
         LocalDate currentDate = LocalDate.now();
         LocalDate tomorrowDate = currentDate.plusDays(1);
-        LocalDateTime endDate = tomorrowDate.atTime(LocalTime.of(9, 0));
 
         return ScheduleVote.builder()
-                .endDate(endDate)
+                .endDate(tomorrowDate)
                 .meet(meet)
                 .build();
     }

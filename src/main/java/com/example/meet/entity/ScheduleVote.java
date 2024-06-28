@@ -3,6 +3,7 @@ package com.example.meet.entity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -39,13 +40,13 @@ public class ScheduleVote {
     private LocalDate dateResult;
 
     @Column(name = "end_date")
-    private LocalDateTime endDate;
+    private LocalDate endDate;
 
     @OneToOne
     @JoinColumn(name = "meet_id", referencedColumnName = "id")
     private Meet meet;
 
-    @OneToMany(mappedBy = "scheduleVote", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "scheduleVote", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<ScheduleVoteItem> scheduleVoteItems = new ArrayList<>();
 
@@ -53,6 +54,7 @@ public class ScheduleVote {
         int max = -1;
         LocalDate result = null;
         Collections.sort(this.scheduleVoteItems, Comparator.comparing(ScheduleVoteItem::getDate));
+        result = this.scheduleVoteItems.get(0).getDate();
 
         for(ScheduleVoteItem item : this.scheduleVoteItems){
             if(item.getScheduleVoters().size() > max){
@@ -60,7 +62,6 @@ public class ScheduleVote {
                 result = item.getDate();
             }
         }
-
         this.dateResult = result;
     }
 }
