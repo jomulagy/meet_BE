@@ -53,7 +53,7 @@ public class SecurityConfig {
                         .requestMatchers("/auth/login","auth/token/refresh").permitAll()
                         .requestMatchers("/v2/api-docs", "/v3/api-docs", "/v3/api-docs/**", "/swagger-resources",
                          "/swagger-resources/**", "/configuration/ui", "/configuration/security", "/swagger-ui/**",
-                         "/webjars/**", "/swagger-ui.html").permitAll()
+                         "/webjars/**", "/swagger-ui.html", "/api-reference").permitAll()
                         .requestMatchers("/test/**").permitAll()
                         .anyRequest().authenticated()
                 )
