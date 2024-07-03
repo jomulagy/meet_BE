@@ -70,10 +70,11 @@ jobs:
         key: ${{ secrets.KEY }}
         envs: GITHUB_SHA
         script: |
+          sudo timedatectl set-timezone Asia/Seoul
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker stop $(docker ps -a -q) || true
           docker rm $(docker ps -a -q -f status=exited) || true
           docker rm $(docker ps -a -q -f status=created) || true
           docker rmi $(docker images -q) || true
           docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
-          docker run -d --restart on-failure:5 -p 443:80 -p 80:8080 -v /home/ubuntu/data:/data --name meetServer ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
+          docker run -d --restart on-failure:5 -p 443:80 -p 80:8080 -v /home/ubuntu/data:/data -v /etc/localtime:/etc/localtime:ro -v /etc/timezone:/etc/timezone:ro --name meetServer ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
