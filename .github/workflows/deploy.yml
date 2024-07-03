@@ -46,9 +46,7 @@ jobs:
     - name: Login to Docker hub
       run: |
         echo "your_access_token" |
-        docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }} 
-        docker run -it openjdk:17 /bin/sh
-        docker run -it openjdk:17 /bin/sh -c "apt-get update && apt-get install -y tzdata"      
+        docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}      
 
       # dockerfile을 통해 이미지를 빌드하고, 이를 docker repo로 push 합니다.
     # 이 때 사용되는 ${{ secrets.DOCKER_REPO }}/directors-dev 가 위에서 만든 도커 repository 입니다.

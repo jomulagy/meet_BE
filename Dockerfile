@@ -1,9 +1,7 @@
 FROM openjdk:17
 
-SHELL ["/bin/sh", "-c"]
-
 # 패키지 업데이트 및 tzdata 설치
-RUN apt-get update && apt-get install -y tzdata
+RUN apt-get update && apt-get install -y tzdata \
 
 RUN apt-get update && \
     apt-get install -y tzdata && \
