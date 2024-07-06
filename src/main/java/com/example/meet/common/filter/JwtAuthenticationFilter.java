@@ -15,6 +15,8 @@ import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.AntPathMatcher;
+import org.springframework.util.PathMatcher;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.GenericFilterBean;
 import java.util.List;
@@ -22,7 +24,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends GenericFilterBean {
     private final JwtTokenProvider jwtTokenProvider;
-    private final List<String> whiteList = List.of(new String[]{"/auth/login", "/auth/token/refresh"});
+    private final List<String> whiteList = List.of("/auth/login", "/auth/token/refresh", "/v2/api-docs", "/v3/api-docs",
+            "/v3/api-docs/**", "/swagger-resources",
+            "/swagger-resources/**", "/configuration/ui", "/configuration/security", "/swagger-ui/**",
+            "/webjars/**", "/swagger-ui.html", "/api-reference", "/favicon.ico");
+    private final PathMatcher pathMatcher = new AntPathMatcher();
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
@@ -31,7 +37,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         String requestURI = httpRequest.getRequestURI();
 
         try{
-            if(!whiteList.contains(requestURI)){
+            if(!isWhiteListed(requestURI)){
                 // 1. Request Header에서 JWT 토큰 추출
                 String token = resolveToken((HttpServletRequest) request);
 
@@ -45,7 +51,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
                     throw new BusinessException(ErrorCode.JWT_TOKEN_INVALID);
                 }
             }
-            
+
             chain.doFilter(request, response);
         } catch (BusinessException e) {
             handleException(response, e);
@@ -77,6 +83,15 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
             return bearerToken.substring(7);
         }
         return null;
+    }
+
+    private boolean isWhiteListed(String requestURI) {
+        for (String pattern : whiteList) {
+            if (pathMatcher.match(pattern, requestURI)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 
