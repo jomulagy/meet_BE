@@ -1,5 +1,6 @@
 package com.example.meet.common.dto.request;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
@@ -16,5 +17,6 @@ public class CreateScheduleVoteItemRequestDto {
     private Long meetId;
     @NotNull
     private LocalDate date;
+    @Schema(hidden = true)
     private Long userId;
 }

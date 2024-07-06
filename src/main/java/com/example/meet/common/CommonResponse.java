@@ -30,7 +30,7 @@ public class CommonResponse<T> {
         return of("200","success",data);
     }
 
-    public static <T> CommonResponse<T> fail(ErrorCode e){ return of(e.getHttpStatus().toString(),e.getMessage(),null);}
+    public static <T> CommonResponse<T> fail(ErrorCode e){ return of(Integer.toString(e.getHttpStatus().value()),e.getMessage(),null);}
     public static <T> CommonResponse<T> fail(HttpStatus status, String message){ return of(status.toString(),message,null);}
 
 }

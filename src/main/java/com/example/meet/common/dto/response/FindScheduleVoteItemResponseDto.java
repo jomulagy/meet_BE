@@ -12,6 +12,8 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 public class FindScheduleVoteItemResponseDto {
+    private String id;
     private String date;
+    private String editable;
     private List<SimpleMemberResponseDto> memberList;
 }

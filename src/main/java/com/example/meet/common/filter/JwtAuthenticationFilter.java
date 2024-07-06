@@ -1,6 +1,7 @@
 package com.example.meet.common.filter;
 
 import com.example.meet.common.CommonResponse;
+import com.example.meet.common.enumulation.ErrorCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.example.meet.common.auth.JwtTokenProvider;
 import com.example.meet.common.exception.BusinessException;
@@ -16,11 +17,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.GenericFilterBean;
+import java.util.List;
 
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends GenericFilterBean {
     private final JwtTokenProvider jwtTokenProvider;
-
+    private final List<String> whiteList = List.of(new String[]{"/auth/login", "/auth/token/refresh"});
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
@@ -28,19 +30,22 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String requestURI = httpRequest.getRequestURI();
 
-
-
         try{
-            // 1. Request Header에서 JWT 토큰 추출
-            String token = resolveToken((HttpServletRequest) request);
+            if(!whiteList.contains(requestURI)){
+                // 1. Request Header에서 JWT 토큰 추출
+                String token = resolveToken((HttpServletRequest) request);
 
-            // 2. validateToken으로 토큰 유효성 검사
-            if (token != null && jwtTokenProvider.validateToken(token)) {
-                // 토큰이 유효할 경우 토큰에서 Authentication 객체를 가지고 와서 SecurityContext에 저장
-                Authentication authentication = jwtTokenProvider.getAuthentication(token);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                // 2. validateToken으로 토큰 유효성 검사
+                if (token != null && jwtTokenProvider.validateToken(token)) {
+                    // 토큰이 유효할 경우 토큰에서 Authentication 객체를 가지고 와서 SecurityContext에 저장
+                    Authentication authentication = jwtTokenProvider.getAuthentication(token);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+                else{
+                    throw new BusinessException(ErrorCode.JWT_TOKEN_INVALID);
+                }
             }
-
+            
             chain.doFilter(request, response);
         } catch (BusinessException e) {
             handleException(response, e);

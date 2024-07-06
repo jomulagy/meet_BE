@@ -93,7 +93,9 @@ public class ScheduleService {
             );
             outDtoList.add(
                     FindScheduleVoteItemResponseDto.builder()
+                            .id(item.getId().toString())
                             .date(item.getDate().toString())
+                            .editable(item.getEditable().toString())
                             .memberList(memberList)
                             .build()
             );
