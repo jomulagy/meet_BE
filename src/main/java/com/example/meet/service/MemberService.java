@@ -2,6 +2,7 @@ package com.example.meet.service;
 
 import com.example.meet.common.dto.request.EditMemberPrevillegeRequestDto;
 import com.example.meet.common.dto.request.MemberListRequestDto;
+import com.example.meet.common.dto.request.MemberRequestDto;
 import com.example.meet.common.dto.response.MemberPrevillegeResponseDto;
 import com.example.meet.common.dto.response.MemberResponseDto;
 import com.example.meet.common.exception.BusinessException;
@@ -9,6 +10,7 @@ import com.example.meet.common.enumulation.EditMemberPrevillegeOption;
 import com.example.meet.common.enumulation.ErrorCode;
 import com.example.meet.common.enumulation.MemberPrevillege;
 import com.example.meet.entity.Member;
+import com.example.meet.mapper.MemberMapper;
 import com.example.meet.repository.MemberRepository;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -21,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final MemberMapper memberMapper = MemberMapper.INSTANCE;
 
     public MemberPrevillegeResponseDto searchMemberPrevillege(Long userId) {
         Optional<Member> user = memberRepository.findById(userId);
@@ -92,5 +95,19 @@ public class MemberService {
         }
         memberRepository.save(member);
 
+    }
+
+    public MemberResponseDto findMember(MemberRequestDto inDto) {
+        //로그인 한 유저 확인
+        Member member = memberRepository.findById(inDto.getUserId()).orElseThrow(
+                () -> new BusinessException(ErrorCode.MEMBER_NOT_EXISTS)
+        );
+
+        //로그인 한 유저의 권한 확인 (관리자 여부)
+        if(member.getPrevillege().equals(MemberPrevillege.denied)){
+            throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
+        }
+
+        return memberMapper.entityToDto(member);
     }
 }
