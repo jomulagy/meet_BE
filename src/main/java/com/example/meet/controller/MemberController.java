@@ -54,7 +54,7 @@ public class MemberController {
                             )
                     ),
                     @ApiResponse(responseCode = "403",
-                            description = "관리자 권한이 없음",
+                            description = "권한이 없음",
                             content = @Content(
                                     mediaType = "application/json"
                             )
