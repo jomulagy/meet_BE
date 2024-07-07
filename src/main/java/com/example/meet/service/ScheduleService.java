@@ -143,8 +143,31 @@ public class ScheduleService {
         scheduleVoteItemList.add(scheduleVoteItem);
         scheduleVoteRepository.save(meet.getScheduleVote());
 
+        String isVote = "false";
+        if(scheduleVoteItem.getScheduleVoters().contains(user)){
+            isVote = "true";
+        }
+        List<SimpleMemberResponseDto> memberList = new ArrayList<>();
+        scheduleVoteItem.getScheduleVoters().forEach(member -> {
+                    memberList.add(SimpleMemberResponseDto.builder()
+                            .id(member.getId().toString())
+                            .name(member.getName())
+                            .build());
+                }
+        );
+
+        //수정 가능 여부 확인
+        String editable = "false";
+        if(meet.getAuthor() == user && scheduleVoteItem.getEditable() && scheduleVoteItem.getScheduleVoters().isEmpty()){
+            editable = "true";
+        }
+        
         return CreateScheduleVoteItemResponseDto.builder()
-                    .scheduleVoteItemId(scheduleVoteItem.getId().toString())
+                    .id(scheduleVoteItem.getId().toString())
+                    .date(scheduleVoteItem.getDate().toString())
+                    .editable(editable)
+                    .isVote(isVote)
+                    .memberList(memberList)
                     .build();
     }
 
