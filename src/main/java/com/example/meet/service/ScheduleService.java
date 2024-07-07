@@ -231,14 +231,15 @@ public class ScheduleService {
         for(ScheduleVoteItem item : scheduleVoteItemList){
             List<Long> memberIds = item.getScheduleVoters().stream()
                     .map(Member::getId)
-                    .collect(Collectors.toList());
+                    .toList();
 
-            if(memberIds.contains(user.getId()) && !inDto.getScheduleVoteItemList().contains(user.getId())){
+            if(memberIds.contains(user.getId()) && !inDto.getScheduleVoteItemList().contains(item.getId())){
                 item.getScheduleVoters().removeIf(member -> member.equals(user));
             }
-            else if(!memberIds.contains(user.getId()) && inDto.getScheduleVoteItemList().contains(user.getId())){
+            else if(!memberIds.contains(user.getId()) && inDto.getScheduleVoteItemList().contains(item.getId())){
                 item.getScheduleVoters().add(user);
             }
+            scheduleVoteItemRepository.save(item);
         }
 
         return null;
