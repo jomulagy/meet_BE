@@ -182,7 +182,7 @@ public class ScheduleController {
                     )
             })
     @Parameter(name = "scheduleVoteItemId", description = "투표항목 id", example = "1")
-    public CommonResponse<DeleteScheduleVoteItemResponseDto> deleteScheduleVoteItem(@RequestBody String scheduleVoteItemId){
+    public CommonResponse<DeleteScheduleVoteItemResponseDto> deleteScheduleVoteItem(@RequestParam String scheduleVoteItemId){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
