@@ -269,6 +269,7 @@ public class ScheduleController {
 
         UpdateScheduleVoteRequestDto inDto = UpdateScheduleVoteRequestDto.builder()
                 .userId(parseLong(userDetails.getUsername()))
+                .meetId(requestDto.getMeetId())
                 .scheduleVoteItemList(requestDto.getScheduleVoteItemList())
                 .build();
 

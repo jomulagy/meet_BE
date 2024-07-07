@@ -1,6 +1,8 @@
 package com.example.meet.controller;
 
 import com.example.meet.common.CommonResponse;
+import com.example.meet.common.dto.request.CreateMeetRequestDto;
+import com.example.meet.service.MeetService;
 import com.example.meet.service.ScheduleService;
 import com.example.meet.service.TestService;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,7 @@ import reactor.core.publisher.Mono;
 public class TestController {
     private final TestService testService;
     private final ScheduleService scheduleService;
+    private final MeetService meetService;
 
     @GetMapping("/kakao/message")
     public Mono<String> kakaoMessageTest(){
@@ -24,7 +27,7 @@ public class TestController {
     }
 
     @GetMapping("")
-    public void test(){
-        scheduleService.terminateScheduleVote();
+    public void test(CreateMeetRequestDto requestDto){
+        meetService.createMeet(requestDto);
     }
 }
