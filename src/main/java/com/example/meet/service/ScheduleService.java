@@ -148,6 +148,7 @@ public class ScheduleService {
                     .build();
     }
 
+    @Transactional
     public DeleteScheduleVoteItemResponseDto deleteScheduleVoteItem(DeleteScheduleVoteItemRequestDto inDto) {
         //로그인 한 유저 확인
         Member user = memberRepository.findById(inDto.getUserId()).orElseThrow(
@@ -167,6 +168,7 @@ public class ScheduleService {
             throw new BusinessException(ErrorCode.SCHEDULE_VOTE_END);
         }
 
+        scheduleVoteItem.getScheduleVote().getScheduleVoteItems().remove(scheduleVoteItem);
         scheduleVoteItemRepository.delete(scheduleVoteItem);
         return null;
     }
