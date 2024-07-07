@@ -51,6 +51,7 @@ public class ScheduleVoteItem {
             joinColumns = @JoinColumn(name = "scheduleVoteItem_id"),
             inverseJoinColumns = @JoinColumn(name = "member_id")
     )
+    @Builder.Default
     private List<Member> scheduleVoters = new ArrayList<>();
 
     public void vote(List<Member> members){

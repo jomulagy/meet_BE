@@ -161,7 +161,7 @@ public class ScheduleService {
         if(meet.getAuthor() == user && scheduleVoteItem.getEditable() && scheduleVoteItem.getScheduleVoters().isEmpty()){
             editable = "true";
         }
-        
+
         return CreateScheduleVoteItemResponseDto.builder()
                     .id(scheduleVoteItem.getId().toString())
                     .date(scheduleVoteItem.getDate().toString())
