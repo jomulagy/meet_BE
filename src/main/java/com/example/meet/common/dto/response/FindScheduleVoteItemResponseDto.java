@@ -15,5 +15,6 @@ public class FindScheduleVoteItemResponseDto {
     private String id;
     private String date;
     private String editable;
+    private String isVote;
     private List<SimpleMemberResponseDto> memberList;
 }
