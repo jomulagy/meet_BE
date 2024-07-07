@@ -88,11 +88,17 @@ public class ScheduleService {
                                         .build());
                     }
             );
+
+            //수정 가능 여부 확인
+            String editable = "false";
+            if(meet.getAuthor() == user && item.getEditable() && item.getScheduleVoters().isEmpty()){
+                editable = "true";
+            }
             outDtoList.add(
                     FindScheduleVoteItemResponseDto.builder()
                             .id(item.getId().toString())
                             .date(item.getDate().toString())
-                            .editable(item.getEditable().toString())
+                            .editable(editable)
                             .isVote(isVote)
                             .memberList(memberList)
                             .build()
@@ -203,6 +209,7 @@ public class ScheduleService {
             else if(!memberIds.contains(user.getId()) && inDto.getScheduleVoteItemList().contains(item.getId())){
                 item.getScheduleVoters().add(user);
             }
+
             scheduleVoteItemRepository.save(item);
         }
 

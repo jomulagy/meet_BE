@@ -172,11 +172,7 @@ public class MeetController {
             description = "Authorization header require",
             responses = {
                     @ApiResponse(responseCode = "200",
-                            description = "성공",
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = EditMeetResponseDto.class)
-                            )
+                            description = "성공"
                     ),
                     @ApiResponse(responseCode = "404",
                             description = "존재하지 않는 멤버, 존재하지 않는 모임",
