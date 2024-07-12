@@ -30,7 +30,11 @@ public enum ErrorCode {
     SCHEDULE_VOTE_ITEM_DUPLICATED(HttpStatus.BAD_REQUEST, "이미 존재하는 날짜 입니다."),
 
     SCHEDULE_VOTE_END(HttpStatus.BAD_REQUEST, "종료된 투표 입니다."),
-    SCHEDULE_VOTE_ITEM_NOT_EXISTS(HttpStatus.NOT_FOUND, "존재하지 않는 투표 항목 입니다.");
+    SCHEDULE_VOTE_ITEM_NOT_EXISTS(HttpStatus.NOT_FOUND, "존재하지 않는 투표 항목 입니다."),
+
+    PLACE_VOTE_END(HttpStatus.BAD_REQUEST, "종료된 투표 입니다."),
+    PLACE_VOTE_ITEM_DUPLICATED(HttpStatus.BAD_REQUEST, "이미 존재하는 장소 입니다."),
+    PLACE_VOTE_ITEM_NOT_EXISTS(HttpStatus.NOT_FOUND, "존재하지 않는 투표 항목 입니다.");
 
 
 

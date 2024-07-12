@@ -52,9 +52,8 @@ public class ScheduleVote {
 
     public void setDateResult(){
         int max = -1;
-        LocalDate result = null;
+        LocalDate result = this.scheduleVoteItems.get(0).getDate();
         Collections.sort(this.scheduleVoteItems, Comparator.comparing(ScheduleVoteItem::getDate));
-        result = this.scheduleVoteItems.get(0).getDate();
 
         for(ScheduleVoteItem item : this.scheduleVoteItems){
             if(item.getScheduleVoters().size() > max){

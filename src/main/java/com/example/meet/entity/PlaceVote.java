@@ -49,7 +49,7 @@ public class PlaceVote {
 
     public void setPlaceResult(){
         int max = -1;
-        String result = null;
+        String result = this.placeVoteItems.get(0).getPlace();
         Collections.sort(this.placeVoteItems, Comparator.comparing(PlaceVoteItem::getId));
 
         for(PlaceVoteItem item : this.placeVoteItems){

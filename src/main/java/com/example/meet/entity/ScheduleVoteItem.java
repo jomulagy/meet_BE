@@ -53,9 +53,4 @@ public class ScheduleVoteItem {
     )
     @Builder.Default
     private List<Member> scheduleVoters = new ArrayList<>();
-
-    public void vote(List<Member> members){
-        scheduleVoters.clear();
-        scheduleVoters = members;
-    }
 }

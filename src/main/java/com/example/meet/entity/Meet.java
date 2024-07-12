@@ -114,4 +114,8 @@ public class Meet {
         LocalDateTime date = LocalDateTime.parse(dateResult+" 19:00", dateTimeFormatter);
         this.date = date;
     }
+
+    public void setPlaceResult(String place) {
+        this.place = place;
+    }
 }

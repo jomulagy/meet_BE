@@ -48,9 +48,4 @@ public class PlaceVoteItem {
             inverseJoinColumns = @JoinColumn(name = "member_id")
     )
     private List<Member> placeVoters = new ArrayList<>();
-
-    public void vote(List<Member> members){
-        placeVoters.clear();
-        placeVoters = members;
-    }
 }
