@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Error Notification</title>
+  <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+        .container {
+            width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        h3 {
+            color: #d9534f;
+        }
+        p {
+            margin: 10px 0;
+        }
+        .label {
+            font-weight: bold;
+        }
+        .stacktrace {
+            background-color: #f5f5f5;
+            border: 1px solid #e3e3e3;
+            padding: 10px;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 1.5em;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+  <h3>Error Notification</h3>
+  <p><span class="label">Request URL:</span> {{requestUrl}}</p>
+  <p><span class="label">Request Method:</span> {{requestMethod}}</p>
+  <p><span class="label">Request Params:</span> {{queryString}}</p>
+  <p><span class="label">Request Body:</span> {{requestBody}}</p>
+  <p><span class="label">Class:</span> {{className}}</p>
+  <p><span class="label">Method:</span> {{methodName}}</p>
+  <p><span class="label">Error Message:</span> {{errorMessage}}</p>
+  <p><span class="label">Stack Trace:</span></p>
+  <pre class="stacktrace">{{stackTrace}}</pre>
+</div>
+</body>
+</html>
