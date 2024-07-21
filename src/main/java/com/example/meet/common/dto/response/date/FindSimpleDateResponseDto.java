@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class FindSimpleDateResponseDto {
     @Schema(description = "모임 날짜", example = "2024-07-05")
-    private String date;
+    private String value;
 
     @Schema(description = "수정 가능 여부", example = "true")
     private String editable;

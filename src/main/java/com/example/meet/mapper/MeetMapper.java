@@ -65,7 +65,7 @@ public interface MeetMapper {
                 editable = true;
             }
             date = FindSimpleDateResponseDto.builder()
-                    .date(scheduleVoteItem.getDate().toString())
+                    .value(scheduleVoteItem.getDate().toString())
                     .editable(editable.toString())
                     .build();
         }
@@ -84,7 +84,7 @@ public interface MeetMapper {
             }
 
             place = FindSimplePLaceResponseDto.builder()
-                    .place(placeVoteItem.getPlace().toString())
+                    .value(placeVoteItem.getPlace().toString())
                     .editable(editable.toString())
                     .build();
         }
