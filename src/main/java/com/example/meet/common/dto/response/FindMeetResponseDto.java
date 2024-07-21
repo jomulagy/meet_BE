@@ -1,5 +1,7 @@
 package com.example.meet.common.dto.response;
 
+import com.example.meet.common.dto.response.date.FindSimpleDateResponseDto;
+import com.example.meet.common.dto.response.place.FindSimplePLaceResponseDto;
 import com.example.meet.common.enumulation.MeetType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -21,10 +23,12 @@ public class FindMeetResponseDto {
     private String content;
     @Schema(description = "모임 종류", example = "Routine")
     private MeetType type;
-    @Schema(description = "모임 날짜", example = "2024-07-05")
-    private String date;
-    @Schema(description = "모임장소", example = "강남역")
-    private String place;
+    @Schema(description = "모임 날짜")
+    private FindSimpleDateResponseDto date;
+    @Schema(description = "모임장소")
+    private FindSimplePLaceResponseDto place;
+    @Schema(description = "작성자 여부", example = "true")
+    private String isAuthor;
     @Schema(description = "참여자 수", example = "2")
     private String participantsNum;
     @Schema(description = "참여자 이름 리스트", example = "['김지훈','장지연']")

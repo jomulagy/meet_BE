@@ -243,7 +243,7 @@ public class MeetService {
                 () -> new BusinessException(ErrorCode.MEET_NOT_EXISTS)
         );
 
-        return meetMapper.EntityToDto(meet);
+        return meetMapper.EntityToDto(meet, user);
     }
 
     @Transactional
