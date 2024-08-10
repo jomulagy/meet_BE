@@ -7,9 +7,10 @@ import com.example.meet.common.dto.request.CreateMeetRequestDto;
 import com.example.meet.common.dto.request.DeleteMeetRequestDto;
 import com.example.meet.common.dto.request.EditMeetRequestDto;
 import com.example.meet.common.dto.request.FindMeetRequestDto;
-import com.example.meet.common.dto.response.CreateMeetResponseDto;
-import com.example.meet.common.dto.response.EditMeetResponseDto;
-import com.example.meet.common.dto.response.FindMeetResponseDto;
+import com.example.meet.common.dto.response.meet.CreateMeetResponseDto;
+import com.example.meet.common.dto.response.meet.EditMeetResponseDto;
+import com.example.meet.common.dto.response.meet.FindMeetResponseDto;
+import com.example.meet.common.dto.response.meet.FindMeetSimpleResponseDto;
 import com.example.meet.common.enumulation.ErrorCode;
 import com.example.meet.common.enumulation.MeetType;
 import com.example.meet.common.enumulation.MemberPrevillege;
@@ -44,7 +45,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import reactor.core.publisher.Mono;
 
 @Slf4j
 @Service
@@ -225,6 +225,22 @@ public class MeetService {
         participateVote.getParticipateVoteItems().add(participateVoteItem2);
 
         participateVoteRepository.save(participateVote);
+    }
+
+    public List<FindMeetSimpleResponseDto> findMeetList(FindMeetRequestDto inDto) {
+        //로그인 한 유저 확인
+        Member user = memberRepository.findById(inDto.getUserId()).orElseThrow(
+                () -> new BusinessException(ErrorCode.MEMBER_NOT_EXISTS)
+        );
+
+        //로그인 한 유저의 권한 확인 (관리자, 멤버 여부)
+        if(user.getPrevillege().equals(MemberPrevillege.denied)){
+            throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
+        }
+
+        //모임 조회
+        List<Meet> meetList = meetRepository.findAll();
+        return meetMapper.EntityListToDtoList(meetList);
     }
 
     public FindMeetResponseDto findMeet(FindMeetRequestDto inDto) {

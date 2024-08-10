@@ -1,4 +1,4 @@
-package com.example.meet.common.dto.response;
+package com.example.meet.common.dto.response.meet;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jdk.jfr.Name;

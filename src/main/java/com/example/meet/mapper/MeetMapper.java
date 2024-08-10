@@ -1,10 +1,11 @@
 package com.example.meet.mapper;
 
 import com.example.meet.common.dto.request.CreateMeetRequestDto;
-import com.example.meet.common.dto.response.CreateMeetResponseDto;
-import com.example.meet.common.dto.response.EditMeetResponseDto;
-import com.example.meet.common.dto.response.FindMeetResponseDto;
+import com.example.meet.common.dto.response.meet.CreateMeetResponseDto;
+import com.example.meet.common.dto.response.meet.EditMeetResponseDto;
+import com.example.meet.common.dto.response.meet.FindMeetResponseDto;
 import com.example.meet.common.dto.response.date.FindSimpleDateResponseDto;
+import com.example.meet.common.dto.response.meet.FindMeetSimpleResponseDto;
 import com.example.meet.common.dto.response.place.FindSimplePLaceResponseDto;
 import com.example.meet.common.enumulation.ErrorCode;
 import com.example.meet.common.exception.BusinessException;
@@ -18,10 +19,13 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import org.mapstruct.Context;
+import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
+import org.springframework.format.datetime.DateFormatter;
 
 @Mapper
 public interface MeetMapper {
@@ -48,11 +52,14 @@ public interface MeetMapper {
     @Mapping(source = "id", target = "id")
     CreateMeetResponseDto entityToCreateDto(Meet entity);
 
-    default FindMeetResponseDto EntityToDto(Meet entity, Member user){
+
+    default FindMeetResponseDto EntityToDto(Meet entity, @Context Member user){
         FindSimpleDateResponseDto date = null;
         FindSimplePLaceResponseDto place = null;
 
         if(entity.getDate() != null){
+            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
             ScheduleVote scheduleVote = entity.getScheduleVote();
             ScheduleVoteItem scheduleVoteItem = scheduleVote.getScheduleVoteItems().stream()
                     .filter(item -> item.getDate().equals(scheduleVote.getDateResult()))
@@ -65,7 +72,7 @@ public interface MeetMapper {
                 editable = true;
             }
             date = FindSimpleDateResponseDto.builder()
-                    .value(scheduleVoteItem.getDate().toString())
+                    .value(scheduleVoteItem.getDate().atStartOfDay().plusHours(19).format(dateTimeFormatter))
                     .editable(editable.toString())
                     .build();
         }
@@ -111,6 +118,21 @@ public interface MeetMapper {
                 .build();
     }
 
+    @Named("EntityToDtoSimple")
+    default FindMeetSimpleResponseDto EntityToDtoSimple(Meet entity){
+        String date = null;
+        if(entity.getDate() != null){
+            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            date = entity.getDate().format(dateTimeFormatter);
+        }
+
+        return FindMeetSimpleResponseDto.builder()
+                .id(entity.getId())
+                .title(entity.getTitle())
+                .date(date)
+                .place(entity.getPlace())
+                .build();
+    }
     default EditMeetResponseDto EntityToUpdateDto(Meet entity){
         String date = null;
 
@@ -138,4 +160,7 @@ public interface MeetMapper {
                 .participants(participants)
                 .build();
     }
+
+    @IterableMapping(qualifiedByName = "EntityToDtoSimple")
+    ArrayList<FindMeetSimpleResponseDto> EntityListToDtoList(List<Meet> meetList);
 }

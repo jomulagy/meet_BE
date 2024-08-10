@@ -1,4 +1,4 @@
-package com.example.meet.common.dto.response;
+package com.example.meet.common.dto.response.meet;
 
 import com.example.meet.common.dto.response.date.FindSimpleDateResponseDto;
 import com.example.meet.common.dto.response.place.FindSimplePLaceResponseDto;

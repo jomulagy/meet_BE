@@ -1,4 +1,4 @@
-package com.example.meet.common.dto.response;
+package com.example.meet.common.dto.response.meet;
 
 import com.example.meet.common.enumulation.MeetType;
 import io.swagger.v3.oas.annotations.media.Schema;
