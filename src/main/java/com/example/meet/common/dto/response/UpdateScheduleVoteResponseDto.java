@@ -1,4 +1,4 @@
-package com.example.meet.controller;
+package com.example.meet.common.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

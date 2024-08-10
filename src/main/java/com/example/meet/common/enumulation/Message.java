@@ -6,7 +6,8 @@ import lombok.Getter;
 @Getter
 public enum Message {
     VOTE("108553"),
-    SCHEDULE("108568")
+    SCHEDULE("108568"),
+    MEET_NOTIFICATION("110979")
     ;
 
     private String id;

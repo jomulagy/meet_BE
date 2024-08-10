@@ -81,6 +81,37 @@ public class MeetService {
 
         createMeet(inDto);
     }
+
+    // 모임 일주일전 알림 -
+    @Scheduled(cron = "0 0 9 * * *")
+    @Transactional
+    public void notifyMeet(){
+        //오늘 날짜인 entity 조회
+        LocalDateTime startOfDay = LocalDateTime.now().with(LocalTime.MIN);
+        LocalDateTime endOfDay = LocalDateTime.now().with(LocalTime.MAX);
+        List<Meet> meetList = meetRepository.findByDateBetween(startOfDay, endOfDay);
+
+        //알림 전송
+        for(Meet meet : meetList){
+            // 참여자 리스트 조회
+            List<Member> participantList = meet.getParticipants();
+
+            // 메세지 템플릿 설정
+            TemplateArgs templateArgs = TemplateArgs.builder()
+                    .title(meet.getTitle())
+                    .scheduleType(null)
+                    .build();
+            Message.MEET_NOTIFICATION.setTemplateArgs(templateArgs);
+
+            // 메세지 전송
+            for(Member member : participantList){
+                messageManager.send(Message.MEET_NOTIFICATION, member).block();
+            }
+        }
+
+    }
+
+
     public CreateMeetResponseDto createMeet(CreateMeetRequestDto inDto) {
         //로그인 한 유저 확인
         Member user = memberRepository.findById(inDto.getUserId()).orElseThrow(

@@ -2,6 +2,9 @@ package com.example.meet.controller;
 
 import com.example.meet.common.CommonResponse;
 import com.example.meet.common.dto.request.CreateMeetRequestDto;
+import com.example.meet.entity.Token;
+import com.example.meet.repository.TokenRepository;
+import com.example.meet.service.AuthService;
 import com.example.meet.service.MeetService;
 import com.example.meet.service.ScheduleService;
 import com.example.meet.service.TestService;
@@ -20,6 +23,8 @@ public class TestController {
     private final TestService testService;
     private final ScheduleService scheduleService;
     private final MeetService meetService;
+    private final AuthService authService;
+    private final TokenRepository tokenRepository;
 
     @GetMapping("/kakao/message")
     public Mono<String> kakaoMessageTest(){
@@ -27,7 +32,7 @@ public class TestController {
     }
 
     @GetMapping("")
-    public void test(CreateMeetRequestDto requestDto){
-        meetService.createMeet(requestDto);
+    public void test(){
+        meetService.notifyMeet();
     }
 }

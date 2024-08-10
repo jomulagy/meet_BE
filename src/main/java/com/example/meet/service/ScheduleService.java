@@ -15,7 +15,7 @@ import com.example.meet.common.enumulation.ErrorCode;
 import com.example.meet.common.enumulation.MemberPrevillege;
 import com.example.meet.common.exception.BusinessException;
 import com.example.meet.common.dto.response.CreateScheduleVoteItemResponseDto;
-import com.example.meet.controller.UpdateScheduleVoteResponseDto;
+import com.example.meet.common.dto.response.UpdateScheduleVoteResponseDto;
 import com.example.meet.entity.Meet;
 import com.example.meet.entity.Member;
 import com.example.meet.entity.ScheduleVote;

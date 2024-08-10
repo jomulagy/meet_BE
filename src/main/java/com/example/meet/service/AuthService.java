@@ -10,23 +10,36 @@ import com.example.meet.common.enumulation.ErrorCode;
 import com.example.meet.common.enumulation.MemberPrevillege;
 import com.example.meet.common.utils.MessageManager;
 import com.example.meet.entity.Member;
+import com.example.meet.entity.Token;
 import com.example.meet.repository.MemberRepository;
+import com.example.meet.repository.TokenRepository;
+import java.time.LocalDateTime;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class AuthService {
+    @Value("${kakao.rest-api-key}")
+    private String kakaoRestApiKey;
+    @Value("${kakao.client-secret}")
+    private String kakaoClientSecret;
+
     private final MemberRepository memberRepository;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
-    private final MessageManager messageManager;
+    private final TokenRepository tokenRepository;
 
     public JwtTokenResponseDto login(KakaoTokenRequestDto request) {
         KakaoUserInfoResponseDto kakaoUserInfoResponseDto = getUserInfo(request.getAccessToken());
@@ -95,7 +108,48 @@ public class AuthService {
         }
 
         return AdminAccessTokenResponseDto.builder()
-                .adminAccessToken(messageManager.getAccessToken())
+                .adminAccessToken(getAccessToken())
                 .build();
+    }
+
+    private boolean isAccessTokenExpired(Token accessToken) {
+        return accessToken== null || accessToken.getExpiresIn() == null || LocalDateTime.now().isAfter(accessToken.getExpiresIn());
+    }
+
+    public String getAccessToken() {
+        Token kakaoToken = tokenRepository.findByName("kakao");
+        if (isAccessTokenExpired(kakaoToken)) {
+            kakaoToken = refreshAccessToken();
+        }
+        return kakaoToken.getAccessToken();
+    }
+
+    @Scheduled(cron = "0 0 0 * * *")
+    @Transactional
+    public Token refreshAccessToken() {
+        Token kakaoToken = tokenRepository.findByName("kakao");
+        WebClient webClient = WebClient.builder().build();
+        webClient.post()
+                .uri("https://kauth.kakao.com/oauth/token")
+                .body(BodyInserters.fromFormData("grant_type", "refresh_token")
+                        .with("client_id", kakaoRestApiKey)
+                        .with("refresh_token", kakaoToken.getRefreshToken())
+                        .with("client_secret", kakaoClientSecret)
+                )
+                .retrieve()
+                .bodyToMono(Map.class)
+                .doOnNext(response -> {
+                    kakaoToken.setAccessToken((String) response.get("access_token"));
+                    int expiresIn = (Integer) response.get("expires_in");
+                    kakaoToken.setExpiresIn(LocalDateTime.now().plusSeconds(expiresIn));
+                    if (response.containsKey("refresh_token")) {
+                        kakaoToken.setRefreshToken((String) response.get("refresh_token"));
+                    }
+                })
+                .then()
+                .block();
+
+                tokenRepository.save(kakaoToken);
+        return kakaoToken;
     }
 }

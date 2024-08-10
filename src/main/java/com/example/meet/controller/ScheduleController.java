@@ -3,6 +3,7 @@ package com.example.meet.controller;
 import static java.lang.Long.parseLong;
 
 import com.example.meet.common.CommonResponse;
+import com.example.meet.common.dto.response.UpdateScheduleVoteResponseDto;
 import com.example.meet.common.dto.request.CreateScheduleVoteItemRequestDto;
 import com.example.meet.common.dto.request.DeleteScheduleVoteItemRequestDto;
 import com.example.meet.common.dto.request.FindScheduleVoteItemRequestDto;
