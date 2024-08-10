@@ -26,6 +26,7 @@ import com.example.meet.repository.MemberRepository;
 import com.example.meet.repository.ScheduleVoteItemRepository;
 import com.example.meet.repository.ScheduleVoteRepository;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -256,9 +257,12 @@ public class ScheduleService {
                 () -> new BusinessException(ErrorCode.MEET_NOT_EXISTS)
         );
 
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String endDate = meet.getScheduleVote().getEndDate().format(dateTimeFormatter);
+
         return FindScheduleVoteResponseDto.builder()
                 .meetTitle(meet.getTitle())
-                .endDate(meet.getScheduleVote().getEndDate().toString())
+                .endDate(endDate)
                 .build();
     }
 

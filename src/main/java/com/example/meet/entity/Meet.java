@@ -118,4 +118,8 @@ public class Meet {
     public void setPlaceResult(String place) {
         this.place = place;
     }
+
+    public void setParticipantsNum(long totalNum) {
+        this.participantsNum = totalNum;
+    }
 }
