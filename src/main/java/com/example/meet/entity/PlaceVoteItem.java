@@ -53,5 +53,6 @@ public class PlaceVoteItem {
             joinColumns = @JoinColumn(name = "placeVoteItem_id"),
             inverseJoinColumns = @JoinColumn(name = "member_id")
     )
+    @Builder.Default
     private List<Member> placeVoters = new ArrayList<>();
 }

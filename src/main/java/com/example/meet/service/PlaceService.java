@@ -107,8 +107,7 @@ public class PlaceService {
             );
 
         }
-        // 추가 할때 오류 남
-        //  {18, 2}
+
         return outDtoList;
     }
 
@@ -133,7 +132,6 @@ public class PlaceService {
 
         List<PlaceVoteItem> placeVoteItemList = meet.getPlaceVote().getPlaceVoteItems();
 
-        //TODO: test
         for(PlaceVoteItem item : placeVoteItemList){
             if(item.getPlace().equals(inDto.getPlace())){
                 throw new BusinessException(ErrorCode.PLACE_VOTE_ITEM_DUPLICATED);
@@ -159,16 +157,10 @@ public class PlaceService {
                 }
         );
 
-        //수정 가능 여부 확인
-        String editable = "false";
-        if(meet.getAuthor() == user && placeVoteItem.getEditable() && placeVoteItem.getPlaceVoters().isEmpty()){
-            editable = "true";
-        }
-
         return CreatePlaceVoteItemResponseDto.builder()
                 .id(placeVoteItem.getId().toString())
                 .place(placeVoteItem.getPlace())
-                .editable(editable)
+                .editable("true")
                 .isVote(isVote)
                 .memberList(memberList)
                 .build();

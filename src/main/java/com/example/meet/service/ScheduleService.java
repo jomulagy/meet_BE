@@ -158,16 +158,10 @@ public class ScheduleService {
                 }
         );
 
-        //수정 가능 여부 확인
-        String editable = "false";
-        if(meet.getAuthor() == user && scheduleVoteItem.getEditable() && scheduleVoteItem.getScheduleVoters().isEmpty()){
-            editable = "true";
-        }
-
         return CreateScheduleVoteItemResponseDto.builder()
                     .id(scheduleVoteItem.getId().toString())
                     .date(scheduleVoteItem.getDate().toString())
-                    .editable(editable)
+                    .editable("true")
                     .isVote(isVote)
                     .memberList(memberList)
                     .build();
