@@ -54,47 +54,35 @@ public interface MeetMapper {
 
 
     default FindMeetResponseDto EntityToDto(Meet entity, @Context Member user){
-        FindSimpleDateResponseDto date = null;
-        FindSimplePLaceResponseDto place = null;
+        FindSimpleDateResponseDto dateResponseDto = null;
+        FindSimplePLaceResponseDto placeResponseDto = null;
+
+        String date = null;
 
         if(entity.getDate() != null){
             DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-            ScheduleVote scheduleVote = entity.getScheduleVote();
-            ScheduleVoteItem scheduleVoteItem = scheduleVote.getScheduleVoteItems().stream()
-                    .filter(item -> item.getDate().equals(scheduleVote.getDateResult()))
-                    .findFirst()
-                    .orElseThrow(() -> new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR));
-
-            Boolean editable = false;
-
-            if(scheduleVoteItem.getEditable() && entity.getAuthor() == user){
-                editable = true;
-            }
-            date = FindSimpleDateResponseDto.builder()
-                    .value(scheduleVoteItem.getDate().atStartOfDay().plusHours(19).format(dateTimeFormatter))
-                    .editable(editable.toString())
-                    .build();
+            date = entity.getDate().format(dateTimeFormatter);
         }
 
-        if(entity.getPlace() != null){
-            PlaceVote placeVote = entity.getPlaceVote();
-            PlaceVoteItem placeVoteItem = placeVote.getPlaceVoteItems().stream()
-                    .filter(item -> item.getPlace().equals(placeVote.getPlaceResult()))
-                    .findFirst()
-                    .orElseThrow(() -> new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR));
+        Boolean editable = false;
 
-            Boolean editable = false;
-
-            if(placeVoteItem.getEditable() && entity.getAuthor() == user){
-                editable = true;
-            }
-
-            place = FindSimplePLaceResponseDto.builder()
-                    .value(placeVoteItem.getPlace().toString())
-                    .editable(editable.toString())
-                    .build();
+        if(entity.getAuthor().equals(user) && entity.getScheduleVote() == null){
+            editable = true;
         }
+
+        dateResponseDto = FindSimpleDateResponseDto.builder()
+                .value(date)
+                .editable(editable.toString())
+                .build();
+
+        if(entity.getAuthor().equals(user) && entity.getPlaceVote() == null){
+            editable = true;
+        }
+
+        placeResponseDto = FindSimplePLaceResponseDto.builder()
+                .value(entity.getPlace())
+                .editable(editable.toString())
+                .build();
 
         Long participantsNum = entity.getParticipantsNum();
         if(entity.getParticipantsNum() == null){
@@ -111,8 +99,8 @@ public interface MeetMapper {
                 .title(entity.getTitle())
                 .content(entity.getContent())
                 .type(entity.getType())
-                .date(date)
-                .place(place)
+                .date(dateResponseDto)
+                .place(placeResponseDto)
                 .participantsNum(String.valueOf(participantsNum))
                 .participants(participants)
                 .build();
