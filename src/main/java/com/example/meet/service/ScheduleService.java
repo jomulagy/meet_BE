@@ -56,6 +56,7 @@ public class ScheduleService {
             scheduleVote.setDateResult();
             scheduleVote.getMeet().setDateResult(scheduleVote.getDateResult());
         }
+
     }
     public List<FindScheduleVoteItemResponseDto> findScheduleVoteItemList(FindScheduleVoteItemRequestDto inDto) {
 
@@ -92,7 +93,7 @@ public class ScheduleService {
 
             //수정 가능 여부 확인
             String editable = "false";
-            if(meet.getAuthor() == user && item.getEditable() && item.getScheduleVoters().isEmpty()){
+            if(item.getAuthor() == user && item.getEditable() && item.getScheduleVoters().isEmpty()){
                 editable = "true";
             }
             outDtoList.add(
@@ -138,7 +139,7 @@ public class ScheduleService {
             }
         }
 
-        ScheduleVoteItem entity = scheduleVoteItemMapper.toEntity(inDto, meet.getScheduleVote());
+        ScheduleVoteItem entity = scheduleVoteItemMapper.toEntity(inDto, meet.getScheduleVote(), user);
         ScheduleVoteItem scheduleVoteItem = scheduleVoteItemRepository.save(entity);
 
         scheduleVoteItemList.add(scheduleVoteItem);

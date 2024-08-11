@@ -42,6 +42,10 @@ public class ScheduleVoteItem {
     private Boolean editable;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author")
+    private Member author;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "scheduleVote_id")
     private ScheduleVote scheduleVote;
 

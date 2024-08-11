@@ -7,8 +7,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.util.List;
 import java.util.ArrayList;
@@ -38,6 +40,14 @@ public class Member {
 
     @Column(name = "previllege",nullable = false)
     private MemberPrevillege previllege = MemberPrevillege.denied;
+
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<ScheduleVoteItem> scheduleVoteItemList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<PlaceVoteItem> placeVoteItemList = new ArrayList<>();
 
     @ManyToMany(mappedBy = "scheduleVoters")
     private List<ScheduleVoteItem> scheduleVoters = new ArrayList<>();

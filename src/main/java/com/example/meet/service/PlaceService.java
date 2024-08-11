@@ -93,7 +93,7 @@ public class PlaceService {
 
             //수정 가능 여부 확인
             String editable = "false";
-            if(meet.getAuthor() == user && item.getEditable() && item.getPlaceVoters().isEmpty()){
+            if(item.getAuthor().equals(user) && item.getEditable() && item.getPlaceVoters().isEmpty()){
                 editable = "true";
             }
             outDtoList.add(
@@ -107,7 +107,8 @@ public class PlaceService {
             );
 
         }
-
+        // 추가 할때 오류 남
+        //  {18, 2}
         return outDtoList;
     }
 
@@ -139,7 +140,7 @@ public class PlaceService {
             }
         }
 
-        PlaceVoteItem entity = placeVoteItemMapper.toEntity(inDto, meet.getPlaceVote());
+        PlaceVoteItem entity = placeVoteItemMapper.toEntity(inDto, meet.getPlaceVote(), user);
         PlaceVoteItem placeVoteItem = placeVoteItemRepository.save(entity);
 
         placeVoteItemList.add(placeVoteItem);
