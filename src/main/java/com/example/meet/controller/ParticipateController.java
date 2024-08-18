@@ -3,17 +3,12 @@ package com.example.meet.controller;
 import static java.lang.Long.parseLong;
 
 import com.example.meet.common.CommonResponse;
+import com.example.meet.common.dto.request.participate.UpdateParticipateVoteRequestDto;
 import com.example.meet.common.dto.request.participate.FindParticipateVoteItemRequestDto;
 import com.example.meet.common.dto.request.participate.FindParticipateVoteRequestDto;
-import com.example.meet.common.dto.request.place.FindPlaceVoteItemRequestDto;
-import com.example.meet.common.dto.request.place.FindPlaceVoteRequestDto;
-import com.example.meet.common.dto.request.place.UpdatePlaceVoteRequestDto;
 import com.example.meet.common.dto.response.participate.FindParticipateVoteItemResponseDto;
 import com.example.meet.common.dto.response.participate.FindParticipateVoteResponseDto;
 import com.example.meet.common.dto.response.participate.UpdateParticipateVoteResponseDto;
-import com.example.meet.common.dto.response.place.FindPlaceVoteItemResponseDto;
-import com.example.meet.common.dto.response.place.FindPlaceVoteResponseDto;
-import com.example.meet.common.dto.response.place.UpdatePlaceVoteResponseDto;
 import com.example.meet.service.ParticipateService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

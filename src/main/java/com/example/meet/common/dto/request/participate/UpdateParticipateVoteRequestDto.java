@@ -1,4 +1,4 @@
-package com.example.meet.controller;
+package com.example.meet.common.dto.request.participate;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;

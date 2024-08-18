@@ -50,7 +50,7 @@ public class AuthService {
 
         Long userId = kakaoUserInfoResponseDto.getUserID();
         Member member = memberRepository.findById(userId).get();
-        if(member.getPrevillege() == MemberPrevillege.denied){
+        if(member.getPrevillege().equals(MemberPrevillege.denied)){
             throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
         }
         // jwt 토큰 반환

@@ -6,17 +6,14 @@ import com.example.meet.common.dto.response.SimpleMemberResponseDto;
 import com.example.meet.common.dto.response.participate.FindParticipateVoteItemResponseDto;
 import com.example.meet.common.dto.response.participate.FindParticipateVoteResponseDto;
 import com.example.meet.common.dto.response.participate.UpdateParticipateVoteResponseDto;
-import com.example.meet.common.dto.response.place.FindPlaceVoteItemResponseDto;
-import com.example.meet.common.dto.response.place.FindPlaceVoteResponseDto;
 import com.example.meet.common.enumulation.ErrorCode;
 import com.example.meet.common.enumulation.MemberPrevillege;
 import com.example.meet.common.exception.BusinessException;
-import com.example.meet.controller.UpdateParticipateVoteRequestDto;
+import com.example.meet.common.dto.request.participate.UpdateParticipateVoteRequestDto;
 import com.example.meet.entity.Meet;
 import com.example.meet.entity.Member;
 import com.example.meet.entity.ParticipateVote;
 import com.example.meet.entity.ParticipateVoteItem;
-import com.example.meet.entity.PlaceVoteItem;
 import com.example.meet.repository.MeetRepository;
 import com.example.meet.repository.MemberRepository;
 import com.example.meet.repository.ParticipateVoteItemRepository;
@@ -70,8 +67,11 @@ public class ParticipateService {
 
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String endDate = meet.getParticipateVote().getEndDate().format(dateTimeFormatter);
+        String date = meet.getDate().format(dateTimeFormatter);
         return FindParticipateVoteResponseDto.builder()
                 .meetTitle(meet.getTitle())
+                .date(date)
+                .place(meet.getPlace())
                 .endDate(endDate)
                 .build();
     }

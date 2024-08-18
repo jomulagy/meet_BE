@@ -103,7 +103,7 @@ public class MemberService {
                 () -> new BusinessException(ErrorCode.MEMBER_NOT_EXISTS)
         );
 
-        //로그인 한 유저의 권한 확인 (관리자 여부)
+        //로그인 한 유저의 권한 확인
         if(member.getPrevillege().equals(MemberPrevillege.denied)){
             throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
         }
