@@ -103,6 +103,7 @@ public interface MeetMapper {
                 .place(placeResponseDto)
                 .participantsNum(String.valueOf(participantsNum))
                 .participants(participants)
+                .isAuthor(String.valueOf(entity.getAuthor().equals(user)))
                 .build();
     }
 
