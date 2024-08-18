@@ -6,6 +6,7 @@ import com.example.meet.common.dto.response.SimpleMemberResponseDto;
 import com.example.meet.common.dto.response.participate.FindParticipateVoteItemResponseDto;
 import com.example.meet.common.dto.response.participate.FindParticipateVoteResponseDto;
 import com.example.meet.common.dto.response.participate.UpdateParticipateVoteResponseDto;
+import com.example.meet.common.dto.response.place.FindPlaceVoteItemResponseDto;
 import com.example.meet.common.enumulation.ErrorCode;
 import com.example.meet.common.enumulation.MemberPrevillege;
 import com.example.meet.common.exception.BusinessException;
@@ -106,6 +107,17 @@ public class ParticipateService {
                                 .name(member.getName())
                                 .build());
                     }
+            );
+
+            String name = item.getIsParticipate().equals(true) ? "참여" : "불참";
+
+            outDtoList.add(
+                    FindParticipateVoteItemResponseDto.builder()
+                            .id(item.getId().toString())
+                            .name(name)
+                            .isVote(isVote)
+                            .memberList(memberList)
+                            .build()
             );
         }
 

@@ -75,7 +75,7 @@ public class ParticipateController {
 
     @GetMapping("/item/list")
     @Tag(name = "participate vote", description = "참여여부 투표")
-    @Operation(summary = "참여여부 투표",
+    @Operation(summary = "참여여부 투표 항목 리스트",
             description = "Authorization header require<br>type - Routine",
             responses = {
                     @ApiResponse(responseCode = "200",
