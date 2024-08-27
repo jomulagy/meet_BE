@@ -251,7 +251,7 @@ public class PlaceService {
                 () -> new BusinessException(ErrorCode.MEET_NOT_EXISTS)
         );
 
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String endDate = meet.getPlaceVote().getEndDate().format(dateTimeFormatter);
 
         return FindPlaceVoteResponseDto.builder()

@@ -66,7 +66,7 @@ public class ParticipateService {
                 () -> new BusinessException(ErrorCode.MEET_NOT_EXISTS)
         );
 
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String endDate = meet.getParticipateVote().getEndDate().format(dateTimeFormatter);
         String date = meet.getDate().format(dateTimeFormatter);
         return FindParticipateVoteResponseDto.builder()

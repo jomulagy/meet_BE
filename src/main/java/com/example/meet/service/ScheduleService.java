@@ -252,7 +252,7 @@ public class ScheduleService {
                 () -> new BusinessException(ErrorCode.MEET_NOT_EXISTS)
         );
 
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String endDate = meet.getScheduleVote().getEndDate().format(dateTimeFormatter);
 
         return FindScheduleVoteResponseDto.builder()
