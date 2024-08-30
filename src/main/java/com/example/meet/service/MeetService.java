@@ -317,17 +317,17 @@ public class MeetService {
         }
 
         //투표한 필드는 편집 불가(날짜)
-        if(meet.getDate() != null && meet.getScheduleVote().getDateResult() != null && !Objects.equals(inDto.getDate(), meet.getDate().toLocalDate())){
+        if(meet.getDate() != null && meet.getScheduleVote() != null && meet.getScheduleVote().getDateResult() != null && !Objects.equals(inDto.getDate(), meet.getDate().toLocalDate())){
             throw new BusinessException(ErrorCode.VOTE_REQUIRED);
         }
 
         //투표한 필드는 편집 불가(시간)
-        if(meet.getDate() != null && meet.getScheduleVote().getDateResult() != null && !Objects.equals(inDto.getTime(), meet.getDate().toLocalTime())){
+        if(meet.getDate() != null && meet.getScheduleVote() != null && meet.getScheduleVote().getDateResult() != null && !Objects.equals(inDto.getTime(), meet.getDate().toLocalTime())){
             throw new BusinessException(ErrorCode.VOTE_REQUIRED);
         }
 
         //투표한 필드는 편집 불가(장소)
-        if(meet.getPlace() != null && meet.getPlaceVote().getPlaceResult() != null && !Objects.equals(inDto.getPlace(), meet.getPlace())){
+        if(meet.getPlace() != null && meet.getPlaceVote() != null && meet.getPlaceVote().getPlaceResult() != null && !Objects.equals(inDto.getPlace(), meet.getPlace())){
             throw new BusinessException(ErrorCode.VOTE_REQUIRED);
         }
 
