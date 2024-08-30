@@ -77,4 +77,4 @@ jobs:
           docker rm $(docker ps -a -q -f status=created) || true
           docker rmi $(docker images -q) || true
           docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
-          docker run -d --restart on-failure:5 -p 443:80 -v /home/ubuntu/data:/data -v /etc/localtime:/etc/localtime:ro -v /etc/timezone:/etc/timezone:ro --name meetServer ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
+          docker run -d --restart on-failure:5 -p 80:80 -p 8080:8080 -v /home/ubuntu/data:/data -v /etc/localtime:/etc/localtime:ro -v /etc/timezone:/etc/timezone:ro --name meetServer ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
