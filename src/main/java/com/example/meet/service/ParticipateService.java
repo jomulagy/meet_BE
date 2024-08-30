@@ -139,7 +139,7 @@ public class ParticipateService {
                 () -> new BusinessException(ErrorCode.MEET_NOT_EXISTS)
         );
 
-        if(meet.getPlaceVote().getEndDate().isBefore(LocalDateTime.now())){
+        if(meet.getParticipateVote().getEndDate().isBefore(LocalDateTime.now())){
             throw new BusinessException(ErrorCode.PARTICIPATE_VOTE_END);
         }
 
