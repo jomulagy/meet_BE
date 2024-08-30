@@ -17,6 +17,8 @@ public class CreateScheduleVoteItemResponseDto {
     private String id;
     @Schema(description = "날짜")
     private String date;
+    @Schema(description = "시간")
+    private String time;
     @Schema(description = "수정 가능 여부")
     private String editable;
     @Schema(description = "투표 여부")

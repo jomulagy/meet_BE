@@ -78,7 +78,7 @@ public class Meet {
     private List<Member> participants = new ArrayList<>();
 
     void setDate(){
-        this.date = this.scheduleVote.getDateResult().atTime(19, 0);
+        this.date = this.scheduleVote.getDateResult();
     }
 
     void setPlace(){
@@ -101,17 +101,13 @@ public class Meet {
     }
 
     public void update(EditMeetRequestDto inDto) {
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        LocalDateTime date = date = LocalDateTime.parse(inDto.getDate()+" 19:00", dateTimeFormatter);;
         this.title = inDto.getTitle();
         this.content = inDto.getContent();
-        this.date = date;
+        this.date = LocalDateTime.of(inDto.getDate(), inDto.getTime());
         this.place = inDto.getPlace();
     }
 
-    public void setDateResult(LocalDate dateResult) {
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        LocalDateTime date = LocalDateTime.parse(dateResult+" 19:00", dateTimeFormatter);
+    public void setDateResult(LocalDateTime dateResult) {
         this.date = date;
     }
 

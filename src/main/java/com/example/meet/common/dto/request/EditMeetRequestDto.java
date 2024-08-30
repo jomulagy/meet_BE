@@ -1,6 +1,8 @@
 package com.example.meet.common.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,7 +22,9 @@ public class EditMeetRequestDto {
     @Schema(description = "모임 내용", example = "정기 모임 입니다.")
     private String content;
     @Schema(description = "모임 날짜", example = "2024-07-05")
-    private String date;
+    private LocalDate date;
+    @Schema(description = "모임 시간", example = "19:00")
+    private LocalTime time;
     @Schema(description = "모임장소", example = "강남역")
     private String place;
 

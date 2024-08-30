@@ -197,6 +197,7 @@ public class MeetController {
                 .title(requestDto.getTitle())
                 .content(requestDto.getContent())
                 .date(requestDto.getDate())
+                .time(requestDto.getTime())
                 .place(requestDto.getPlace())
                 .build();
 

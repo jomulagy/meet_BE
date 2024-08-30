@@ -58,10 +58,13 @@ public interface MeetMapper {
         FindSimplePLaceResponseDto placeResponseDto = null;
 
         String date = null;
+        String time = null;
 
         if(entity.getDate() != null){
-            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            date = entity.getDate().format(dateTimeFormatter);
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+            date = entity.getDate().toLocalDate().format(dateFormatter);
+            time = entity.getDate().toLocalTime().format(timeFormatter);
         }
 
         Boolean editable = false;
@@ -72,6 +75,7 @@ public interface MeetMapper {
 
         dateResponseDto = FindSimpleDateResponseDto.builder()
                 .value(date)
+                .time(time)
                 .editable(editable.toString())
                 .build();
 

@@ -2,6 +2,7 @@ package com.example.meet.common.utils;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Component;
@@ -20,13 +21,13 @@ public class ScheduleManager {
         }
     }
 
-    public static List<LocalDate> getFridaysAndSaturdays(LocalDate startDate, LocalDate endDate) {
-        List<LocalDate> dates = new ArrayList<>();
+    public static List<LocalDateTime> getFridaysAndSaturdays(LocalDate startDate, LocalDate endDate) {
+        List<LocalDateTime> dates = new ArrayList<>();
         LocalDate date = startDate;
 
         while (!date.isAfter(endDate)) {
             if (date.getDayOfWeek() == DayOfWeek.FRIDAY || date.getDayOfWeek() == DayOfWeek.SATURDAY) {
-                dates.add(date);
+                dates.add(date.atTime(19, 0));
             }
             date = date.plusDays(1);
         }

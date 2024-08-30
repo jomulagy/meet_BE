@@ -39,7 +39,7 @@ public class ParticipateService {
     private final MemberRepository memberRepository;
     private final MeetRepository meetRepository;
 
-    @Scheduled(cron = "0 0 8 4 3,6,9,12 ?")
+    @Scheduled(cron = "0 0 8 3 3,6,9,12 ?")
     @Transactional
     public void terminatePlaceVote(){
         LocalDate currentDate = LocalDate.now();

@@ -152,6 +152,7 @@ public class ScheduleController {
                 .userId(parseLong(userDetails.getUsername()))
                 .meetId(request.getMeetId())
                 .date(request.getDate())
+                .time(request.getTime())
                 .build();
 
         return CommonResponse.success(scheduleService.createScheduleVoteItem(inDto));

@@ -36,7 +36,7 @@ public class ScheduleVoteItem {
     private Long id;
 
     @Column(name = "date")
-    private LocalDate date;
+    private LocalDateTime date;
 
     @Column(name = "editable", nullable = false)
     private Boolean editable;

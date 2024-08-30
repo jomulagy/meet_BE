@@ -26,6 +26,7 @@ import com.example.meet.repository.MemberRepository;
 import com.example.meet.repository.ScheduleVoteItemRepository;
 import com.example.meet.repository.ScheduleVoteRepository;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -99,7 +100,8 @@ public class ScheduleService {
             outDtoList.add(
                     FindScheduleVoteItemResponseDto.builder()
                             .id(item.getId().toString())
-                            .date(item.getDate().toString())
+                            .date(item.getDate().toLocalDate().toString())
+                            .time(item.getDate().toLocalTime().toString())
                             .editable(editable)
                             .isVote(isVote)
                             .memberList(memberList)
@@ -134,7 +136,7 @@ public class ScheduleService {
 
         //TODO: test
         for(ScheduleVoteItem item : scheduleVoteItemList){
-            if(item.getDate().equals(inDto.getDate())){
+            if(item.getDate().toLocalDate().equals(inDto.getDate()) && item.getDate().toLocalTime().equals(inDto.getTime())){
                 throw new BusinessException(ErrorCode.SCHEDULE_VOTE_ITEM_DUPLICATED);
             }
         }
@@ -160,7 +162,8 @@ public class ScheduleService {
 
         return CreateScheduleVoteItemResponseDto.builder()
                     .id(scheduleVoteItem.getId().toString())
-                    .date(scheduleVoteItem.getDate().toString())
+                    .date(scheduleVoteItem.getDate().toLocalDate().toString())
+                    .time(scheduleVoteItem.getDate().toLocalTime().toString())
                     .editable("true")
                     .isVote(isVote)
                     .memberList(memberList)

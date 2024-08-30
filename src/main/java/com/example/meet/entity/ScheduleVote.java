@@ -37,7 +37,7 @@ public class ScheduleVote {
     private Long id;
 
     @Column(name = "date_result")
-    private LocalDate dateResult;
+    private LocalDateTime dateResult;
 
     @Column(name = "end_date")
     private LocalDate endDate;
@@ -52,7 +52,7 @@ public class ScheduleVote {
 
     public void setDateResult(){
         int max = -1;
-        LocalDate result = this.scheduleVoteItems.get(0).getDate();
+        LocalDateTime result = this.scheduleVoteItems.get(0).getDate();
         Collections.sort(this.scheduleVoteItems, Comparator.comparing(ScheduleVoteItem::getDate));
 
         for(ScheduleVoteItem item : this.scheduleVoteItems){

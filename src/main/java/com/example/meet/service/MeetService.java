@@ -206,9 +206,9 @@ public class MeetService {
         LocalDate lastDayOfNextQuarterMonth = nextQuarterMonth.atEndOfMonth();
 
         // 해당 월의 모든 금요일과 토요일 계산
-        List<LocalDate> fridaysAndSaturdays = ScheduleManager.getFridaysAndSaturdays(firstDayOfNextQuarterMonth, lastDayOfNextQuarterMonth);
+        List<LocalDateTime> fridaysAndSaturdays = ScheduleManager.getFridaysAndSaturdays(firstDayOfNextQuarterMonth, lastDayOfNextQuarterMonth);
 
-        for(LocalDate date : fridaysAndSaturdays){
+        for(LocalDateTime date : fridaysAndSaturdays){
             ScheduleVoteItem scheduleVoteItem = ScheduleVoteItem.builder().date(date).scheduleVote(scheduleVote).editable(false).build();
             scheduleVoteItemRepository.save(scheduleVoteItem);
             scheduleVote.getScheduleVoteItems().add(scheduleVoteItem);
