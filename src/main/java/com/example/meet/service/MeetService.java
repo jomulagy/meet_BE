@@ -40,6 +40,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.YearMonth;
 import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -315,13 +316,18 @@ public class MeetService {
             throw new BusinessException(ErrorCode.MEET_EDIT_PERMISSION_REQUIRED);
         }
 
-        //투표한 필드는 편집 불가
-        if(meet.getDate() != null && meet.getScheduleVote().getDateResult() != null && !inDto.getDate().equals(meet.getDate().toString())){
+        //투표한 필드는 편집 불가(날짜)
+        if(meet.getDate() != null && meet.getScheduleVote().getDateResult() != null && !Objects.equals(inDto.getDate(), meet.getDate().toLocalDate())){
             throw new BusinessException(ErrorCode.VOTE_REQUIRED);
         }
 
-        //투표한 필드는 편집 불가
-        if(meet.getPlace() != null && meet.getPlaceVote().getPlaceResult() != null && !inDto.getPlace().equals(meet.getPlace())){
+        //투표한 필드는 편집 불가(시간)
+        if(meet.getDate() != null && meet.getScheduleVote().getDateResult() != null && !Objects.equals(inDto.getTime(), meet.getDate().toLocalTime())){
+            throw new BusinessException(ErrorCode.VOTE_REQUIRED);
+        }
+
+        //투표한 필드는 편집 불가(장소)
+        if(meet.getPlace() != null && meet.getPlaceVote().getPlaceResult() != null && !Objects.equals(inDto.getPlace(), meet.getPlace())){
             throw new BusinessException(ErrorCode.VOTE_REQUIRED);
         }
 
