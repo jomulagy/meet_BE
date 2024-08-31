@@ -14,9 +14,10 @@ import reactor.core.publisher.Mono;
 public class TestService {
     private final MessageManager messageManager;
 
-    public Mono<String> kakaoMessageTest() {
+    public Mono<String> kakaoMessageTest(String meetId) {
         TemplateArgs templateArgs = TemplateArgs.builder()
                 .title("test")
+                .but(meetId)
                 .scheduleType("정기")
                 .build();
         Message.VOTE.setTemplateArgs(templateArgs);

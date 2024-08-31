@@ -28,11 +28,11 @@ public class TestController {
 
     @GetMapping("/kakao/message")
     public Mono<String> kakaoMessageTest(){
-        return testService.kakaoMessageTest();
+        return testService.kakaoMessageTest("16");
     }
 
     @GetMapping("")
     public void test(){
-        meetService.notifyMeet();
+        testService.kakaoMessageTest("16");
     }
 }

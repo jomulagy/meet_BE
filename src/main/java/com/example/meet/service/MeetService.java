@@ -100,6 +100,7 @@ public class MeetService {
             // 메세지 템플릿 설정
             TemplateArgs templateArgs = TemplateArgs.builder()
                     .title(meet.getTitle())
+                    .but(meet.getId().toString())
                     .scheduleType(null)
                     .build();
             Message.MEET_NOTIFICATION.setTemplateArgs(templateArgs);
@@ -155,6 +156,7 @@ public class MeetService {
 
         TemplateArgs templateArgs = TemplateArgs.builder()
                 .title(entity.getTitle())
+                .but(entity.getId().toString())
                 .scheduleType(null)
                 .build();
         Message.SCHEDULE.setTemplateArgs(templateArgs);

@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 public class MessageManager {
-    private final String REQUEST_URI = "http://localhost:5173/";
+    private final String REQUEST_URI = "https://meetplace.store/";
     private final MemberRepository memberRepository;
     private final ObjectMapper objectMapper;
     private final AuthService authService;

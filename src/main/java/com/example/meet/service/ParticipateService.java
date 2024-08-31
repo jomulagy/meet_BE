@@ -1,5 +1,6 @@
 package com.example.meet.service;
 
+import com.example.meet.common.dto.TemplateArgs;
 import com.example.meet.common.dto.request.participate.FindParticipateVoteItemRequestDto;
 import com.example.meet.common.dto.request.participate.FindParticipateVoteRequestDto;
 import com.example.meet.common.dto.response.SimpleMemberResponseDto;
@@ -9,8 +10,10 @@ import com.example.meet.common.dto.response.participate.UpdateParticipateVoteRes
 import com.example.meet.common.dto.response.place.FindPlaceVoteItemResponseDto;
 import com.example.meet.common.enumulation.ErrorCode;
 import com.example.meet.common.enumulation.MemberPrevillege;
+import com.example.meet.common.enumulation.Message;
 import com.example.meet.common.exception.BusinessException;
 import com.example.meet.common.dto.request.participate.UpdateParticipateVoteRequestDto;
+import com.example.meet.common.utils.MessageManager;
 import com.example.meet.entity.Meet;
 import com.example.meet.entity.Member;
 import com.example.meet.entity.ParticipateVote;
@@ -38,17 +41,28 @@ public class ParticipateService {
     private final ParticipateVoteItemRepository participateVoteItemRepository;
     private final MemberRepository memberRepository;
     private final MeetRepository meetRepository;
+    private final MessageManager messageManager;
 
     @Scheduled(cron = "0 0 8 3 3,6,9,12 ?")
     @Transactional
     public void terminatePlaceVote(){
         LocalDate currentDate = LocalDate.now();
-        List<ParticipateVote> placeVoteList = participateVoteRepository.findByEndDateBefore(currentDate);
+        List<ParticipateVote> participateVoteList = participateVoteRepository.findByEndDateBefore(currentDate);
 
-        for(ParticipateVote participateVote : placeVoteList){
+        for(ParticipateVote participateVote : participateVoteList){
             participateVote.setTotalNum();
             participateVote.getMeet().setParticipantsNum(participateVote.getTotalNum());
         }
+
+        if(participateVoteList.size() > 0){
+            TemplateArgs templateArgs = TemplateArgs.builder()
+                    .title(participateVoteList.get(0).getMeet().getTitle())
+                    .scheduleType(null)
+                    .build();
+            Message.VOTE.setTemplateArgs(templateArgs);
+            messageManager.sendAll(Message.VOTE).block();
+        }
+
     }
 
     public FindParticipateVoteResponseDto findParticipateVote(FindParticipateVoteRequestDto inDto) {

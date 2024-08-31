@@ -16,4 +16,6 @@ public class TemplateArgs {
     private String title;
     @JsonProperty("scheduleType")
     private String scheduleType;
+    @JsonProperty("BUT")
+    private String but;
 }
