@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -36,7 +36,7 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @PostMapping("/api/auth/login")
+    @PostMapping("/login")
     @Tag(name = "Auth", description = "인증")
     @Operation(summary = "로그인",
             responses = {@ApiResponse(responseCode = "200",
