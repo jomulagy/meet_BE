@@ -43,6 +43,7 @@ import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -273,7 +274,7 @@ public class MeetService {
         }
 
         //모임 조회
-        List<Meet> meetList = meetRepository.findAll();
+        List<Meet> meetList = meetRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
         return meetMapper.EntityListToDtoList(meetList);
     }
 
