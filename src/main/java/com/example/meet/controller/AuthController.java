@@ -36,7 +36,7 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @PostMapping("/api/login")
+    @PostMapping("/api/auth/login")
     @Tag(name = "Auth", description = "인증")
     @Operation(summary = "로그인",
             responses = {@ApiResponse(responseCode = "200",
