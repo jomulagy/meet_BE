@@ -34,7 +34,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/meet")
+@RequestMapping("/meet")
 public class MeetController {
     private final MeetService meetService;
 

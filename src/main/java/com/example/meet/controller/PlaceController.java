@@ -37,7 +37,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/meet/place")
+@RequestMapping("/meet/place")
 public class PlaceController {
     private final PlaceService placeService;
 

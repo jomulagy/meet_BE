@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/meet/participate")
+@RequestMapping("/meet/participate")
 public class ParticipateController {
     private final ParticipateService participateService;
 

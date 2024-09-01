@@ -18,7 +18,7 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/test")
+@RequestMapping("/test")
 public class TestController {
     private final TestService testService;
     private final ScheduleService scheduleService;
