@@ -54,12 +54,6 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 }
 
-bootJar {
-	from('src/main/resources') {
-		include 'bootsecurity.p12'
-	}
-}
-
 tasks.named('test') {
 	useJUnitPlatform()
 }
