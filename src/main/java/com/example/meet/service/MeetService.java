@@ -178,8 +178,8 @@ public class MeetService {
 
     private PlaceVote createPlaceVote(Meet meet) {
         LocalDate currentDate = LocalDate.now();
-        LocalDate tomorrowDate = currentDate.plusDays(2);
-        LocalDateTime endDate = tomorrowDate.atTime(LocalTime.of(9, 0));
+        LocalDate tomorrowDate = currentDate.plusDays(1);
+        LocalDateTime endDate = tomorrowDate.atTime(LocalTime.of(4, 0));
 
         return PlaceVote.builder()
                 .endDate(endDate)
@@ -189,8 +189,8 @@ public class MeetService {
 
     private ParticipateVote createParticipateVote(Meet meet) {
         LocalDate currentDate = LocalDate.now();
-        LocalDate tomorrowDate = currentDate.plusDays(3);
-        LocalDateTime endDate = tomorrowDate.atTime(LocalTime.of(9, 0));
+        LocalDate tomorrowDate = currentDate.plusDays(2);
+        LocalDateTime endDate = tomorrowDate.atTime(LocalTime.of(4, 0));
 
         return ParticipateVote.builder()
                 .endDate(endDate)
@@ -222,10 +222,13 @@ public class MeetService {
     }
 
     private void setPlaceVoteItems(PlaceVote placeVote) {
+        Member author = memberRepository.findById(Long.valueOf("2927398983")).orElseThrow();
+
         PlaceVoteItem placeVoteItem1 = PlaceVoteItem.builder()
                 .place("강남역")
                 .placeVote(placeVote)
                 .editable(false)
+                .author(author)
                 .build();
         placeVoteItemRepository.save(placeVoteItem1);
 
@@ -233,6 +236,7 @@ public class MeetService {
                 .place("종각역")
                 .placeVote(placeVote)
                 .editable(false)
+                .author(author)
                 .build();
         placeVoteItemRepository.save(placeVoteItem2);
 

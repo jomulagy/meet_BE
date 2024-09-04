@@ -26,6 +26,7 @@ import com.example.meet.repository.MemberRepository;
 import com.example.meet.repository.PlaceVoteItemRepository;
 import com.example.meet.repository.PlaceVoteRepository;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,10 +48,10 @@ public class PlaceService {
     private final PlaceVoteItemMapper placeVoteItemMapper = PlaceVoteItemMapper.INSTANCE;
 
 
-    @Scheduled(cron = "0 0 8 2 3,6,9,12 ?")
+    @Scheduled(cron = "0 0 8 4 3,6,9,12 ?")
     @Transactional
     public void terminatePlaceVote(){
-        LocalDate currentDate = LocalDate.now();
+        LocalDateTime currentDate = LocalDateTime.now();
         List<PlaceVote> placeVoteList = placeVoteRepository.findEventsWithNullDateResultAndEndDateBefore(currentDate);
 
         for(PlaceVote placeVote : placeVoteList){

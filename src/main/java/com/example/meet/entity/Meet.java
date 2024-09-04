@@ -108,7 +108,7 @@ public class Meet {
     }
 
     public void setDateResult(LocalDateTime dateResult) {
-        this.date = date;
+        this.date = dateResult;
     }
 
     public void setPlaceResult(String place) {
