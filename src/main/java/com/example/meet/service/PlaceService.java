@@ -123,11 +123,14 @@ public class PlaceService {
             throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
         }
 
+        if(inDto.getPlace() == null || inDto.getPlace().isEmpty()){
+            throw new BusinessException(ErrorCode.PLACE_VALUE_REQUIRED);
+        }
         Meet meet = meetRepository.findById(inDto.getMeetId()).orElseThrow(
                 () -> new BusinessException(ErrorCode.MEET_NOT_EXISTS)
         );
 
-        if(meet.getPlace() != null){
+        if(meet.getPlaceVote().getEndDate() != null && meet.getPlaceVote().getEndDate().isBefore(LocalDateTime.now())){
             throw new BusinessException(ErrorCode.PLACE_VOTE_END);
         }
 
