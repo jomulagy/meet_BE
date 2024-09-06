@@ -186,7 +186,7 @@ public class PlaceService {
                 () -> new BusinessException(ErrorCode.PLACE_VOTE_ITEM_NOT_EXISTS)
         );
 
-        if(placeVoteItem.getPlaceVote().getMeet().getPlace() != null){
+        if(placeVoteItem.getPlaceVote().getEndDate() != null && placeVoteItem.getPlaceVote().getEndDate().isBefore(LocalDateTime.now())){
             throw new BusinessException(ErrorCode.PLACE_VOTE_END);
         }
 

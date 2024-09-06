@@ -169,9 +169,10 @@ public class MeetService {
     private ScheduleVote createScheduleVote(Meet meet) {
         LocalDate currentDate = LocalDate.now();
         LocalDate tomorrowDate = currentDate.plusDays(1);
+        LocalDateTime endDate = tomorrowDate.atTime(LocalTime.of(4, 0));
 
         return ScheduleVote.builder()
-                .endDate(tomorrowDate)
+                .endDate(endDate)
                 .meet(meet)
                 .build();
     }

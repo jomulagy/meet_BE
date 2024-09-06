@@ -26,6 +26,7 @@ import com.example.meet.repository.MemberRepository;
 import com.example.meet.repository.ScheduleVoteItemRepository;
 import com.example.meet.repository.ScheduleVoteRepository;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -128,7 +129,7 @@ public class ScheduleService {
                 () -> new BusinessException(ErrorCode.MEET_NOT_EXISTS)
         );
 
-        if(meet.getDate() != null){
+        if(meet.getScheduleVote().getEndDate() != null && meet.getScheduleVote().getEndDate().isBefore(LocalDateTime.now())){
             throw new BusinessException(ErrorCode.SCHEDULE_VOTE_END);
         }
 
@@ -186,7 +187,7 @@ public class ScheduleService {
                 () -> new BusinessException(ErrorCode.SCHEDULE_VOTE_ITEM_NOT_EXISTS)
         );
 
-        if(scheduleVoteItem.getScheduleVote().getMeet().getDate() != null){
+        if(scheduleVoteItem.getScheduleVote().getEndDate() != null && scheduleVoteItem.getScheduleVote().getEndDate().isBefore(LocalDateTime.now())){
             throw new BusinessException(ErrorCode.SCHEDULE_VOTE_END);
         }
 

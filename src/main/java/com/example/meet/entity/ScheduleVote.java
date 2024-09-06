@@ -40,7 +40,7 @@ public class ScheduleVote {
     private LocalDateTime dateResult;
 
     @Column(name = "end_date")
-    private LocalDate endDate;
+    private LocalDateTime endDate;
 
     @OneToOne
     @JoinColumn(name = "meet_id", referencedColumnName = "id")
