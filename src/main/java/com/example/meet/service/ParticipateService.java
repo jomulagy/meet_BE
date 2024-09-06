@@ -66,6 +66,9 @@ public class ParticipateService {
     }
 
     public FindParticipateVoteResponseDto findParticipateVote(FindParticipateVoteRequestDto inDto) {
+        String endDate = null;
+        String date = null;
+
         //로그인 한 유저 확인
         Member user = memberRepository.findById(inDto.getUserId()).orElseThrow(
                 () -> new BusinessException(ErrorCode.MEMBER_NOT_EXISTS)
@@ -81,8 +84,15 @@ public class ParticipateService {
         );
 
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String endDate = meet.getParticipateVote().getEndDate().format(dateTimeFormatter);
-        String date = meet.getDate().format(dateTimeFormatter);
+
+        if( meet.getParticipateVote().getEndDate() != null){
+            endDate = meet.getParticipateVote().getEndDate().format(dateTimeFormatter);
+        }
+
+        if( meet.getDate() != null){
+            date = meet.getDate().format(dateTimeFormatter);
+        }
+
         return FindParticipateVoteResponseDto.builder()
                 .meetTitle(meet.getTitle())
                 .date(date)
