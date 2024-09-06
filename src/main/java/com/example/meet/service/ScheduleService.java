@@ -211,7 +211,7 @@ public class ScheduleService {
                 () -> new BusinessException(ErrorCode.MEET_NOT_EXISTS)
         );
 
-        if(meet.getDate() != null){
+        if(meet.getScheduleVote() != null && meet.getScheduleVote().getEndDate() != null && meet.getScheduleVote().getEndDate().isBefore(LocalDateTime.now())){
             throw new BusinessException(ErrorCode.SCHEDULE_VOTE_END);
         }
 

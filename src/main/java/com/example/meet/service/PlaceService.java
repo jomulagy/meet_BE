@@ -210,7 +210,7 @@ public class PlaceService {
                 () -> new BusinessException(ErrorCode.MEET_NOT_EXISTS)
         );
 
-        if(meet.getPlace() != null){
+        if(meet.getPlaceVote() != null && meet.getPlaceVote().getEndDate() != null && meet.getPlaceVote().getEndDate().isBefore(LocalDateTime.now())){
             throw new BusinessException(ErrorCode.PLACE_VOTE_END);
         }
 
