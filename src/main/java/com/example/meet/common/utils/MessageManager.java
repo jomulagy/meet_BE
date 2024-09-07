@@ -170,7 +170,7 @@ public class MessageManager {
     }
 
     private List<String> getAllUUIDs(){
-        return memberRepository.findByPrevillegeGreaterThan(MemberPrevillege.denied)
+        return memberRepository.findByPrevillegeGreaterThanAndUuidIsNotNull(MemberPrevillege.denied)
                 .stream()
                 .map(Member::getUuid)
                 .collect(Collectors.toList());

@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
-    List<Member> findByPrevillegeGreaterThan(MemberPrevillege i);
+    List<Member> findByPrevillegeGreaterThanAndUuidIsNotNull(MemberPrevillege previllege);
 }
