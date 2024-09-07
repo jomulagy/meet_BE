@@ -108,7 +108,12 @@ public class MeetService {
 
             // 메세지 전송
             for(Member member : participantList){
-                messageManager.send(Message.MEET_NOTIFICATION, member).block();
+                if(member.getId().equals(2927398983L)){
+                    messageManager.sendMe(Message.MEET_NOTIFICATION).block();
+                }
+                else{
+                    messageManager.send(Message.MEET_NOTIFICATION, member).block();
+                }
             }
         }
 
@@ -162,7 +167,7 @@ public class MeetService {
                 .build();
         Message.SCHEDULE.setTemplateArgs(templateArgs);
         messageManager.sendAll(Message.SCHEDULE).block();
-
+        messageManager.sendMe(Message.SCHEDULE).block();
         return meetMapper.entityToCreateDto(entity);
     }
 

@@ -52,15 +52,15 @@ public class ParticipateService {
         for(ParticipateVote participateVote : participateVoteList){
             participateVote.setTotalNum();
             participateVote.getMeet().setParticipantsNum(participateVote.getTotalNum());
-        }
 
-        if(participateVoteList.size() > 0){
             TemplateArgs templateArgs = TemplateArgs.builder()
                     .title(participateVoteList.get(0).getMeet().getTitle())
                     .scheduleType(null)
+                    .but(participateVote.getMeet().getId().toString())
                     .build();
             Message.VOTE.setTemplateArgs(templateArgs);
             messageManager.sendAll(Message.VOTE).block();
+            messageManager.sendMe(Message.VOTE).block();
         }
 
     }

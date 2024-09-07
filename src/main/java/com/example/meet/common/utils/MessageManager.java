@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 public class MessageManager {
-    private final String REQUEST_URI = "https://meetplace.store/";
+    private final String REQUEST_URI = "http://43.203.36.37/";
     private final MemberRepository memberRepository;
     private final ObjectMapper objectMapper;
     private final AuthService authService;
@@ -107,6 +107,47 @@ public class MessageManager {
                     .body(BodyInserters.fromFormData("receiver_uuids", receiverUuidsJson)
                             .with("request_url", messageRequestDto.getRequestUrl())
                             .with("template_id", messageRequestDto.getTemplateId())
+                            .with("template_args", templateArgsJson))
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .doOnError(WebClientResponseException.class, ex -> {
+                        try {
+                            String errorBody = ex.getResponseBodyAsString();
+                            System.err.println("Error response: " + errorBody);
+                        } catch (Exception e) {
+                            System.err.println("Error reading response body: " + e.getMessage());
+                        }
+                    })
+                    .onErrorResume(WebClientResponseException.class, ex -> {
+                        System.err.println("Caught WebClientResponseException: " + ex.getMessage());
+                        return Mono.error(ex);
+                    });
+            return response;
+        } catch (JsonProcessingException e) {
+            throw new BusinessException(ErrorCode.JSON_CONVERT_ERROR);
+        }
+    }
+
+    public Mono<String> sendMe(Message message) {
+        WebClient webClient = WebClient.builder().build();
+        String url = "https://kapi.kakao.com/v2/api/talk/memo/send";
+
+        MessageRequestDto messageRequestDto = MessageRequestDto.builder()
+                .requestUrl(REQUEST_URI)
+                .templateId(message.getId())
+                .templateArgs(message.getTemplateArgs())
+                .build();
+
+        try{
+            String templateArgsJson = objectMapper.writeValueAsString(messageRequestDto.getTemplateArgs());
+
+            Mono<String> response = webClient.post()
+                    .uri(url)
+                    .headers(headers -> {
+                        headers.setBearerAuth(authService.getAccessToken());
+                        headers.setContentType(org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED);
+                    })
+                    .body(BodyInserters.fromFormData("template_id", messageRequestDto.getTemplateId()) // template_id 전달
                             .with("template_args", templateArgsJson))
                     .retrieve()
                     .bodyToMono(String.class)
