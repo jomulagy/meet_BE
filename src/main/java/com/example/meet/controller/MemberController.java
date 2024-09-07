@@ -127,6 +127,7 @@ public class MemberController {
                 .userId(parseLong(userDetails.getUsername()))
                 .memberId(requestDto.getMemberId())
                 .option(requestDto.getOption())
+                .uuid(requestDto.getUuid())
                 .build();
 
         memberService.editMemberPrevillege(inDto);
