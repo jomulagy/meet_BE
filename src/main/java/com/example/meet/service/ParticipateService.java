@@ -43,7 +43,7 @@ public class ParticipateService {
     private final MeetRepository meetRepository;
     private final MessageManager messageManager;
 
-    @Scheduled(cron = "0 0 8 3 3,6,9,12 ?")
+    @Scheduled(cron = "0 10 8 * * ?")
     @Transactional
     public void terminatePlaceVote(){
         LocalDate currentDate = LocalDate.now();

@@ -48,7 +48,7 @@ public class ScheduleService {
 
     private final ScheduleVoteItemMapper scheduleVoteItemMapper = ScheduleVoteItemMapper.INSTANCE;
 
-    @Scheduled(cron = "0 50 7 2 3,6,9,12 ?")
+    @Scheduled(cron = "0 50 7 * * ?")
     @Transactional
     public void terminateScheduleVote(){
         LocalDate currentDate = LocalDate.now();
