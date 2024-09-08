@@ -14,4 +14,5 @@ public class FindParticipateVoteResponseDto {
     private String date;
     private String place;
     private String endDate;
+    private String isAuthor;
 }

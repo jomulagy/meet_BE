@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class FindScheduleVoteResponseDto {
     private String meetTitle;
     private String endDate;
+    private String isAuthor;
 }

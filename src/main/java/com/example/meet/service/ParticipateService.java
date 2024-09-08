@@ -93,11 +93,14 @@ public class ParticipateService {
             date = meet.getDate().format(dateTimeFormatter);
         }
 
+        Boolean isAuthor = meet.getAuthor().equals(user);
+
         return FindParticipateVoteResponseDto.builder()
                 .meetTitle(meet.getTitle())
                 .date(date)
                 .place(meet.getPlace())
                 .endDate(endDate)
+                .isAuthor(isAuthor.toString())
                 .build();
     }
 

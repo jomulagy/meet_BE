@@ -27,7 +27,6 @@ import com.example.meet.repository.ScheduleVoteItemRepository;
 import com.example.meet.repository.ScheduleVoteRepository;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -258,10 +257,12 @@ public class ScheduleService {
 
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String endDate = meet.getScheduleVote().getEndDate().format(dateTimeFormatter);
+        Boolean isAuthor = meet.getAuthor().equals(user);
 
         return FindScheduleVoteResponseDto.builder()
                 .meetTitle(meet.getTitle())
                 .endDate(endDate)
+                .isAuthor(isAuthor.toString())
                 .build();
     }
 

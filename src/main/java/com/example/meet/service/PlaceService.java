@@ -257,10 +257,12 @@ public class PlaceService {
 
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String endDate = meet.getPlaceVote().getEndDate().format(dateTimeFormatter);
+        Boolean isAuthor = meet.getAuthor().equals(user);
 
         return FindPlaceVoteResponseDto.builder()
                 .meetTitle(meet.getTitle())
                 .endDate(endDate)
+                .isAuthor(isAuthor.toString())
                 .build();
     }
 
