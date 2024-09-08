@@ -17,6 +17,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import lombok.AllArgsConstructor;
@@ -103,7 +104,12 @@ public class Meet {
     public void update(EditMeetRequestDto inDto) {
         this.title = inDto.getTitle();
         this.content = inDto.getContent();
-        this.date = LocalDateTime.of(inDto.getDate(), inDto.getTime());
+        if (inDto.getDate() == null) {
+            this.date = null;
+        } else {
+            LocalTime time = (inDto.getTime() != null) ? inDto.getTime() : LocalTime.of(0, 0);
+            this.date = LocalDateTime.of(inDto.getDate(), time);
+        }
         this.place = inDto.getPlace();
     }
 
