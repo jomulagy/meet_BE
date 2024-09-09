@@ -2,6 +2,7 @@ package com.example.meet.repository;
 
 import com.example.meet.entity.ScheduleVote;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,5 +13,5 @@ import java.util.List;
 @Repository
 public interface ScheduleVoteRepository extends JpaRepository<ScheduleVote, Long> {
     @Query("SELECT e FROM ScheduleVote e WHERE e.dateResult IS NULL AND e.endDate <= :currentDate")
-    List<ScheduleVote> findEventsWithNullDateResultAndEndDateBefore(@Param("currentDate") LocalDate currentDate);
+    List<ScheduleVote> findEventsWithNullDateResultAndEndDateBefore(@Param("currentDate") LocalDateTime currentDate);
 }

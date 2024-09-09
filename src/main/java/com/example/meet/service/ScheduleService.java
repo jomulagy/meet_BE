@@ -50,7 +50,7 @@ public class ScheduleService {
     @Scheduled(cron = "0 50 7 * * ?")
     @Transactional
     public void terminateScheduleVote(){
-        LocalDate currentDate = LocalDate.now();
+        LocalDateTime currentDate = LocalDateTime.now();
         List<ScheduleVote> scheduleVoteList = scheduleVoteRepository.findEventsWithNullDateResultAndEndDateBefore(currentDate);
 
         for(ScheduleVote scheduleVote : scheduleVoteList){
