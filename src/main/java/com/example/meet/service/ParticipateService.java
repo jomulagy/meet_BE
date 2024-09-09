@@ -68,6 +68,7 @@ public class ParticipateService {
     public FindParticipateVoteResponseDto findParticipateVote(FindParticipateVoteRequestDto inDto) {
         String endDate = null;
         String date = null;
+        String time = null;
 
         //로그인 한 유저 확인
         Member user = memberRepository.findById(inDto.getUserId()).orElseThrow(
@@ -91,6 +92,7 @@ public class ParticipateService {
 
         if( meet.getDate() != null){
             date = meet.getDate().format(dateTimeFormatter);
+            time = meet.getDate().format(DateTimeFormatter.ofPattern("HH시 mm분"));
         }
 
         Boolean isAuthor = meet.getAuthor().equals(user);
@@ -98,6 +100,7 @@ public class ParticipateService {
         return FindParticipateVoteResponseDto.builder()
                 .meetTitle(meet.getTitle())
                 .date(date)
+                .time(time)
                 .place(meet.getPlace())
                 .endDate(endDate)
                 .isAuthor(isAuthor.toString())

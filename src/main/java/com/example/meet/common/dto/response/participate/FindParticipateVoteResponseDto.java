@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class FindParticipateVoteResponseDto {
     private String meetTitle;
     private String date;
+    private String time;
     private String place;
     private String endDate;
     private String isAuthor;
