@@ -46,7 +46,7 @@ public class ParticipateService {
     @Scheduled(cron = "0 15 0 * * ?")
     @Transactional
     public void terminateParticipateVote(){
-        LocalDate currentDate = LocalDate.now();
+        LocalDateTime currentDate = LocalDateTime.now();
         List<ParticipateVote> participateVoteList = participateVoteRepository.findByEndDateBefore(currentDate);
 
         for(ParticipateVote participateVote : participateVoteList){

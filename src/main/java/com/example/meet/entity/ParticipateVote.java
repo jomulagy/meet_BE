@@ -47,8 +47,13 @@ public class ParticipateVote {
     private List<ParticipateVoteItem> participateVoteItems = new ArrayList<>();
 
     public void setTotalNum(){
-        this.totalNum = this.participateVoteItems.stream()
+        ParticipateVoteItem item = this.participateVoteItems.stream()
                 .filter(ParticipateVoteItem::getIsParticipate)
-                .count();
+                .findFirst()
+                .orElse(null);
+
+        if(item != null){
+            this.totalNum = item.getParticipateVoters().size();
+        }
     }
 }
