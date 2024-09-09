@@ -196,7 +196,7 @@ public class MeetService {
     private ScheduleVote createScheduleVote(Meet meet) {
         LocalDate currentDate = LocalDate.now();
         LocalDate tomorrowDate = currentDate.plusDays(1);
-        LocalDateTime endDate = tomorrowDate.atTime(LocalTime.of(4, 0));
+        LocalDateTime endDate = tomorrowDate.atTime(LocalTime.of(0, 0));
 
         return ScheduleVote.builder()
                 .endDate(endDate)
@@ -206,8 +206,8 @@ public class MeetService {
 
     private PlaceVote createPlaceVote(Meet meet) {
         LocalDate currentDate = LocalDate.now();
-        LocalDate tomorrowDate = currentDate.plusDays(1);
-        LocalDateTime endDate = tomorrowDate.atTime(LocalTime.of(4, 0));
+        LocalDate tomorrowDate = currentDate.plusDays(2);
+        LocalDateTime endDate = tomorrowDate.atTime(LocalTime.of(0, 0));
 
         return PlaceVote.builder()
                 .endDate(endDate)
@@ -217,8 +217,8 @@ public class MeetService {
 
     private ParticipateVote createParticipateVote(Meet meet) {
         LocalDate currentDate = LocalDate.now();
-        LocalDate tomorrowDate = currentDate.plusDays(2);
-        LocalDateTime endDate = tomorrowDate.atTime(LocalTime.of(4, 0));
+        LocalDate tomorrowDate = currentDate.plusDays(3);
+        LocalDateTime endDate = tomorrowDate.atTime(LocalTime.of(0, 0));
 
         return ParticipateVote.builder()
                 .endDate(endDate)
