@@ -43,24 +43,15 @@ public class ParticipateService {
     private final MeetRepository meetRepository;
     private final MessageManager messageManager;
 
-    @Scheduled(cron = "0 10 8 * * ?")
+    @Scheduled(cron = "0 15 0 * * ?")
     @Transactional
-    public void terminatePlaceVote(){
+    public void terminateParticipateVote(){
         LocalDate currentDate = LocalDate.now();
         List<ParticipateVote> participateVoteList = participateVoteRepository.findByEndDateBefore(currentDate);
 
         for(ParticipateVote participateVote : participateVoteList){
             participateVote.setTotalNum();
             participateVote.getMeet().setParticipantsNum(participateVote.getTotalNum());
-
-            TemplateArgs templateArgs = TemplateArgs.builder()
-                    .title(participateVoteList.get(0).getMeet().getTitle())
-                    .scheduleType(null)
-                    .but(participateVote.getMeet().getId().toString())
-                    .build();
-            Message.VOTE.setTemplateArgs(templateArgs);
-            messageManager.sendAll(Message.VOTE).block();
-            messageManager.sendMe(Message.VOTE).block();
         }
 
     }

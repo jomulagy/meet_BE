@@ -6,5 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 public enum MeetType {
-    Routine; // 정기
+    Routine, // 정기
+    CUSTOM
+    ;
 }

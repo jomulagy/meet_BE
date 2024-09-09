@@ -10,4 +10,5 @@ import org.springframework.stereotype.Repository;
 public interface MeetRepository extends JpaRepository<Meet, Long> {
 
     List<Meet> findByDateBetween(LocalDateTime startOfDay, LocalDateTime endOfDay);
+    List<Meet> findByDateIsNotNullAndPlaceIsNotNullAndParticipantsNumIsNull();
 }

@@ -48,7 +48,7 @@ public class PlaceService {
     private final PlaceVoteItemMapper placeVoteItemMapper = PlaceVoteItemMapper.INSTANCE;
 
 
-    @Scheduled(cron = "0 0 8 * * ?")
+    @Scheduled(cron = "0 10 0 * * ?")
     @Transactional
     public void terminatePlaceVote(){
         LocalDateTime currentDate = LocalDateTime.now();

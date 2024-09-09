@@ -84,6 +84,24 @@ public class MeetService {
         createMeet(inDto);
     }
 
+    @Scheduled(cron = "0 30 8 * * ?")
+    @Transactional
+    public void sendParticipateMessage(){
+        List<Meet> meetList = meetRepository.findByDateIsNotNullAndPlaceIsNotNullAndParticipantsNumIsNull();
+
+        for(Meet meet : meetList){
+            TemplateArgs templateArgs = TemplateArgs.builder()
+                    .title(meet.getTitle())
+                    .scheduleType(null)
+                    .but(meet.getId().toString())
+                    .build();
+            Message.VOTE.setTemplateArgs(templateArgs);
+            messageManager.sendAll(Message.VOTE).block();
+            messageManager.sendMe(Message.VOTE).block();
+        }
+
+    }
+
     // 모임 일주일전 알림 -
     @Scheduled(cron = "0 0 9 * * *")
     @Transactional
@@ -132,6 +150,10 @@ public class MeetService {
         }
 
         Meet entity = meetMapper.dtoToEntity(inDto, user);
+
+        if(inDto.getType() != MeetType.Routine){
+            entity.setParticipantsNum(0);
+        }
         meetRepository.save(entity);
 
         //일정 투표 연결
