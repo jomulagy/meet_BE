@@ -89,6 +89,10 @@ public class Meet {
         this.participantsNum = this.participateVote.getTotalNum();
     }
 
+    public void setParticipants(List<Member> participants) {
+        this.participants = participants;
+    }
+
     public void setScheduleVote(ScheduleVote scheduleVote){
         this.scheduleVote = scheduleVote;
     }

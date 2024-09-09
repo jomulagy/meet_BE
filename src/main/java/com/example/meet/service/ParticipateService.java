@@ -52,6 +52,17 @@ public class ParticipateService {
         for(ParticipateVote participateVote : participateVoteList){
             participateVote.setTotalNum();
             participateVote.getMeet().setParticipantsNum(participateVote.getTotalNum());
+
+            ParticipateVoteItem item = participateVote.getParticipateVoteItems().stream()
+                    .filter(ParticipateVoteItem::getIsParticipate)
+                    .findFirst()
+                    .orElse(null);
+
+            if(item != null){
+                // 방어적 복사
+                List<Member> participateVoters = new ArrayList<>(item.getParticipateVoters());
+                participateVote.getMeet().setParticipants(participateVoters);
+            }
         }
 
     }
