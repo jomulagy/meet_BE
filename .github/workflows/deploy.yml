@@ -1,4 +1,4 @@
-name: CD with Gradle
+name: CD for Deploy
 
 # 언제 이 파일의 내용이 실행될 것인지 정의합니다.
 # 여기서는 main 브랜치에 코드가 push 되거나 pull_request되었을 때 실행할 것을 말하고 있습니다.
@@ -79,4 +79,4 @@ jobs:
           docker rm $(docker ps -a -q -f status=created) || true
 
           docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:deploy
-          docker run -d --restart on-failure:5 -p 8001:8001 -v /home/ubuntu/data:/data -v /etc/localtime:/etc/localtime:ro -v /etc/timezone:/etc/timezone:ro --name meetService ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:deploy
+          docker run -d --restart on-failure:5 -p 8080:8080 -v /home/ubuntu/data:/data -v /etc/localtime:/etc/localtime:ro -v /etc/timezone:/etc/timezone:ro --name meetService ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:deploy
