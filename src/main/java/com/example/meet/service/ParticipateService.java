@@ -47,7 +47,7 @@ public class ParticipateService {
     @Transactional
     public void terminateParticipateVote(){
         LocalDateTime currentDate = LocalDateTime.now();
-        List<ParticipateVote> participateVoteList = participateVoteRepository.findByEndDateBefore(currentDate);
+        List<ParticipateVote> participateVoteList = participateVoteRepository.findByEndDateBeforeAndTotalNumIsNull(currentDate);
 
         for(ParticipateVote participateVote : participateVoteList){
             participateVote.setTotalNum();

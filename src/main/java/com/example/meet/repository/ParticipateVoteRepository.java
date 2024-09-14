@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ParticipateVoteRepository extends JpaRepository<ParticipateVote, Long> {
 
-    List<ParticipateVote> findByEndDateBefore(LocalDateTime currentDate);
+    List<ParticipateVote> findByEndDateBeforeAndTotalNumIsNull(LocalDateTime currentDate);
 }
