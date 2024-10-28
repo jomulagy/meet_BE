@@ -6,15 +6,9 @@ import com.example.meet.common.dto.response.meet.EditMeetResponseDto;
 import com.example.meet.common.dto.response.meet.FindMeetResponseDto;
 import com.example.meet.common.dto.response.date.FindSimpleDateResponseDto;
 import com.example.meet.common.dto.response.meet.FindMeetSimpleResponseDto;
-import com.example.meet.common.dto.response.place.FindSimplePLaceResponseDto;
-import com.example.meet.common.enumulation.ErrorCode;
-import com.example.meet.common.exception.BusinessException;
+import com.example.meet.common.dto.response.place.FindSimplePlaceResponseDto;
 import com.example.meet.entity.Meet;
 import com.example.meet.entity.Member;
-import com.example.meet.entity.PlaceVote;
-import com.example.meet.entity.PlaceVoteItem;
-import com.example.meet.entity.ScheduleVote;
-import com.example.meet.entity.ScheduleVoteItem;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -25,7 +19,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
-import org.springframework.format.datetime.DateFormatter;
 
 @Mapper
 public interface MeetMapper {
@@ -55,7 +48,7 @@ public interface MeetMapper {
 
     default FindMeetResponseDto EntityToDto(Meet entity, @Context Member user){
         FindSimpleDateResponseDto dateResponseDto = null;
-        FindSimplePLaceResponseDto placeResponseDto = null;
+        FindSimplePlaceResponseDto placeResponseDto = null;
 
         String date = null;
         String time = null;
@@ -83,7 +76,7 @@ public interface MeetMapper {
             editable = true;
         }
 
-        placeResponseDto = FindSimplePLaceResponseDto.builder()
+        placeResponseDto = FindSimplePlaceResponseDto.builder()
                 .value(entity.getPlace())
                 .editable(editable.toString())
                 .build();
