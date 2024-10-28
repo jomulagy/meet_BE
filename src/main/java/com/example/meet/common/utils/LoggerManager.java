@@ -2,6 +2,8 @@ package com.example.meet.common.utils;
 
 import com.example.meet.common.enumulation.ErrorCode;
 import com.example.meet.common.exception.BusinessException;
+import com.example.meet.entity.BatchLog;
+import com.example.meet.repository.BatchLogRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,6 +13,7 @@ import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -24,6 +27,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 public class LoggerManager {
 
     private final JavaMailSender mailSender;
+    private final BatchLogRepository batchLogRepository;
 
     public void logError(HttpServletRequest request, Exception ex){
         String requestUrl = request.getRequestURL().toString();
@@ -92,5 +96,14 @@ public class LoggerManager {
         }
 
 
+    }
+
+    public void insertBatch(String name, String status, String message){
+        BatchLog log = new BatchLog();
+        log.setName(name);
+        log.setStatus(status);
+        log.setMessage(message);
+        log.setStartDate(LocalDateTime.now());
+        batchLogRepository.save(log);
     }
 }
