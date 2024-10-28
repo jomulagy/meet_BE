@@ -8,6 +8,7 @@ import com.example.meet.common.dto.response.participate.FindParticipateVoteItemR
 import com.example.meet.common.dto.response.participate.FindParticipateVoteResponseDto;
 import com.example.meet.common.dto.response.participate.UpdateParticipateVoteResponseDto;
 import com.example.meet.common.dto.response.place.FindPlaceVoteItemResponseDto;
+import com.example.meet.common.dto.response.place.FindSimplePlaceResponseDto;
 import com.example.meet.common.enumulation.ErrorCode;
 import com.example.meet.common.enumulation.MemberPrevillege;
 import com.example.meet.common.enumulation.Message;
@@ -103,7 +104,7 @@ public class ParticipateService {
                 .meetTitle(meet.getTitle())
                 .date(date)
                 .time(time)
-                .place(meet.getPlace())
+                .place(meet.getPlace().getName())
                 .endDate(endDate)
                 .isAuthor(isAuthor.toString())
                 .build();

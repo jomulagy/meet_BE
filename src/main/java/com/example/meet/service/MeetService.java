@@ -31,10 +31,12 @@ import com.example.meet.repository.MeetRepository;
 import com.example.meet.repository.MemberRepository;
 import com.example.meet.repository.ParticipateVoteItemRepository;
 import com.example.meet.repository.ParticipateVoteRepository;
+import com.example.meet.repository.PlaceRepository;
 import com.example.meet.repository.PlaceVoteItemRepository;
 import com.example.meet.repository.PlaceVoteRepository;
 import com.example.meet.repository.ScheduleVoteItemRepository;
 import com.example.meet.repository.ScheduleVoteRepository;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -47,6 +49,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 @Slf4j
 @Service
@@ -61,6 +64,7 @@ public class MeetService {
     private final PlaceVoteItemRepository placeVoteItemRepository;
     private final ParticipateVoteRepository participateVoteRepository;
     private final ParticipateVoteItemRepository participateVoteItemRepository;
+    private final PlaceRepository placeRepository;
 
     private final MessageManager messageManager;
 
@@ -137,7 +141,7 @@ public class MeetService {
 
     }
 
-
+    @Transactional
     public CreateMeetResponseDto createMeet(CreateMeetRequestDto inDto) {
         //로그인 한 유저 확인
         Member user = memberRepository.findById(inDto.getUserId()).orElseThrow(
@@ -154,7 +158,10 @@ public class MeetService {
         if(inDto.getType() != MeetType.Routine){
             entity.setParticipantsNum(0);
         }
-        meetRepository.save(entity);
+
+        Meet meet = meetRepository.save(entity);
+        entity.getPlace().setMeet(meet);
+        placeRepository.save(entity.getPlace());
 
         //일정 투표 연결
         if(entity.getScheduleVote() == null){
@@ -254,6 +261,8 @@ public class MeetService {
 
         PlaceVoteItem placeVoteItem1 = PlaceVoteItem.builder()
                 .place("강남역")
+                .xPos(BigDecimal.valueOf(37.49809895356626))
+                .yPos(BigDecimal.valueOf(127.02798897144342))
                 .placeVote(placeVote)
                 .editable(false)
                 .author(author)
@@ -262,6 +271,8 @@ public class MeetService {
 
         PlaceVoteItem placeVoteItem2 = PlaceVoteItem.builder()
                 .place("종각역")
+                .xPos(BigDecimal.valueOf(37.57023519725892))
+                .yPos(BigDecimal.valueOf(126.98313949597043))
                 .placeVote(placeVote)
                 .editable(false)
                 .author(author)
@@ -362,7 +373,7 @@ public class MeetService {
         }
 
         //투표한 필드는 편집 불가(장소)
-        if(meet.getPlace() != null && meet.getPlaceVote() != null && meet.getPlaceVote().getPlaceResult() != null && !Objects.equals(inDto.getPlace(), meet.getPlace())){
+        if(meet.getPlace() != null && meet.getPlaceVote() != null && meet.getPlaceVote().getPlaceResult() != null && !Objects.equals(inDto.getPlace().getName(), meet.getPlace().getName())){
             throw new BusinessException(ErrorCode.VOTE_REQUIRED);
         }
 

@@ -56,7 +56,7 @@ public class PlaceService {
 
         for(PlaceVote placeVote : placeVoteList){
             placeVote.setPlaceResult();
-            placeVote.getMeet().setPlaceResult(placeVote.getPlaceResult());
+            placeVote.getMeet().setPlace();
         }
     }
     public List<FindPlaceVoteItemResponseDto> findPlaceVoteItemList(FindPlaceVoteItemRequestDto inDto) {
