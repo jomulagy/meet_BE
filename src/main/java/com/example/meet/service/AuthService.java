@@ -16,6 +16,7 @@ import com.example.meet.repository.BatchLogRepository;
 import com.example.meet.repository.MemberRepository;
 import com.example.meet.repository.TokenRepository;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -145,13 +146,13 @@ public class AuthService {
                 .retrieve()
                 .bodyToMono(Map.class)
                 .doOnNext(response -> {
-                    log.debug("Response: {}", response);
                     kakaoToken.setAccessToken((String) response.get("access_token"));
                     int expiresIn = (Integer) response.get("expires_in");
                     kakaoToken.setExpiresIn(LocalDateTime.now().plusSeconds(expiresIn));
                     if (response.containsKey("refresh_token")) {
                         kakaoToken.setRefreshToken((String) response.get("refresh_token"));
                     }
+                    loggerManager.insertBatch("refreshAccessToken", "200", response.toString());
                 })
                 .doOnError(WebClientResponseException.class, ex -> {
                     loggerManager.insertBatch("refreshAccessToken", ex.getStatusCode().toString(), ex.getResponseBodyAsString());
@@ -163,7 +164,6 @@ public class AuthService {
                 .block();
 
                 tokenRepository.save(kakaoToken);
-                loggerManager.insertBatch("refreshAccessToken", "200", "success");
         return kakaoToken;
     }
 }
