@@ -123,7 +123,7 @@ public class PlaceService {
             throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
         }
 
-        if(inDto.getPlace() == null || inDto.getPlace().isEmpty()){
+        if(inDto.getPlace() == null || inDto.getPlace().getName().isEmpty()){
             throw new BusinessException(ErrorCode.PLACE_VALUE_REQUIRED);
         }
         Meet meet = meetRepository.findById(inDto.getMeetId()).orElseThrow(
