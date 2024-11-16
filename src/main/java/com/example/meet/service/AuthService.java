@@ -8,16 +8,20 @@ import com.example.meet.common.dto.response.KakaoUserInfoResponseDto;
 import com.example.meet.common.exception.BusinessException;
 import com.example.meet.common.enumulation.ErrorCode;
 import com.example.meet.common.enumulation.MemberPrevillege;
-import com.example.meet.common.utils.MessageManager;
+import com.example.meet.common.utils.LoggerManager;
+import com.example.meet.entity.BatchLog;
 import com.example.meet.entity.Member;
 import com.example.meet.entity.Token;
+import com.example.meet.repository.BatchLogRepository;
 import com.example.meet.repository.MemberRepository;
 import com.example.meet.repository.TokenRepository;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -26,6 +30,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 @Service
 @RequiredArgsConstructor
@@ -40,6 +45,7 @@ public class AuthService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
     private final TokenRepository tokenRepository;
+    private final LoggerManager loggerManager;
 
     public JwtTokenResponseDto login(KakaoTokenRequestDto request) {
         KakaoUserInfoResponseDto kakaoUserInfoResponseDto = getUserInfo(request.getAccessToken());
@@ -131,6 +137,7 @@ public class AuthService {
         WebClient webClient = WebClient.builder().build();
         webClient.post()
                 .uri("https://kauth.kakao.com/oauth/token")
+                .headers(headers -> headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED))
                 .body(BodyInserters.fromFormData("grant_type", "refresh_token")
                         .with("client_id", kakaoRestApiKey)
                         .with("refresh_token", kakaoToken.getRefreshToken())
@@ -145,6 +152,13 @@ public class AuthService {
                     if (response.containsKey("refresh_token")) {
                         kakaoToken.setRefreshToken((String) response.get("refresh_token"));
                     }
+                    loggerManager.insertBatch("refreshAccessToken", "200", response.toString());
+                })
+                .doOnError(WebClientResponseException.class, ex -> {
+                    loggerManager.insertBatch("refreshAccessToken", ex.getStatusCode().toString(), ex.getResponseBodyAsString());
+                })
+                .onErrorResume(error -> {
+                    return null;
                 })
                 .then()
                 .block();

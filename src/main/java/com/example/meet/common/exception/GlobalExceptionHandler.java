@@ -15,14 +15,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
     protected CommonResponse<Void> handleBusinessException(HttpServletRequest request, BusinessException e) {
-        //loggerManager.logError(request, e);
-
         return CommonResponse.fail(e.getErrorCode());
     }
 
     @ExceptionHandler(Exception.class)
     protected CommonResponse<Void> handleException(HttpServletRequest request, Exception e) {
-        //loggerManager.logError(request, e);
         return CommonResponse.fail(HttpStatus.INTERNAL_SERVER_ERROR,e.getMessage());
     }
 }

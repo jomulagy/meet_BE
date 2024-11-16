@@ -39,6 +39,10 @@ public class MessageManager {
         String url = "https://kapi.kakao.com/v1/api/talk/friends/message/send";
         List<String> uuids = getAllUUIDs();
 
+        if(uuids.isEmpty()){
+            return Mono.empty();
+        }
+
         MessageRequestDto messageRequestDto = MessageRequestDto.builder()
                 .receiverUuids(uuids)
                 .requestUrl(REQUEST_URI)

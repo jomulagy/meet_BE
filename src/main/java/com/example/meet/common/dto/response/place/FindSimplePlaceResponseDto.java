@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class FindSimplePLaceResponseDto {
+public class FindSimplePlaceResponseDto {
     @Schema(description = "모임 장소", example = "강남역")
     private String value;
 
