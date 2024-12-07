@@ -1,6 +1,7 @@
 package com.example.meet.service;
 
 import com.example.meet.common.auth.JwtTokenProvider;
+import com.example.meet.common.dto.request.Batch.BatchRequestDto;
 import com.example.meet.common.dto.request.KakaoTokenRequestDto;
 import com.example.meet.common.auth.JwtTokenResponseDto;
 import com.example.meet.common.dto.response.AdminAccessTokenResponseDto;
@@ -165,5 +166,13 @@ public class AuthService {
 
                 tokenRepository.save(kakaoToken);
         return kakaoToken;
+    }
+
+    public void isAdmin(BatchRequestDto inDto){
+        String accessToken = tokenRepository.findByName("kakao").getAccessToken();
+
+        if(!accessToken.equals(inDto.getToken())){
+            throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
+        }
     }
 }
