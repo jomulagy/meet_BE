@@ -254,6 +254,10 @@ public class MeetService {
 
         // 다음 분기의 첫 번째 달 계산
         int nextQuarterStartMonth = ScheduleManager.calculateNextQuarterStartMonth(today.getMonthValue());
+        int month = today.getMonthValue();
+        if(nextQuarterStartMonth < today.getMonthValue()){
+            today = today.plusYears(1);
+        }
 
         // 해당 월의 첫 번째 날과 마지막 날 가져오기
         YearMonth nextQuarterMonth = YearMonth.of(today.getYear(), nextQuarterStartMonth);
