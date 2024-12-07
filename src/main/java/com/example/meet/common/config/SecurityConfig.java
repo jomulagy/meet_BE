@@ -56,6 +56,7 @@ public class SecurityConfig {
                          "/swagger-resources/**", "/configuration/ui", "/configuration/security", "/swagger-ui/**",
                          "/webjars/**", "/swagger-ui.html", "/api-reference", "/favicon.ico").permitAll()
                         .requestMatchers("/test/**").permitAll()
+                        .requestMatchers("/batch/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(Customizer.withDefaults())

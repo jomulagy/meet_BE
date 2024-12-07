@@ -27,7 +27,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
     private final List<String> whiteList = List.of("/auth/login", "/auth/token/refresh", "/v2/api-docs", "/v3/api-docs",
             "/v3/api-docs/**", "/swagger-resources",
             "/swagger-resources/**", "/configuration/ui", "/configuration/security", "/swagger-ui/**",
-            "/webjars/**", "/swagger-ui.html", "/api-reference", "/favicon.ico", "/test/**");
+            "/webjars/**", "/swagger-ui.html", "/api-reference", "/favicon.ico", "/test/**", "/batch/**");
     private final PathMatcher pathMatcher = new AntPathMatcher();
 
     @Override
