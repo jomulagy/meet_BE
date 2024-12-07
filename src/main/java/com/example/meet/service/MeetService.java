@@ -75,6 +75,11 @@ public class MeetService {
             int month = date.getMonthValue();
             int quarter = quarterList.get((month - 1) / 3);
 
+            // 1분기면 내년
+            if(quarter == 1){
+                year+=1;
+            }
+
             String title = String.format("%d년도 %d 분기 정기 회식", year, quarter);
 
             CreateMeetRequestDto inDto = CreateMeetRequestDto.builder()
