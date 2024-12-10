@@ -244,6 +244,7 @@ public class MeetService {
         LocalDateTime endDate = tomorrowDate.atTime(LocalTime.of(0, 0));
 
         return ParticipateVote.builder()
+                .totalNum(0)
                 .endDate(endDate)
                 .meet(meet)
                 .build();

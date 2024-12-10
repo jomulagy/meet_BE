@@ -18,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.mail.javamail.JavaMailSender;
 
@@ -98,6 +100,7 @@ public class LoggerManager {
 
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void insertBatch(String name, String status, String message){
         BatchLog log = new BatchLog();
         log.setName(name);
