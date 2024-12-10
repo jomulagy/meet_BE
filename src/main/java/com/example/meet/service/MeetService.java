@@ -75,6 +75,11 @@ public class MeetService {
             int month = date.getMonthValue();
             int quarter = quarterList.get((month - 1) / 3);
 
+            // 1분기면 내년
+            if(quarter == 1){
+                year+=1;
+            }
+
             String title = String.format("%d년도 %d 분기 정기 회식", year, quarter);
 
             CreateMeetRequestDto inDto = CreateMeetRequestDto.builder()
@@ -239,6 +244,7 @@ public class MeetService {
         LocalDateTime endDate = tomorrowDate.atTime(LocalTime.of(0, 0));
 
         return ParticipateVote.builder()
+                .totalNum(0)
                 .endDate(endDate)
                 .meet(meet)
                 .build();
@@ -249,6 +255,10 @@ public class MeetService {
 
         // 다음 분기의 첫 번째 달 계산
         int nextQuarterStartMonth = ScheduleManager.calculateNextQuarterStartMonth(today.getMonthValue());
+        int month = today.getMonthValue();
+        if(nextQuarterStartMonth < today.getMonthValue()){
+            today = today.plusYears(1);
+        }
 
         // 해당 월의 첫 번째 날과 마지막 날 가져오기
         YearMonth nextQuarterMonth = YearMonth.of(today.getYear(), nextQuarterStartMonth);
