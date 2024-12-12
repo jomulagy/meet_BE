@@ -241,7 +241,7 @@ public class MeetService {
     private ParticipateVote createParticipateVote(Meet meet) {
         LocalDate currentDate = LocalDate.now();
         LocalDate tomorrowDate = currentDate.plusDays(3);
-        LocalDateTime endDate = tomorrowDate.atTime(LocalTime.of(0, 0));
+        LocalDateTime endDate = tomorrowDate.atTime(LocalTime.of(0, 16));
 
         return ParticipateVote.builder()
                 .totalNum(0)

@@ -13,6 +13,7 @@ import com.example.meet.common.enumulation.MemberPrevillege;
 import com.example.meet.common.enumulation.Message;
 import com.example.meet.common.exception.BusinessException;
 import com.example.meet.common.dto.request.participate.UpdateParticipateVoteRequestDto;
+import com.example.meet.common.utils.LoggerManager;
 import com.example.meet.common.utils.MessageManager;
 import com.example.meet.entity.Meet;
 import com.example.meet.entity.Member;
@@ -41,28 +42,44 @@ public class ParticipateService {
     private final ParticipateVoteItemRepository participateVoteItemRepository;
     private final MemberRepository memberRepository;
     private final MeetRepository meetRepository;
-    private final MessageManager messageManager;
+    private final LoggerManager loggerManager;
 
     @Scheduled(cron = "0 15 0 * * ?")
     @Transactional
     public void terminateParticipateVote(){
-        LocalDateTime currentDate = LocalDateTime.now();
-        List<ParticipateVote> participateVoteList = participateVoteRepository.findByEndDateBeforeAndTotalNumIsNull(currentDate);
+        try {
+            List<ParticipateVote> participateVoteList = participateVoteRepository.findByEndDateToday();
+            StringBuilder dataStr = new StringBuilder();
 
-        for(ParticipateVote participateVote : participateVoteList){
-            participateVote.setTotalNum();
-            participateVote.getMeet().setParticipantsNum(participateVote.getTotalNum());
+            for(ParticipateVote participateVote : participateVoteList){
+                participateVote.setTotalNum();
+                participateVote.getMeet().setParticipantsNum(participateVote.getTotalNum());
 
-            ParticipateVoteItem item = participateVote.getParticipateVoteItems().stream()
-                    .filter(ParticipateVoteItem::getIsParticipate)
-                    .findFirst()
-                    .orElse(null);
+                ParticipateVoteItem item = participateVote.getParticipateVoteItems().stream()
+                        .filter(ParticipateVoteItem::getIsParticipate)
+                        .findFirst()
+                        .orElse(null);
 
-            if(item != null){
-                // 방어적 복사
-                List<Member> participateVoters = new ArrayList<>(item.getParticipateVoters());
-                participateVote.getMeet().setParticipants(participateVoters);
+                if(item != null){
+                    // 방어적 복사
+                    List<Member> participateVoters = new ArrayList<>(item.getParticipateVoters());
+                    participateVote.getMeet().setParticipants(participateVoters);
+                }
+
+                dataStr.append(participateVote.getMeet().getTitle());
+                dataStr.append(", ");
             }
+
+            // 마지막 ", " 제거
+            int index = dataStr.lastIndexOf( ", ");
+
+            if (index != -1 && index == dataStr.length() - 2) {
+                dataStr.delete(index, dataStr.length());
+            }
+
+            loggerManager.insertBatch("참여여부 투표 종료", "success", dataStr.toString());
+        } catch (Exception e) {
+            loggerManager.insertBatch("참여여부 투표 종료", "error", e.getMessage());
         }
 
     }
