@@ -61,6 +61,7 @@ public class MemberService {
                             .id(m.getId().toString())
                             .name(m.getName())
                             .email(m.getEmail())
+                            .deposit(m.getDeposit().toString())
                             .previllege(m.getPrevillege().toString())
                             .isFirst(isFirst.toString())
                             .build();
