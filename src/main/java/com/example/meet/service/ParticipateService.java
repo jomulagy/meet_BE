@@ -2,7 +2,7 @@ package com.example.meet.service;
 
 import com.example.meet.common.dto.request.participate.FindParticipateVoteItemRequestDto;
 import com.example.meet.common.dto.request.participate.FindParticipateVoteRequestDto;
-import com.example.meet.common.dto.response.SimpleMemberResponseDto;
+import com.example.meet.common.dto.response.member.SimpleMemberResponseDto;
 import com.example.meet.common.dto.response.participate.FindParticipateVoteItemResponseDto;
 import com.example.meet.common.dto.response.participate.FindParticipateVoteResponseDto;
 import com.example.meet.common.dto.response.participate.UpdateParticipateVoteResponseDto;

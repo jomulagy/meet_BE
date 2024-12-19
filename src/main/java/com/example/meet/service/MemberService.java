@@ -1,10 +1,12 @@
 package com.example.meet.service;
 
-import com.example.meet.common.dto.request.EditMemberPrevillegeRequestDto;
+import com.example.meet.common.dto.request.member.EditMemberPrevillegeRequestDto;
 import com.example.meet.common.dto.request.MemberListRequestDto;
 import com.example.meet.common.dto.request.MemberRequestDto;
-import com.example.meet.common.dto.response.MemberPrevillegeResponseDto;
-import com.example.meet.common.dto.response.MemberResponseDto;
+import com.example.meet.common.dto.request.member.EditMemberDepositRequestDto;
+import com.example.meet.common.dto.response.member.MemberDepositResponseDto;
+import com.example.meet.common.dto.response.member.MemberPrevillegeResponseDto;
+import com.example.meet.common.dto.response.member.MemberResponseDto;
 import com.example.meet.common.exception.BusinessException;
 import com.example.meet.common.enumulation.EditMemberPrevillegeOption;
 import com.example.meet.common.enumulation.ErrorCode;
@@ -111,4 +113,28 @@ public class MemberService {
         return memberMapper.entityToDto(member);
     }
 
+    public MemberDepositResponseDto editMemberDeposit(EditMemberDepositRequestDto inDto) {
+        //로그인 한 유저 확인
+        Member user = memberRepository.findById(inDto.getUserId()).orElseThrow(
+                () -> new BusinessException(ErrorCode.MEMBER_NOT_EXISTS)
+        );
+
+        //로그인 한 유저의 권한 확인 (관리자 여부)
+        if(!user.getPrevillege().equals(MemberPrevillege.admin)){
+            throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
+        }
+
+        Member member = memberRepository.findById(inDto.getMemberId()).orElseThrow(
+                () -> new BusinessException(ErrorCode.MEMBER_NOT_EXISTS)
+        );
+
+        if(inDto.getOption() == null){
+            throw new BusinessException(ErrorCode.VALUE_REQUIRED);
+        }
+
+        member.setDeposit(inDto.getOption().equals("true"));
+        memberRepository.save(member);
+
+        return new MemberDepositResponseDto(member.getDeposit().toString());
+    }
 }

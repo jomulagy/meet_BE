@@ -1,7 +1,7 @@
 package com.example.meet.common.dto.response;
 
+import com.example.meet.common.dto.response.member.SimpleMemberResponseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

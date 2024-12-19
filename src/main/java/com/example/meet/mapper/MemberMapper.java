@@ -1,6 +1,6 @@
 package com.example.meet.mapper;
 
-import com.example.meet.common.dto.response.MemberResponseDto;
+import com.example.meet.common.dto.response.member.MemberResponseDto;
 import com.example.meet.entity.Member;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

@@ -3,12 +3,13 @@ package com.example.meet.controller;
 import static java.lang.Long.parseLong;
 
 import com.example.meet.common.CommonResponse;
-import com.example.meet.common.auth.JwtTokenResponseDto;
-import com.example.meet.common.dto.request.EditMemberPrevillegeRequestDto;
+import com.example.meet.common.dto.request.member.EditMemberPrevillegeRequestDto;
 import com.example.meet.common.dto.request.MemberListRequestDto;
 import com.example.meet.common.dto.request.MemberRequestDto;
-import com.example.meet.common.dto.response.MemberPrevillegeResponseDto;
-import com.example.meet.common.dto.response.MemberResponseDto;
+import com.example.meet.common.dto.request.member.EditMemberDepositRequestDto;
+import com.example.meet.common.dto.response.member.MemberDepositResponseDto;
+import com.example.meet.common.dto.response.member.MemberPrevillegeResponseDto;
+import com.example.meet.common.dto.response.member.MemberResponseDto;
 import com.example.meet.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -168,6 +169,44 @@ public class MemberController {
                 .userId(parseLong(userDetails.getUsername()))
                 .build();
         return CommonResponse.success(memberService.findMemberList(inDto));
+    }
+
+    @PutMapping("/deposit")
+    @Tag(name = "Member", description = "회원")
+    @Operation(summary = "회비 입금 여부 수정",
+            description = "Authorization header require",
+            responses = {
+                    @ApiResponse(responseCode = "200",
+                            description = "성공",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = MemberDepositResponseDto.class))
+                            )
+                    ),
+                    @ApiResponse(responseCode = "404",
+                            description = "존재하지 않는 멤버",
+                            content = @Content(
+                                    mediaType = "application/json"
+                            )
+                    ),
+                    @ApiResponse(responseCode = "403",
+                            description = "관리자 권한이 없음",
+                            content = @Content(
+                                    mediaType = "application/json"
+                            )
+                    )
+
+            })
+    public CommonResponse<MemberDepositResponseDto> editMemberDeposit(@RequestBody EditMemberDepositRequestDto requestDto){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        EditMemberDepositRequestDto inDto = EditMemberDepositRequestDto.builder()
+                .memberId(requestDto.getMemberId())
+                .userId(parseLong(userDetails.getUsername()))
+                .option(requestDto.getOption())
+                .build();
+        return CommonResponse.success(memberService.editMemberDeposit(inDto));
     }
 
 }
