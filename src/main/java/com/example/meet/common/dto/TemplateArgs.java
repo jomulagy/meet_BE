@@ -18,4 +18,8 @@ public class TemplateArgs {
     private String scheduleType;
     @JsonProperty("BUT")
     private String but;
+    @JsonProperty("year")
+    private String year;
+    @JsonProperty("nextYear")
+    private String nextYear;
 }

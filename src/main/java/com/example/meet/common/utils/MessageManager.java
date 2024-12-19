@@ -85,6 +85,10 @@ public class MessageManager {
     }
 
     public Mono<String> send(Message message, Member member) {
+        if(member.getUuid() == null){
+            return Mono.empty();
+        }
+
         WebClient webClient = WebClient.builder().build();
         String url = "https://kapi.kakao.com/v1/api/talk/friends/message/send";
 

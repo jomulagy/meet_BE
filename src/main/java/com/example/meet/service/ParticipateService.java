@@ -1,88 +1,36 @@
 package com.example.meet.service;
 
-import com.example.meet.common.dto.TemplateArgs;
 import com.example.meet.common.dto.request.participate.FindParticipateVoteItemRequestDto;
 import com.example.meet.common.dto.request.participate.FindParticipateVoteRequestDto;
 import com.example.meet.common.dto.response.member.SimpleMemberResponseDto;
 import com.example.meet.common.dto.response.participate.FindParticipateVoteItemResponseDto;
 import com.example.meet.common.dto.response.participate.FindParticipateVoteResponseDto;
 import com.example.meet.common.dto.response.participate.UpdateParticipateVoteResponseDto;
-import com.example.meet.common.dto.response.place.FindPlaceVoteItemResponseDto;
 import com.example.meet.common.enumulation.ErrorCode;
 import com.example.meet.common.enumulation.MemberPrevillege;
-import com.example.meet.common.enumulation.Message;
 import com.example.meet.common.exception.BusinessException;
 import com.example.meet.common.dto.request.participate.UpdateParticipateVoteRequestDto;
-import com.example.meet.common.utils.LoggerManager;
-import com.example.meet.common.utils.MessageManager;
 import com.example.meet.entity.Meet;
 import com.example.meet.entity.Member;
-import com.example.meet.entity.ParticipateVote;
 import com.example.meet.entity.ParticipateVoteItem;
 import com.example.meet.repository.MeetRepository;
 import com.example.meet.repository.MemberRepository;
 import com.example.meet.repository.ParticipateVoteItemRepository;
-import com.example.meet.repository.ParticipateVoteRepository;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class ParticipateService {
-    private final ParticipateVoteRepository participateVoteRepository;
     private final ParticipateVoteItemRepository participateVoteItemRepository;
     private final MemberRepository memberRepository;
     private final MeetRepository meetRepository;
-    private final LoggerManager loggerManager;
-
-    @Scheduled(cron = "0 15 0 * * ?")
-    @Transactional
-    public void terminateParticipateVote(){
-        try {
-            List<ParticipateVote> participateVoteList = participateVoteRepository.findByEndDateToday();
-            StringBuilder dataStr = new StringBuilder();
-
-            for(ParticipateVote participateVote : participateVoteList){
-                participateVote.setTotalNum();
-                participateVote.getMeet().setParticipantsNum(participateVote.getTotalNum());
-
-                ParticipateVoteItem item = participateVote.getParticipateVoteItems().stream()
-                        .filter(ParticipateVoteItem::getIsParticipate)
-                        .findFirst()
-                        .orElse(null);
-
-                if(item != null){
-                    // 방어적 복사
-                    List<Member> participateVoters = new ArrayList<>(item.getParticipateVoters());
-                    participateVote.getMeet().setParticipants(participateVoters);
-                }
-
-                dataStr.append(participateVote.getMeet().getTitle());
-                dataStr.append(", ");
-            }
-
-            // 마지막 ", " 제거
-            int index = dataStr.lastIndexOf( ", ");
-
-            if (index != -1 && index == dataStr.length() - 2) {
-                dataStr.delete(index, dataStr.length());
-            }
-
-            loggerManager.insertBatch("참여여부 투표 종료", "success", dataStr.toString());
-        } catch (Exception e) {
-            loggerManager.insertBatch("참여여부 투표 종료", "error", e.getMessage());
-        }
-
-    }
 
     public FindParticipateVoteResponseDto findParticipateVote(FindParticipateVoteRequestDto inDto) {
         String endDate = null;
