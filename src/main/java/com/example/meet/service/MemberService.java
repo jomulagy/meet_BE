@@ -110,4 +110,5 @@ public class MemberService {
 
         return memberMapper.entityToDto(member);
     }
+
 }
