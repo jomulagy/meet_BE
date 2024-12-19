@@ -16,6 +16,8 @@ public class MemberResponseDto {
     private String id;
     @Schema(description = "유저 이름", example = "김지훈")
     private String name;
+    @Schema(description = "입금 여부", example = "false")
+    private String deposit;
     @Schema(description = "접근 권한", example = "admin")
     private String previllege;
     @Schema(description = "카카오 email id", example = "kjh980309@naver.com")
