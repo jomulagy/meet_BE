@@ -9,21 +9,16 @@ import com.example.meet.common.dto.response.KakaoUserInfoResponseDto;
 import com.example.meet.common.exception.BusinessException;
 import com.example.meet.common.enumulation.ErrorCode;
 import com.example.meet.common.enumulation.MemberPrevillege;
-import com.example.meet.common.utils.LoggerManager;
-import com.example.meet.entity.BatchLog;
 import com.example.meet.entity.Member;
 import com.example.meet.entity.Token;
-import com.example.meet.repository.BatchLogRepository;
 import com.example.meet.repository.MemberRepository;
 import com.example.meet.repository.TokenRepository;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -46,7 +41,6 @@ public class AuthService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
     private final TokenRepository tokenRepository;
-    private final LoggerManager loggerManager;
 
     public JwtTokenResponseDto login(KakaoTokenRequestDto request) {
         KakaoUserInfoResponseDto kakaoUserInfoResponseDto = getUserInfo(request.getAccessToken());
@@ -131,7 +125,6 @@ public class AuthService {
         return kakaoToken.getAccessToken();
     }
 
-    @Scheduled(cron = "0 0 0 * * *")
     @Transactional
     public Token refreshAccessToken() {
         Token kakaoToken = tokenRepository.findByName("kakao");
@@ -153,10 +146,9 @@ public class AuthService {
                     if (response.containsKey("refresh_token")) {
                         kakaoToken.setRefreshToken((String) response.get("refresh_token"));
                     }
-                    loggerManager.insertBatch("refreshAccessToken", "200", response.toString());
                 })
                 .doOnError(WebClientResponseException.class, ex -> {
-                    loggerManager.insertBatch("refreshAccessToken", ex.getStatusCode().toString(), ex.getResponseBodyAsString());
+                    log.error(ex.getStatusCode().toString() + ex.getResponseBodyAsString());
                 })
                 .onErrorResume(error -> {
                     return null;

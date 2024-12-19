@@ -16,7 +16,6 @@ import com.example.meet.common.enumulation.MeetType;
 import com.example.meet.common.enumulation.MemberPrevillege;
 import com.example.meet.common.enumulation.Message;
 import com.example.meet.common.exception.BusinessException;
-import com.example.meet.common.utils.LoggerManager;
 import com.example.meet.common.utils.MessageManager;
 import com.example.meet.common.utils.ScheduleManager;
 import com.example.meet.entity.Meet;
@@ -64,102 +63,6 @@ public class MeetService {
     private final ParticipateVoteItemRepository participateVoteItemRepository;
 
     private final MessageManager messageManager;
-    private final LoggerManager loggerManager;
-
-    @Scheduled(cron = "0 0 8 1 3,6,9,12 ?")
-    public void createRoutineMeet(){
-        try {
-            LocalDate date = LocalDate.now();
-            List<Integer> quarterList = List.of(2, 3, 4, 1);
-            int year = date.getYear();
-            int month = date.getMonthValue();
-            int quarter = quarterList.get((month - 1) / 3);
-
-            // 1분기면 내년
-            if(quarter == 1){
-                year+=1;
-            }
-
-            String title = String.format("%d년도 %d 분기 정기 회식", year, quarter);
-
-            CreateMeetRequestDto inDto = CreateMeetRequestDto.builder()
-                    .userId(parseLong("2927398983"))
-                    .title(title)
-                    .type(MeetType.Routine)
-                    .build();
-
-            createMeet(inDto);
-
-            loggerManager.insertBatch("정기 모임 생성", "success", "정기 모임 생성 완료");
-        } catch (Exception e) {
-            loggerManager.insertBatch("정기 모임 생성", "error", e.getMessage());
-        }
-    }
-
-    @Scheduled(cron = "0 30 8 * * ?")
-    @Transactional
-    public void sendParticipateMessage(){
-        try {
-            List<Meet> meetList = meetRepository.findByDateIsNotNullAndPlaceIsNotNullAndParticipantsNumIsNull();
-
-            for (Meet meet : meetList) {
-                TemplateArgs templateArgs = TemplateArgs.builder()
-                        .title(meet.getTitle())
-                        .scheduleType(null)
-                        .but(meet.getId().toString())
-                        .build();
-                Message.VOTE.setTemplateArgs(templateArgs);
-                messageManager.sendAll(Message.VOTE).block();
-                messageManager.sendMe(Message.VOTE).block();
-            }
-
-            loggerManager.insertBatch("참여여부 투표 알림", "success", meetList.size() + "건 전송 완료");
-        } catch (Exception e) {
-            loggerManager.insertBatch("참여여부 투표 알림", "error", e.getMessage());
-        }
-
-    }
-
-    // 모임 일주일전 알림 -
-    @Scheduled(cron = "0 0 9 * * *")
-    @Transactional
-    public void notifyMeet(){
-        try {
-            //오늘 날짜인 entity 조회
-            LocalDateTime startOfDay = LocalDateTime.now().with(LocalTime.MIN);
-            LocalDateTime endOfDay = LocalDateTime.now().with(LocalTime.MAX);
-            List<Meet> meetList = meetRepository.findByDateBetween(startOfDay, endOfDay);
-
-            //알림 전송
-            for (Meet meet : meetList) {
-                // 참여자 리스트 조회
-                List<Member> participantList = meet.getParticipants();
-
-                // 메세지 템플릿 설정
-                TemplateArgs templateArgs = TemplateArgs.builder()
-                        .title(meet.getTitle())
-                        .but(meet.getId().toString())
-                        .scheduleType(null)
-                        .build();
-                Message.MEET_NOTIFICATION.setTemplateArgs(templateArgs);
-
-                // 메세지 전송
-                for (Member member : participantList) {
-                    if (member.getId().equals(2927398983L)) {
-                        messageManager.sendMe(Message.MEET_NOTIFICATION).block();
-                    } else {
-                        messageManager.send(Message.MEET_NOTIFICATION, member).block();
-                    }
-                }
-            }
-
-            loggerManager.insertBatch("모임 일주일전 알림", "success", meetList.size() + "건 전송 완료");
-        } catch (Exception e) {
-            loggerManager.insertBatch("모임 일주일전 알림", "error", e.getMessage());
-        }
-
-    }
-
 
     public CreateMeetResponseDto createMeet(CreateMeetRequestDto inDto) {
         //로그인 한 유저 확인
