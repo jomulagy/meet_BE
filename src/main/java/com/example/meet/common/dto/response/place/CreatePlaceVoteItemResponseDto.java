@@ -1,6 +1,6 @@
 package com.example.meet.common.dto.response.place;
 
-import com.example.meet.common.dto.response.SimpleMemberResponseDto;
+import com.example.meet.common.dto.response.member.SimpleMemberResponseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 import lombok.AllArgsConstructor;

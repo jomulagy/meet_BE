@@ -1,4 +1,4 @@
-package com.example.meet.common.dto.response;
+package com.example.meet.common.dto.response.member;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;

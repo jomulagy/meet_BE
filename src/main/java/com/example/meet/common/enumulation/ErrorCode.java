@@ -15,6 +15,7 @@ public enum ErrorCode {
     //유저
     MEMBER_PERMISSION_REQUIRED(HttpStatus.FORBIDDEN,"접근 권한이 없는 멤버 입니다."),
     MEMBER_NOT_EXISTS(HttpStatus.NOT_FOUND,"존재하지 않는 유저 입니다."),
+    VALUE_REQUIRED(HttpStatus.BAD_REQUEST, "빈 값을 입력 할 수 없습니다."),
 
     //기타
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"서버 에러"),
