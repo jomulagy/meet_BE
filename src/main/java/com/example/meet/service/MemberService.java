@@ -128,7 +128,7 @@ public class MemberService {
                 () -> new BusinessException(ErrorCode.MEMBER_NOT_EXISTS)
         );
 
-        if(inDto.getOption() != null){
+        if(inDto.getOption() == null){
             throw new BusinessException(ErrorCode.VALUE_REQUIRED);
         }
 

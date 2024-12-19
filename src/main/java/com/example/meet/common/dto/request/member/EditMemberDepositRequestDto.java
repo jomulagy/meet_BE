@@ -13,7 +13,7 @@ public class EditMemberDepositRequestDto {
     @Schema(description = "대상 멤버 id", example = "12345677")
     private final Long memberId;
     @Schema(description = "입금여부", example = "true")
-    private String option;
+    private final String option;
     @Schema(hidden = true)
     private final Long userId;
 }
