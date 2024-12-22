@@ -1,5 +1,6 @@
 package com.example.meet.common.dto.response;
 
+import com.example.meet.common.dto.response.member.SimpleMemberResponseDto;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

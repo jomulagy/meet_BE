@@ -1,4 +1,4 @@
-package com.example.meet.common.dto.request;
+package com.example.meet.common.dto.request.member;
 
 import com.example.meet.common.enumulation.EditMemberPrevillegeOption;
 import io.swagger.v3.oas.annotations.media.Schema;

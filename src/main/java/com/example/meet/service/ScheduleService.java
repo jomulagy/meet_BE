@@ -10,7 +10,7 @@ import com.example.meet.common.dto.request.UpdateScheduleVoteRequestDto;
 import com.example.meet.common.dto.response.DeleteScheduleVoteItemResponseDto;
 import com.example.meet.common.dto.response.FindScheduleVoteItemResponseDto;
 import com.example.meet.common.dto.response.FindScheduleVoteResponseDto;
-import com.example.meet.common.dto.response.SimpleMemberResponseDto;
+import com.example.meet.common.dto.response.member.SimpleMemberResponseDto;
 import com.example.meet.common.enumulation.ErrorCode;
 import com.example.meet.common.enumulation.MemberPrevillege;
 import com.example.meet.common.exception.BusinessException;

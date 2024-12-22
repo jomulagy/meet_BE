@@ -41,6 +41,9 @@ public class Member {
     @Column(name = "previllege",nullable = false)
     private MemberPrevillege previllege = MemberPrevillege.denied;
 
+    @Column(name = "deposit",nullable = false)
+    private Boolean deposit = false;
+
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<ScheduleVoteItem> scheduleVoteItemList = new ArrayList<>();
@@ -67,5 +70,13 @@ public class Member {
 
     public void updateUUID(String uuid) {
         this.uuid = uuid;
+    }
+
+    public void setDeposit(Boolean deposit) {
+        this.deposit = deposit;
+    }
+
+    public void setPrevillege(MemberPrevillege previllege) {
+        this.previllege = previllege;
     }
 }

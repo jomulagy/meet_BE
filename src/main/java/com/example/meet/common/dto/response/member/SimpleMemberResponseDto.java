@@ -1,4 +1,4 @@
-package com.example.meet.common.dto.response;
+package com.example.meet.common.dto.response.member;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
