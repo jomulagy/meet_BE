@@ -34,14 +34,15 @@ public class SendDepositWarningMessage extends CommonJob {
 
         TemplateArgs templateArgs = TemplateArgs.builder()
                 .year(String.valueOf(year))
+                .nextYear(String.valueOf(year+1))
                 .build();
-        Message.DEPOSIT_WARNING.setTemplateArgs(templateArgs);
+        Message.DEPOSIT.setTemplateArgs(templateArgs);
 
         for(Member member : memberList){
             if (member.getId().equals(2927398983L)) {
-                messageManager.sendMe(Message.DEPOSIT_WARNING).block();
+                messageManager.sendMe(Message.DEPOSIT).block();
             } else {
-                messageManager.send(Message.DEPOSIT_WARNING, member).block();
+                messageManager.send(Message.DEPOSIT, member).block();
             }
 
             log.append(member.getName());
