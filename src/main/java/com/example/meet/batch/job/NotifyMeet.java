@@ -33,8 +33,8 @@ public class NotifyMeet extends CommonJob {
         StringBuilder log = new StringBuilder();
 
         //오늘 날짜인 entity 조회
-        LocalDateTime startOfDay = LocalDateTime.now().with(LocalTime.MIN);
-        LocalDateTime endOfDay = LocalDateTime.now().with(LocalTime.MAX);
+        LocalDateTime startOfDay = LocalDateTime.now().with(LocalTime.MIN).plusWeeks(1);
+        LocalDateTime endOfDay = LocalDateTime.now().with(LocalTime.MAX).plusWeeks(1);
         List<Meet> meetList = meetRepository.findByDateBetween(startOfDay, endOfDay);
 
         log.append("[");
