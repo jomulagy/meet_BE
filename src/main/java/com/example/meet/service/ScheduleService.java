@@ -46,18 +46,6 @@ public class ScheduleService {
 
     private final ScheduleVoteItemMapper scheduleVoteItemMapper = ScheduleVoteItemMapper.INSTANCE;
 
-    @Scheduled(cron = "0 5 0 * * ?")
-    @Transactional
-    public void terminateScheduleVote(){
-        LocalDateTime currentDate = LocalDateTime.now();
-        List<ScheduleVote> scheduleVoteList = scheduleVoteRepository.findEventsWithNullDateResultAndEndDateBefore(currentDate);
-
-        for(ScheduleVote scheduleVote : scheduleVoteList){
-            scheduleVote.setDateResult();
-            scheduleVote.getMeet().setDateResult(scheduleVote.getDateResult());
-        }
-
-    }
     public List<FindScheduleVoteItemResponseDto> findScheduleVoteItemList(FindScheduleVoteItemRequestDto inDto) {
 
         //로그인 한 유저 확인

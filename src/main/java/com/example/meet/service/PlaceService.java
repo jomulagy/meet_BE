@@ -46,18 +46,6 @@ public class PlaceService {
 
     private final PlaceVoteItemMapper placeVoteItemMapper = PlaceVoteItemMapper.INSTANCE;
 
-
-    @Scheduled(cron = "0 10 0 * * ?")
-    @Transactional
-    public void terminatePlaceVote(){
-        LocalDateTime currentDate = LocalDateTime.now();
-        List<PlaceVote> placeVoteList = placeVoteRepository.findEventsWithNullDateResultAndEndDateBefore(currentDate);
-
-        for(PlaceVote placeVote : placeVoteList){
-            placeVote.setPlaceResult();
-            placeVote.getMeet().setPlaceResult(placeVote.getPlaceResult());
-        }
-    }
     public List<FindPlaceVoteItemResponseDto> findPlaceVoteItemList(FindPlaceVoteItemRequestDto inDto) {
 
         //로그인 한 유저 확인

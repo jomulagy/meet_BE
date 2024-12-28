@@ -8,8 +8,7 @@ public enum Message {
     VOTE("108553"),
     SCHEDULE("108568"),
     MEET_NOTIFICATION("110979"),
-    DEPOSIT("115530"),
-    DEPOSIT_WARNING("115531")
+    DEPOSIT("115531"),
     ;
 
     private String id;
