@@ -91,12 +91,14 @@ public interface MeetMapper {
             editable = true;
         }
 
-        placeResponseDto = FindSimplePlaceResponseDto.builder()
-                .name(entity.getPlace().getName())
-                .xPos(entity.getPlace().getXPos().toString())
-                .yPos(entity.getPlace().getYPos().toString())
-                .editable(editable.toString())
-                .build();
+        if(entity.getPlace() != null){
+            placeResponseDto = FindSimplePlaceResponseDto.builder()
+                    .name(entity.getPlace().getName())
+                    .xPos(entity.getPlace().getXPos().toString())
+                    .yPos(entity.getPlace().getYPos().toString())
+                    .editable(editable.toString())
+                    .build();
+        }
 
         Long participantsNum = entity.getParticipantsNum();
         if(entity.getParticipantsNum() == null){
@@ -124,7 +126,7 @@ public interface MeetMapper {
     @Named("EntityToDtoSimple")
     default FindMeetSimpleResponseDto EntityToDtoSimple(Meet entity){
         String date = null;
-        FindSimplePlaceResponseDto place = null;
+        String place = null;
 
         if(entity.getDate() != null){
             DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -132,11 +134,7 @@ public interface MeetMapper {
         }
 
         if(entity.getPlace() != null){
-            place = FindSimplePlaceResponseDto.builder()
-                    .name(entity.getPlace().getName())
-                    .xPos(entity.getPlace().getXPos().toString())
-                    .yPos(entity.getPlace().getYPos().toString())
-                    .build();
+            place = entity.getPlace().getName();
         }
 
         return FindMeetSimpleResponseDto.builder()

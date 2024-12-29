@@ -19,5 +19,5 @@ public class FindMeetSimpleResponseDto {
     @Schema(description = "모임 날짜")
     private String date;
     @Schema(description = "모임 장소")
-    private FindSimplePlaceResponseDto place;
+    private String place;
 }
