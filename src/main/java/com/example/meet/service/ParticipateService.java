@@ -38,6 +38,7 @@ public class ParticipateService {
         String endDate = null;
         String date = null;
         String time = null;
+        String place = null;
 
         //로그인 한 유저 확인
         Member user = memberRepository.findById(inDto.getUserId()).orElseThrow(
@@ -64,13 +65,17 @@ public class ParticipateService {
             time = meet.getDate().format(DateTimeFormatter.ofPattern("HH시 mm분"));
         }
 
+        if(meet.getPlace() != null){
+            place = meet.getPlace().getName();
+        }
+
         Boolean isAuthor = meet.getAuthor().equals(user);
 
         return FindParticipateVoteResponseDto.builder()
                 .meetTitle(meet.getTitle())
                 .date(date)
                 .time(time)
-                .place(meet.getPlace().getName())
+                .place(place)
                 .endDate(endDate)
                 .isAuthor(isAuthor.toString())
                 .build();
