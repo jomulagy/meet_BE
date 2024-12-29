@@ -93,8 +93,8 @@ public interface MeetMapper {
 
         placeResponseDto = FindSimplePlaceResponseDto.builder()
                 .name(entity.getPlace().getName())
-                .xpos(entity.getPlace().getXPos().toString())
-                .ypos(entity.getPlace().getYPos().toString())
+                .xPos(entity.getPlace().getXPos().toString())
+                .yPos(entity.getPlace().getYPos().toString())
                 .editable(editable.toString())
                 .build();
 
@@ -134,8 +134,8 @@ public interface MeetMapper {
         if(entity.getPlace() != null){
             place = FindSimplePlaceResponseDto.builder()
                     .name(entity.getPlace().getName())
-                    .xpos(entity.getPlace().getXPos().toString())
-                    .ypos(entity.getPlace().getYPos().toString())
+                    .xPos(entity.getPlace().getXPos().toString())
+                    .yPos(entity.getPlace().getYPos().toString())
                     .build();
         }
 
@@ -166,8 +166,8 @@ public interface MeetMapper {
 
         FindSimplePlaceResponseDto place = FindSimplePlaceResponseDto.builder()
                 .name(entity.getPlace().getName())
-                .xpos(entity.getPlace().getXPos().toString())
-                .ypos(entity.getPlace().getYPos().toString())
+                .xPos(entity.getPlace().getXPos().toString())
+                .yPos(entity.getPlace().getYPos().toString())
                 .build();
 
         return EditMeetResponseDto.builder()
