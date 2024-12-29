@@ -1,5 +1,6 @@
 package com.example.meet.common.dto.response.meet;
 
+import com.example.meet.common.dto.response.place.FindSimplePlaceResponseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,5 +19,5 @@ public class FindMeetSimpleResponseDto {
     @Schema(description = "모임 날짜")
     private String date;
     @Schema(description = "모임 장소")
-    private String place;
+    private FindSimplePlaceResponseDto place;
 }

@@ -10,7 +10,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import java.time.LocalDate;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,6 +36,12 @@ public class PlaceVote {
     @Column(name = "place_result")
     private String placeResult;
 
+    @Column(name = "x_pos")
+    private BigDecimal xPos;
+
+    @Column(name = "y_pos")
+    private BigDecimal yPos;
+
     @Column(name = "end_date")
     private LocalDateTime endDate;
 
@@ -49,16 +55,18 @@ public class PlaceVote {
 
     public void setPlaceResult(){
         int max = -1;
-        String result = this.placeVoteItems.get(0).getPlace();
+        PlaceVoteItem result = this.placeVoteItems.get(0);
         Collections.sort(this.placeVoteItems, Comparator.comparing(PlaceVoteItem::getId));
 
         for(PlaceVoteItem item : this.placeVoteItems){
             if(item.getPlaceVoters().size() > max){
                 max = item.getPlaceVoters().size();
-                result = item.getPlace();
+                result = item;
             }
         }
 
-        this.placeResult = result;
+        this.placeResult = result.getPlace();
+        this.xPos = result.getXPos();
+        this.yPos = result.getYPos();
     }
 }

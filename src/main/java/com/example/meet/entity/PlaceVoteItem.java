@@ -13,6 +13,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +36,10 @@ public class PlaceVoteItem {
 
     @Column(name = "place", nullable = false)
     private String place;
+    @Column(name = "x_pos", nullable = false)
+    private BigDecimal xPos;
+    @Column(name = "y_pos", nullable = false)
+    private BigDecimal yPos;
 
     @Column(name = "editable", nullable = false)
     private Boolean editable;

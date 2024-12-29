@@ -120,7 +120,7 @@ public class PlaceController {
     @PostMapping("/item")
     @Tag(name = "place vote", description = "모임 장소 투표")
     @Operation(summary = "투표항목 추가",
-            description = "Authorization header require<br>type - Routine",
+            description = "Authorization header require",
             responses = {
                     @ApiResponse(responseCode = "200",
                             description = "성공",
@@ -142,8 +142,6 @@ public class PlaceController {
                             )
                     )
             })
-    @Parameter(name = "meetId", description = "모임 id", example = "1")
-    @Parameter(name = "place", description = "장소", example = "강남역")
     public CommonResponse<CreatePlaceVoteItemResponseDto> createPlaceVoteItem(@RequestBody CreatePlaceVoteItemRequestDto request){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -220,8 +218,6 @@ public class PlaceController {
                             )
                     )
             })
-    @Parameter(name = "meetId", description = "모임 id", example = "1")
-    @Parameter(name = "placeVoteItemList", description = "투표한 항목 id 리스트", example = "[1, 2]")
     public CommonResponse<UpdatePlaceVoteResponseDto> updatePlaceVote(@RequestBody UpdatePlaceVoteRequestDto requestDto){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
