@@ -1,8 +1,10 @@
 package com.example.meet.common.config;
 
+import com.example.meet.common.dto.request.place.PlaceRequestDto;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
@@ -19,7 +21,7 @@ public class SwaggerConfig {
                 .type(SecurityScheme.Type.HTTP)
                 .scheme("bearer")
                 .bearerFormat("JWT")
-        );
+        ).addSchemas("PlaceRequestDto", new Schema<PlaceRequestDto>().example("{ \"name\": \"강남역\", \"xPos\": \"12.11\", \"yPos\": \"123.45\" }"));;
         return new OpenAPI()
                 .components(new Components())
                 .info(apiInfo())
