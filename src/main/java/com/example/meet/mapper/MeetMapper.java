@@ -36,11 +36,12 @@ public interface MeetMapper {
             date = LocalDateTime.parse(dto.getDate()+" 19:00", DATE_TIME_FORMATTER);
         }
 
+        place = new Place();
         if(dto.getPlace() != null){
             if (dto.getPlace().getName() == null || dto.getPlace().getXPos() == null || dto.getPlace().getYPos() == null) {
                 throw new BusinessException(ErrorCode.PLACE_VALUE_REQUIRED);
             }
-            place = new Place();
+
             place.setName(dto.getPlace().getName());
             place.setXPos(dto.getPlace().getXPos());
             place.setYPos(dto.getPlace().getYPos());
@@ -62,8 +63,9 @@ public interface MeetMapper {
 
 
     default FindMeetResponseDto EntityToDto(Meet entity, @Context Member user){
-        FindSimpleDateResponseDto dateResponseDto = null;
+        FindSimpleDateResponseDto dateResponseDto;
         FindSimplePlaceResponseDto placeResponseDto = null;
+        Place place = entity.getPlace();
 
         String date = null;
         String time = null;
@@ -91,11 +93,22 @@ public interface MeetMapper {
             editable = true;
         }
 
-        if(entity.getPlace() != null){
+        if(place != null){
+            String xpos = null;
+            String ypos = null;
+
+            if(place.getXPos() != null){
+                xpos = place.getXPos().toString();
+            }
+
+            if(place.getYPos() != null){
+                ypos = place.getYPos().toString();
+            }
+
             placeResponseDto = FindSimplePlaceResponseDto.builder()
-                    .name(entity.getPlace().getName())
-                    .xPos(entity.getPlace().getXPos().toString())
-                    .yPos(entity.getPlace().getYPos().toString())
+                    .name(place.getName())
+                    .xPos(xpos)
+                    .yPos(ypos)
                     .editable(editable.toString())
                     .build();
         }
