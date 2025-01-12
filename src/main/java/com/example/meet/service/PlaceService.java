@@ -245,7 +245,7 @@ public class PlaceService {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String endDate = null;
         if(meet.getPlaceVote() != null){
-            meet.getPlaceVote().getEndDate().format(dateTimeFormatter);
+            endDate = meet.getPlaceVote().getEndDate().format(dateTimeFormatter);
         }
         Boolean isAuthor = meet.getAuthor().equals(user);
 
