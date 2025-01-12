@@ -243,7 +243,10 @@ public class ScheduleService {
         );
 
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String endDate = meet.getScheduleVote().getEndDate().format(dateTimeFormatter);
+        String endDate = null;
+        if(meet.getScheduleVote() != null){
+            meet.getScheduleVote().getEndDate().format(dateTimeFormatter);
+        }
         Boolean isAuthor = meet.getAuthor().equals(user);
 
         return FindScheduleVoteResponseDto.builder()
