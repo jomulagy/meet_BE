@@ -40,6 +40,13 @@ jobs:
         chmod +x ./gradlew
         ./gradlew clean build -x test
 
+    # 빌드 결과물을 artifact로 업로드
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: build-artifacts
+        path: build/libs/
+
   docker:
     runs-on: ubuntu-latest # ubuntu 최신 버전에서 script를 실행
     needs: build  # build 작업이 완료된 후 실행됨
@@ -47,6 +54,13 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+
+      # 빌드한 아티팩트 다운로드
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: build-artifacts
+          path: build/libs  # 다운받을 위치 (Dockerfile에서 참조할 경로)
 
       # docker hub login
       - name: Login to Docker hub
