@@ -31,6 +31,9 @@ public class CreateMeetRequestDto {
     @Schema(description = "날짜", example = "2024-07-05")
     private String date;
 
+    @Schema(description = "시간", example = "19:00")
+    private String time;
+
     private PlaceRequestDto place;
 
     @Schema(description = "내용", example = "내용", required = false)

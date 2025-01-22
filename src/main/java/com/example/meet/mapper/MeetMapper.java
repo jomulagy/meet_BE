@@ -12,7 +12,9 @@ import com.example.meet.common.exception.BusinessException;
 import com.example.meet.entity.Meet;
 import com.example.meet.entity.Member;
 import com.example.meet.entity.Place;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,13 +29,24 @@ import org.mapstruct.factory.Mappers;
 public interface MeetMapper {
     MeetMapper INSTANCE = Mappers.getMapper(MeetMapper.class);
     DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
 
     default Meet dtoToEntity(CreateMeetRequestDto dto, Member author){
-        LocalDateTime date = null;
+        LocalDate date = null;
+        LocalTime time = null;
         Place place = null;
 
         if(dto.getDate() != null){
-            date = LocalDateTime.parse(dto.getDate()+" 19:00", DATE_TIME_FORMATTER);
+            date = LocalDate.parse(dto.getDate(), DATE_FORMATTER);
+        }
+        if(dto.getTime() != null){
+            time = LocalTime.parse(dto.getTime(), TIME_FORMATTER);
+        }
+
+        LocalDateTime dateTime = null;
+        if (date != null && time != null) {
+            dateTime = date.atTime(time);
         }
 
         place = new Place();
@@ -46,12 +59,15 @@ public interface MeetMapper {
             place.setXPos(dto.getPlace().getXPos());
             place.setYPos(dto.getPlace().getYPos());
         }
+        else {
+            place = null;
+        }
 
 
         return Meet.builder()
                 .title(dto.getTitle())
                 .type(dto.getType())
-                .date(date)
+                .date(dateTime)
                 .place(place)
                 .content(dto.getContent())
                 .author(author)

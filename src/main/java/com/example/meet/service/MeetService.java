@@ -68,6 +68,7 @@ public class MeetService {
 
     private final MessageManager messageManager;
 
+    @Transactional
     public CreateMeetResponseDto createMeet(CreateMeetRequestDto inDto) {
         //로그인 한 유저 확인
         Member user = memberRepository.findById(inDto.getUserId()).orElseThrow(
@@ -86,11 +87,13 @@ public class MeetService {
         }
 
         Meet meet = meetRepository.save(entity);
-        entity.getPlace().setMeet(meet);
-        placeRepository.save(entity.getPlace());
+        if(entity.getPlace() != null){
+            entity.getPlace().setMeet(meet);
+            placeRepository.save(entity.getPlace());
+        }
 
         //일정 투표 연결
-        if(entity.getScheduleVote() == null){
+        if(entity.getScheduleVote() == null && entity.getDate() == null){
             ScheduleVote scheduleVote = createScheduleVote(entity);
             scheduleVoteRepository.save(scheduleVote);
             if(entity.getType() == MeetType.Routine){
@@ -100,7 +103,7 @@ public class MeetService {
             entity.setScheduleVote(scheduleVote);
         }
         //장소 투표 연결
-        if(entity.getPlaceVote() == null){
+        if(entity.getPlaceVote() == null && entity.getPlace() == null){
             PlaceVote placeVote = createPlaceVote(entity);
             placeVoteRepository.save(placeVote);
             setPlaceVoteItems(placeVote);
