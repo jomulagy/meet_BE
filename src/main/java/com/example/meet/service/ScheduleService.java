@@ -62,41 +62,44 @@ public class ScheduleService {
                 () -> new BusinessException(ErrorCode.MEET_NOT_EXISTS)
         );
 
-        List<ScheduleVoteItem> scheduleVoteItemList = meet.getScheduleVote().getScheduleVoteItems();
-
         List<FindScheduleVoteItemResponseDto> outDtoList = new ArrayList<>();
-        for(ScheduleVoteItem item : scheduleVoteItemList){
-            String isVote = "false";
-            if(item.getScheduleVoters().contains(user)){
-                isVote = "true";
-            }
-            List<SimpleMemberResponseDto> memberList = new ArrayList<>();
-            item.getScheduleVoters().forEach(member -> {
-                        memberList.add(SimpleMemberResponseDto.builder()
-                                        .id(member.getId().toString())
-                                        .name(member.getName())
-                                        .build());
-                    }
-            );
 
-            //수정 가능 여부 확인
-            String editable = "false";
-            if(item.getAuthor() == user && item.getEditable() && item.getScheduleVoters().isEmpty()){
-                editable = "true";
-            }
-            outDtoList.add(
-                    FindScheduleVoteItemResponseDto.builder()
-                            .id(item.getId().toString())
-                            .date(item.getDate().toLocalDate().toString())
-                            .time(item.getDate().toLocalTime().toString())
-                            .editable(editable)
-                            .isVote(isVote)
-                            .memberList(memberList)
-                            .build()
-            );
+        if(meet.getScheduleVote() != null){
+            List<ScheduleVoteItem> scheduleVoteItemList = meet.getScheduleVote().getScheduleVoteItems();
 
+            for(ScheduleVoteItem item : scheduleVoteItemList){
+                String isVote = "false";
+                if(item.getScheduleVoters().contains(user)){
+                    isVote = "true";
+                }
+                List<SimpleMemberResponseDto> memberList = new ArrayList<>();
+                item.getScheduleVoters().forEach(member -> {
+                            memberList.add(SimpleMemberResponseDto.builder()
+                                    .id(member.getId().toString())
+                                    .name(member.getName())
+                                    .build());
+                        }
+                );
+
+                //수정 가능 여부 확인
+                String editable = "false";
+                if(item.getAuthor() == user && item.getEditable() && item.getScheduleVoters().isEmpty()){
+                    editable = "true";
+                }
+                outDtoList.add(
+                        FindScheduleVoteItemResponseDto.builder()
+                                .id(item.getId().toString())
+                                .date(item.getDate().toLocalDate().toString())
+                                .time(item.getDate().toLocalTime().toString())
+                                .editable(editable)
+                                .isVote(isVote)
+                                .memberList(memberList)
+                                .build()
+                );
+
+            }
         }
-
+      
         return outDtoList;
     }
 

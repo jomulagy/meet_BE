@@ -62,38 +62,40 @@ public class PlaceService {
                 () -> new BusinessException(ErrorCode.MEET_NOT_EXISTS)
         );
 
-        List<PlaceVoteItem> placeVoteItemList = meet.getPlaceVote().getPlaceVoteItems();
-
         List<FindPlaceVoteItemResponseDto> outDtoList = new ArrayList<>();
-        for(PlaceVoteItem item : placeVoteItemList){
-            String isVote = "false";
-            if(item.getPlaceVoters().contains(user)){
-                isVote = "true";
-            }
-            List<SimpleMemberResponseDto> memberList = new ArrayList<>();
-            item.getPlaceVoters().forEach(member -> {
-                        memberList.add(SimpleMemberResponseDto.builder()
-                                .id(member.getId().toString())
-                                .name(member.getName())
-                                .build());
-                    }
-            );
 
-            //수정 가능 여부 확인
-            String editable = "false";
-            if(item.getAuthor().equals(user) && item.getEditable() && item.getPlaceVoters().isEmpty()){
-                editable = "true";
-            }
-            outDtoList.add(
-                    FindPlaceVoteItemResponseDto.builder()
-                            .id(item.getId().toString())
-                            .place(item.getPlace())
-                            .editable(editable)
-                            .isVote(isVote)
-                            .memberList(memberList)
-                            .build()
-            );
+        if(meet.getPlace() != null) {
+            List<PlaceVoteItem> placeVoteItemList = meet.getPlaceVote().getPlaceVoteItems();
+            for (PlaceVoteItem item : placeVoteItemList) {
+                String isVote = "false";
+                if (item.getPlaceVoters().contains(user)) {
+                    isVote = "true";
+                }
+                List<SimpleMemberResponseDto> memberList = new ArrayList<>();
+                item.getPlaceVoters().forEach(member -> {
+                            memberList.add(SimpleMemberResponseDto.builder()
+                                    .id(member.getId().toString())
+                                    .name(member.getName())
+                                    .build());
+                        }
+                );
 
+                //수정 가능 여부 확인
+                String editable = "false";
+                if (item.getAuthor().equals(user) && item.getEditable() && item.getPlaceVoters().isEmpty()) {
+                    editable = "true";
+                }
+                outDtoList.add(
+                        FindPlaceVoteItemResponseDto.builder()
+                                .id(item.getId().toString())
+                                .place(item.getPlace())
+                                .editable(editable)
+                                .isVote(isVote)
+                                .memberList(memberList)
+                                .build()
+                );
+
+            }
         }
 
         return outDtoList;
