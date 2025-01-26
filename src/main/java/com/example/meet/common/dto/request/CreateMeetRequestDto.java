@@ -16,7 +16,7 @@ import lombok.ToString;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = {"userId", "type", "title", "date"})
+@ToString(exclude = {"userId", "type", "title", "date", "time"})
 @Builder
 public class CreateMeetRequestDto {
     @Schema(hidden = true)
