@@ -7,6 +7,7 @@ import com.example.meet.common.dto.request.member.EditMemberDepositRequestDto;
 import com.example.meet.common.dto.response.member.MemberDepositResponseDto;
 import com.example.meet.common.dto.response.member.MemberPrevillegeResponseDto;
 import com.example.meet.common.dto.response.member.MemberResponseDto;
+import com.example.meet.common.enumulation.DepositStatus;
 import com.example.meet.common.exception.BusinessException;
 import com.example.meet.common.enumulation.EditMemberPrevillegeOption;
 import com.example.meet.common.enumulation.ErrorCode;
@@ -133,7 +134,10 @@ public class MemberService {
             throw new BusinessException(ErrorCode.VALUE_REQUIRED);
         }
 
-        member.setDeposit(inDto.getOption().equals("true"));
+        if(member.getDeposit() != null){
+            member.getDeposit().setIsDepositByName(inDto.getOption());
+        }
+
         memberRepository.save(member);
 
         return new MemberDepositResponseDto(member.getDeposit().toString());

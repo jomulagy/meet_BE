@@ -41,8 +41,8 @@ public class Member {
     @Column(name = "previllege",nullable = false)
     private MemberPrevillege previllege = MemberPrevillege.denied;
 
-    @Column(name = "deposit",nullable = false)
-    private Boolean deposit = false;
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Deposit deposit;
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
@@ -72,7 +72,7 @@ public class Member {
         this.uuid = uuid;
     }
 
-    public void setDeposit(Boolean deposit) {
+    public void setDeposit(Deposit deposit) {
         this.deposit = deposit;
     }
 

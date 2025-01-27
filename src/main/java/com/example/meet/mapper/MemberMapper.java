@@ -10,10 +10,27 @@ import java.util.List;
 public interface MemberMapper {
     MemberMapper INSTANCE = Mappers.getMapper(MemberMapper.class);
 
-    MemberResponseDto entityToDto(Member member);
-    Member DtoToEntity(MemberResponseDto memberDto);
+    default MemberResponseDto entityToDto(Member member){
+        Boolean deposit = Boolean.FALSE;
+        Boolean isFirst = Boolean.FALSE;
+
+        if(member.getDeposit() != null){
+            deposit = member.getDeposit().getIsDeposit();
+        }
+
+        if(member.getUuid() != null){
+            isFirst = Boolean.TRUE;
+        }
+        return MemberResponseDto.builder()
+                .id(member.getId().toString())
+                .name(member.getName())
+                .deposit(deposit.toString())
+                .previllege(member.getPrevillege().toString())
+                .email(member.getEmail())
+                .isFirst(isFirst.toString())
+                .build();
+    }
 
     List<MemberResponseDto> usersToUserDtos(List<Member> members);
-    List<Member> userDtosToUsers(List<MemberResponseDto> memberDtos);
 
 }

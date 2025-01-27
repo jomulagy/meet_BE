@@ -22,11 +22,15 @@ public class DeleteMemberPrevillege extends CommonJob {
     @Transactional
     protected String performJob(JobExecutionContext context) {
         StringBuilder log = new StringBuilder();
-        List<Member> memberList = memberRepository.findByDeposit(false);
+        List<Member> memberList = memberRepository.findAll();
 
         log.append("[");
 
         for(Member member: memberList){
+            if(!member.getDeposit().getIsDeposit()){
+                continue;
+            }
+
             member.setPrevillege(MemberPrevillege.denied);
 
             log.append(member.getName());

@@ -16,6 +16,7 @@ public enum ErrorCode {
     MEMBER_PERMISSION_REQUIRED(HttpStatus.FORBIDDEN,"접근 권한이 없는 멤버 입니다."),
     MEMBER_NOT_EXISTS(HttpStatus.NOT_FOUND,"존재하지 않는 유저 입니다."),
     VALUE_REQUIRED(HttpStatus.BAD_REQUEST, "빈 값을 입력 할 수 없습니다."),
+    DEPOSIT_STATUS_NOT_EXISTS(HttpStatus.NOT_FOUND,"존재하지 않는 입금 상태 입니다."),
 
     //기타
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"서버 에러"),
@@ -43,7 +44,7 @@ public enum ErrorCode {
 
     //메일
     MAIL_SEND_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "메일 전송중 오류가 발생했습니다."),
-
+    
     ;
 
     private final HttpStatus httpStatus;

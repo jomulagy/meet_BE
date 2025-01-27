@@ -30,7 +30,7 @@ public class SendDepositWarningMessage extends CommonJob {
 
         log.append("[");
 
-        List<Member> memberList = memberRepository.findByDeposit(false);
+        List<Member> memberList = memberRepository.findAll();
 
         TemplateArgs templateArgs = TemplateArgs.builder()
                 .year(String.valueOf(year))
@@ -39,6 +39,10 @@ public class SendDepositWarningMessage extends CommonJob {
         Message.DEPOSIT.setTemplateArgs(templateArgs);
 
         for(Member member : memberList){
+            if(!member.getDeposit().getIsDeposit()){
+                continue;
+            }
+
             if (member.getId().equals(2927398983L)) {
                 messageManager.sendMe(Message.DEPOSIT).block();
             } else {
