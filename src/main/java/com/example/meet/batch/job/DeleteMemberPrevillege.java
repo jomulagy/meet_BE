@@ -1,6 +1,7 @@
 package com.example.meet.batch.job;
 
 import com.example.meet.batch.CommonJob;
+import com.example.meet.common.enumulation.DepositStatus;
 import com.example.meet.common.enumulation.MemberPrevillege;
 import com.example.meet.entity.Member;
 import com.example.meet.repository.BatchLogRepository;
@@ -27,11 +28,12 @@ public class DeleteMemberPrevillege extends CommonJob {
         log.append("[");
 
         for(Member member: memberList){
-            if(!member.getDeposit().getIsDeposit()){
+            if(!member.hasDeposit()){
                 continue;
             }
 
-            member.setPrevillege(MemberPrevillege.denied);
+            member.setIsDepositFalse();
+            member.setPrivilege(MemberPrevillege.denied);
 
             log.append(member.getName());
             log.append(", ");

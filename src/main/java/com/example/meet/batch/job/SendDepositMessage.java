@@ -34,10 +34,7 @@ public class SendDepositMessage extends CommonJob {
         List<Member> memberList = memberRepository.findAll();
 
         for(Member member : memberList){
-            Deposit deposit = member.getDeposit();
-            if(deposit != null){
-                deposit.setIsDepositFalse();
-            }
+            member.setIsDepositFalse();
         }
 
         TemplateArgs templateArgs = TemplateArgs.builder()

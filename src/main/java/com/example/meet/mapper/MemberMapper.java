@@ -15,7 +15,7 @@ public interface MemberMapper {
         Boolean isFirst = Boolean.FALSE;
 
         if(member.getDeposit() != null){
-            deposit = member.getDeposit().getIsDeposit();
+            deposit = member.hasDeposit();
         }
 
         if(member.getUuid() != null){
@@ -25,7 +25,7 @@ public interface MemberMapper {
                 .id(member.getId().toString())
                 .name(member.getName())
                 .deposit(deposit.toString())
-                .previllege(member.getPrevillege().toString())
+                .previllege(member.getPrivilege().getStatus().toString())
                 .email(member.getEmail())
                 .isFirst(isFirst.toString())
                 .build();

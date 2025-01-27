@@ -19,7 +19,7 @@ public enum ErrorCode {
     DEPOSIT_STATUS_NOT_EXISTS(HttpStatus.NOT_FOUND,"존재하지 않는 입금 상태 입니다."),
 
     //기타
-    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"서버 에러"),
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"시스템 관리자에게 문의하십시오."),
 
     //카카오 메세지 API
     JSON_CONVERT_ERROR(HttpStatus.BAD_REQUEST,"Failed to process JSON"),

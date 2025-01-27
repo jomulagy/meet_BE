@@ -1,6 +1,9 @@
 package com.example.meet.entity;
 
+import com.example.meet.common.enumulation.DepositStatus;
+import com.example.meet.common.enumulation.ErrorCode;
 import com.example.meet.common.enumulation.MemberPrevillege;
+import com.example.meet.common.exception.BusinessException;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,12 +15,14 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.cglib.beans.BulkBeanException;
 
 @Entity
 @Getter
@@ -38,8 +43,8 @@ public class Member {
     @Column(name = "uuid")
     private String uuid;
 
-    @Column(name = "previllege",nullable = false)
-    private MemberPrevillege previllege = MemberPrevillege.denied;
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Privilege privilege;
 
     @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private Deposit deposit;
@@ -64,10 +69,6 @@ public class Member {
     @ManyToMany(mappedBy = "participants")
     private List<Meet> meets = new ArrayList<>();
 
-    public void updatePrevillege(MemberPrevillege previllege){
-        this.previllege = previllege;
-    }
-
     public void updateUUID(String uuid) {
         this.uuid = uuid;
     }
@@ -76,7 +77,48 @@ public class Member {
         this.deposit = deposit;
     }
 
-    public void setPrevillege(MemberPrevillege previllege) {
-        this.previllege = previllege;
+    public Boolean hasPrivilege(){
+        Boolean result = Boolean.FALSE;
+
+        if(this.getPrivilege() != null){
+            result = this.getPrivilege().getStatus() != MemberPrevillege.denied;
+        }
+
+        return result;
+    }
+
+    public Boolean isAdmin(){
+        Boolean result = Boolean.FALSE;
+
+        if(this.getPrivilege() != null){
+            result = this.getPrivilege().getStatus() == MemberPrevillege.admin;
+        }
+
+        return result;
+    }
+
+    public void setPrivilege(MemberPrevillege memberPrevillege) {
+        if(this.privilege == null){
+            throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+        this.privilege.setStatus(memberPrevillege);
+    }
+
+    // 미납이거나, 연체 상태일때 FALSE
+    // 완납이거나, 연체 상태 아닐때 TRUE
+    public Boolean hasDeposit(){
+        return this.deposit.getIsDeposit().getCode() == 1 || this.deposit.getIsDeposit().getCode() == 4;
+    }
+
+    public void setIsDepositByName(String name) {
+        if(this.deposit != null){
+            this.deposit.setIsDepositByName(name);
+        }
+    }
+
+    public void setIsDepositFalse(){
+        if(this.deposit != null){
+            this.deposit.setIsDepositFalse();
+        }
     }
 }

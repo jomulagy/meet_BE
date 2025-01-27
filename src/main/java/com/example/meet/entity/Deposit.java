@@ -19,6 +19,7 @@ import lombok.Data;
 @Table(name = "deposit")
 public class Deposit {
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -35,22 +36,22 @@ public class Deposit {
     @JoinColumn(name = "member_id", referencedColumnName = "id")
     private Member member;
 
-    // 미납이거나, 연체 상태일때 FALSE
-    // 완납이거나, 연체 상태 아닐때 TRUE
-    public Boolean getIsDeposit(){
-        return this.isDeposit.getCode() == 1 || this.isDeposit.getCode() == 4;
-    }
-
-    public DepositStatus setIsDepositByName(String name) {
-        return Arrays.stream(DepositStatus.values())
+    public void setIsDepositByName(String name) {
+        DepositStatus depositStatus = Arrays.stream(DepositStatus.values())
                 .filter(status -> status.getName().equals(name))
                 .findFirst()
                 .orElseThrow(() -> new BusinessException(ErrorCode.DEPOSIT_STATUS_NOT_EXISTS));
+        this.isDeposit = depositStatus;
     }
 
     public void setIsDepositFalse(){
-        this.setCount(null);
-        this.setIsDeposit(DepositStatus.NONE);
-        this.setTotalCount(null);
+        if(this.isDeposit == DepositStatus.COMPLETE){
+            this.isDeposit = DepositStatus.NONE;
+            this.setCount(null);
+            this.setTotalCount(null);
+        }
+        else if(this.isDeposit == DepositStatus.PARTITION){
+            this.isDeposit = DepositStatus.OVERDUE;
+        }
     }
 }

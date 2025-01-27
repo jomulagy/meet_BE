@@ -1,7 +1,5 @@
 package com.example.meet.service;
 
-import static java.lang.Long.parseLong;
-
 import com.example.meet.common.dto.TemplateArgs;
 import com.example.meet.common.dto.request.CreateMeetRequestDto;
 import com.example.meet.common.dto.request.DeleteMeetRequestDto;
@@ -13,7 +11,6 @@ import com.example.meet.common.dto.response.meet.FindMeetResponseDto;
 import com.example.meet.common.dto.response.meet.FindMeetSimpleResponseDto;
 import com.example.meet.common.enumulation.ErrorCode;
 import com.example.meet.common.enumulation.MeetType;
-import com.example.meet.common.enumulation.MemberPrevillege;
 import com.example.meet.common.enumulation.Message;
 import com.example.meet.common.exception.BusinessException;
 import com.example.meet.common.utils.MessageManager;
@@ -44,7 +41,6 @@ import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -71,7 +67,7 @@ public class MeetService {
         );
 
         //로그인 한 유저의 권한 확인 (관리자, 멤버 여부)
-        if(user.getPrevillege().equals(MemberPrevillege.denied)){
+        if(!user.hasPrivilege()){
             throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
         }
 
@@ -232,7 +228,7 @@ public class MeetService {
         );
 
         //로그인 한 유저의 권한 확인 (관리자, 멤버 여부)
-        if(user.getPrevillege().equals(MemberPrevillege.denied)){
+        if(!user.hasPrivilege()){
             throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
         }
 
@@ -248,7 +244,7 @@ public class MeetService {
         );
 
         //로그인 한 유저의 권한 확인 (관리자, 멤버 여부)
-        if(user.getPrevillege().equals(MemberPrevillege.denied)){
+        if(!user.hasPrivilege()){
             throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
         }
 
@@ -268,7 +264,7 @@ public class MeetService {
         );
 
         //로그인 한 유저의 권한 확인 (관리자, 멤버 여부)
-        if(user.getPrevillege().equals(MemberPrevillege.denied)){
+        if(!user.hasPrivilege()){
             throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
         }
 
@@ -278,7 +274,7 @@ public class MeetService {
         );
 
         //작성자 or 관리자 인지 확인
-        if(!(user.getPrevillege().equals(MemberPrevillege.admin) || meet.getAuthor() == user)){
+        if(!(user.isAdmin() || meet.getAuthor() == user)){
             throw new BusinessException(ErrorCode.MEET_EDIT_PERMISSION_REQUIRED);
         }
 
@@ -309,7 +305,7 @@ public class MeetService {
         );
 
         //로그인 한 유저의 권한 확인 (관리자, 멤버 여부)
-        if(user.getPrevillege().equals(MemberPrevillege.denied)){
+        if(!user.hasPrivilege()){
             throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
         }
 
@@ -319,7 +315,7 @@ public class MeetService {
         );
 
         //작성자 or 관리자 인지 확인
-        if(!(user.getPrevillege().equals(MemberPrevillege.admin) || meet.getAuthor() == user)){
+        if(!(user.isAdmin() || meet.getAuthor() == user)){
             throw new BusinessException(ErrorCode.MEET_EDIT_PERMISSION_REQUIRED);
         }
 

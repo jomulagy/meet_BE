@@ -39,7 +39,7 @@ public class SendDepositWarningMessage extends CommonJob {
         Message.DEPOSIT.setTemplateArgs(templateArgs);
 
         for(Member member : memberList){
-            if(!member.getDeposit().getIsDeposit()){
+            if(!member.hasDeposit()){
                 continue;
             }
 

@@ -6,10 +6,13 @@ import com.example.meet.common.dto.request.KakaoTokenRequestDto;
 import com.example.meet.common.auth.JwtTokenResponseDto;
 import com.example.meet.common.dto.response.AdminAccessTokenResponseDto;
 import com.example.meet.common.dto.response.KakaoUserInfoResponseDto;
+import com.example.meet.common.enumulation.DepositStatus;
 import com.example.meet.common.exception.BusinessException;
 import com.example.meet.common.enumulation.ErrorCode;
 import com.example.meet.common.enumulation.MemberPrevillege;
+import com.example.meet.entity.Deposit;
 import com.example.meet.entity.Member;
+import com.example.meet.entity.Privilege;
 import com.example.meet.entity.Token;
 import com.example.meet.repository.MemberRepository;
 import com.example.meet.repository.TokenRepository;
@@ -51,7 +54,7 @@ public class AuthService {
 
         Long userId = kakaoUserInfoResponseDto.getUserID();
         Member member = memberRepository.findById(userId).get();
-        if(member.getPrevillege().equals(MemberPrevillege.denied)){
+        if(!member.hasPrivilege()){
             throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
         }
         // jwt 토큰 반환
@@ -61,12 +64,20 @@ public class AuthService {
         return jwtToken;
     }
 
+    @Transactional
     private void register(KakaoUserInfoResponseDto kakaoUserInfoResponseDto) {
+        Privilege privilege = new Privilege();
+        privilege.setStatus(MemberPrevillege.denied);
+
+        Deposit deposit = new Deposit();
+        deposit.setIsDeposit(DepositStatus.NONE);
+
         Member member = Member.builder()
                 .id(kakaoUserInfoResponseDto.getUserID())
                 .name(kakaoUserInfoResponseDto.getProperties().getNickname())
                 .email(kakaoUserInfoResponseDto.getKakaoAccount().getEmail())
-                .previllege(MemberPrevillege.denied)
+                .privilege(privilege)
+                .deposit(deposit)
                 .build();
         memberRepository.save(member);
     }
@@ -104,7 +115,7 @@ public class AuthService {
         );
 
         //로그인 한 유저의 권한 확인 (관리자 여부)
-        if(!user.getPrevillege().equals(MemberPrevillege.admin)){
+        if(!user.isAdmin()){
             throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
         }
 

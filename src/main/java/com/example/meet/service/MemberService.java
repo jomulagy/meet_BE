@@ -33,7 +33,7 @@ public class MemberService {
         if(!user.isPresent()){
             throw new BusinessException(ErrorCode.MEMBER_NOT_EXISTS);
         }
-        return new MemberPrevillegeResponseDto(user.get().getPrevillege());
+        return new MemberPrevillegeResponseDto(user.get().getPrivilege().getStatus());
 
     }
 
@@ -44,7 +44,7 @@ public class MemberService {
         );
 
         //로그인 한 유저의 권한 확인 (관리자 여부)
-        if(!member.getPrevillege().equals(MemberPrevillege.admin)){
+        if(!member.isAdmin()){
             throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
         }
 
@@ -63,7 +63,7 @@ public class MemberService {
                             .name(m.getName())
                             .email(m.getEmail())
                             .deposit(m.getDeposit().toString())
-                            .previllege(m.getPrevillege().toString())
+                            .previllege(m.getPrivilege().getStatus().toString())
                             .isFirst(isFirst.toString())
                             .build();
                 })
@@ -78,7 +78,7 @@ public class MemberService {
         );
 
         //로그인 한 유저의 권한 확인 (관리자 여부)
-        if(!user.getPrevillege().equals(MemberPrevillege.admin)){
+        if(!user.isAdmin()){
             throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
         }
 
@@ -92,10 +92,10 @@ public class MemberService {
         }
 
         if(inDto.getOption().equals(EditMemberPrevillegeOption.accept) && member.getUuid() != null){
-            member.updatePrevillege(MemberPrevillege.accepted);
+            member.setPrivilege(MemberPrevillege.accepted);
         }
         else{
-            member.updatePrevillege(MemberPrevillege.denied);
+            member.setPrivilege(MemberPrevillege.denied);
         }
         memberRepository.save(member);
 
@@ -108,7 +108,7 @@ public class MemberService {
         );
 
         //로그인 한 유저의 권한 확인
-        if(member.getPrevillege().equals(MemberPrevillege.denied)){
+        if(!member.hasPrivilege()){
             throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
         }
 
@@ -122,7 +122,7 @@ public class MemberService {
         );
 
         //로그인 한 유저의 권한 확인 (관리자 여부)
-        if(!user.getPrevillege().equals(MemberPrevillege.admin)){
+        if(user.isAdmin()){
             throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
         }
 
@@ -135,7 +135,7 @@ public class MemberService {
         }
 
         if(member.getDeposit() != null){
-            member.getDeposit().setIsDepositByName(inDto.getOption());
+            member.setIsDepositByName(inDto.getOption());
         }
 
         memberRepository.save(member);

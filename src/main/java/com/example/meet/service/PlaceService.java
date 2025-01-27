@@ -54,7 +54,7 @@ public class PlaceService {
         );
 
         //로그인 한 유저의 권한 확인
-        if(user.getPrevillege().equals(MemberPrevillege.denied)){
+        if(!user.hasPrivilege()){
             throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
         }
 
@@ -106,7 +106,7 @@ public class PlaceService {
         );
 
         //로그인 한 유저의 권한 확인
-        if(user.getPrevillege().equals(MemberPrevillege.denied)){
+        if(!user.hasPrivilege()){
             throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
         }
 
@@ -165,7 +165,7 @@ public class PlaceService {
         );
 
         //로그인 한 유저의 권한 확인
-        if(user.getPrevillege().equals(MemberPrevillege.denied)){
+        if(!user.hasPrivilege()){
             throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
         }
 
@@ -189,7 +189,7 @@ public class PlaceService {
         );
 
         //로그인 한 유저의 권한 확인
-        if(user.getPrevillege().equals(MemberPrevillege.denied)){
+        if(!user.hasPrivilege()){
             throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
         }
 
@@ -234,7 +234,7 @@ public class PlaceService {
         );
 
         //로그인 한 유저의 권한 확인
-        if(user.getPrevillege().equals(MemberPrevillege.denied)){
+        if(!user.hasPrivilege()){
             throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
         }
 
