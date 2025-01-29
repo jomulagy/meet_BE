@@ -22,15 +22,10 @@ public class CreateRoutineMeet extends CommonJob {
     @Override
     protected void performJob(JobExecutionContext context) {
         LocalDate date = LocalDate.now();
-        List<Integer> quarterList = List.of(2, 3, 4, 1);
+        List<Integer> quarterList = List.of(1, 2, 3, 4);
         int year = date.getYear();
         int month = date.getMonthValue();
         int quarter = quarterList.get((month - 1) / 3);
-
-        // 1분기면 내년
-        if(quarter == 1){
-            year+=1;
-        }
 
         String title = String.format("%d년도 %d 분기 정기 회식", year, quarter);
 
