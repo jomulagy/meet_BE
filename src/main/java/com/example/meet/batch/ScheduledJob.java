@@ -18,7 +18,7 @@ import org.quartz.Job;
 @RequiredArgsConstructor
 public enum ScheduledJob {
     REFRESH_ADMIN_KAKAO_ACCESS_TOKEN(RefreshAdminKakaoAcessToken.class, "0 0 0 * * ? *"),
-    DELETE_MEMBER_PREVILLEGE(DeleteMemberPrevillege.class, "0 5 0 11 1 ? *"),
+    DELETE_MEMBER_PREVILLEGE(DeleteMemberPrevillege.class, "0 5 0 11 * ? *"),
     TERMINATE_SCHEDULE_VOTE(TerminateScheduleVote.class, "0 10 0 * * ? *"),
     TERMINATE_PLACE_VOTE(TerminatePlaceVote.class, "0 15 0 * * ? *"),
     TERMINATE_PARTICIPATE_VOTE(TerminateParticipateVote.class, "0 20 0 * * ? *"),

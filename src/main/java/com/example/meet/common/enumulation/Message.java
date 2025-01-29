@@ -9,6 +9,7 @@ public enum Message {
     SCHEDULE("108568"),
     MEET_NOTIFICATION("110979"),
     DEPOSIT("115531"),
+    DELETE_PRIVILEGE("116807")
     ;
 
     private String id;

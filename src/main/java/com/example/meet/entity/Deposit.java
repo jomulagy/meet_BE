@@ -13,6 +13,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.util.Arrays;
 import lombok.Data;
+import java.util.List;
 
 @Entity
 @Data
@@ -53,5 +54,9 @@ public class Deposit {
         else if(this.isDeposit == DepositStatus.PARTITION){
             this.isDeposit = DepositStatus.OVERDUE;
         }
+    }
+
+    public static List<DepositStatus> getIsDepositFalse(){
+        return List.of(DepositStatus.NONE, DepositStatus.OVERDUE);
     }
 }

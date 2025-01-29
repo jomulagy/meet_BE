@@ -1,9 +1,7 @@
 package com.example.meet.repository.custom.impl;
 
-import com.example.meet.entity.QMember;
-import com.example.meet.entity.QPrivilege;
+import com.example.meet.entity.*;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.example.meet.entity.Member;
 import com.example.meet.repository.custom.MemberRepositoryCustom;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -38,6 +36,18 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
         return queryFactory.selectFrom(member)
                 .join(member.privilege, privilege)
                 .where(privilege.endDate.eq(month10))
+                .fetch();
+    }
+
+    @Override
+    public List<Member> findMembersWithDepositIsDepositFalse() {
+
+        QMember member = QMember.member;
+        QDeposit deposit = QDeposit.deposit;
+
+        return queryFactory.selectFrom(member)
+                .join(member.deposit, deposit)
+                .where(deposit.isDeposit.in(Deposit.getIsDepositFalse()))
                 .fetch();
     }
 }
