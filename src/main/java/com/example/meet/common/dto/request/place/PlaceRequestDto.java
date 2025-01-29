@@ -26,4 +26,8 @@ public class PlaceRequestDto {
     @JsonProperty("yPos")
     @Schema(description = "장소 y 좌표", example = "123.45")
     private BigDecimal yPos;
+
+    @JsonProperty("detail")
+    @Schema(description = "장소", example = "강남역 삼성 스토어")
+    private String detail;
 }

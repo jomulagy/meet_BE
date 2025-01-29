@@ -87,9 +87,12 @@ public class Meet {
     }
 
     void setPlace(EditMeetRequestDto inDto){
-        this.place.setName(inDto.getPlace().getName());
-        this.place.setXPos(inDto.getPlace().getXPos());
-        this.place.setYPos(inDto.getPlace().getYPos());
+        if(inDto.getPlace().getName() != null){
+            this.place.setName(inDto.getPlace().getName());
+            this.place.setXPos(inDto.getPlace().getXPos());
+            this.place.setYPos(inDto.getPlace().getYPos());
+        }
+        this.place.setDetail(inDto.getPlace().getDetail());
     }
     void setParticipateNum(){
         this.participantsNum = this.participateVote.getTotalNum();
@@ -120,8 +123,10 @@ public class Meet {
             LocalTime time = (inDto.getTime() != null) ? inDto.getTime() : LocalTime.of(0, 0);
             this.date = LocalDateTime.of(inDto.getDate(), time);
         }
-        this.setPlace(inDto);
 
+        if(inDto.getPlace() != null){
+            this.setPlace(inDto);
+        }
     }
 
     public void setDateResult(LocalDateTime dateResult) {

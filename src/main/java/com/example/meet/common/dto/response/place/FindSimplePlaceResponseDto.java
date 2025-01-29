@@ -20,6 +20,9 @@ public class FindSimplePlaceResponseDto {
     @Schema(description = "y 좌표", example = "127.02798897144342")
     private String yPos;
 
+    @Schema(description = "장소", example = "강남역 삼성 스토어")
+    private String detail;
+
     @Schema(description = "수정 가능 여부", example = "true")
     private String editable;
 }

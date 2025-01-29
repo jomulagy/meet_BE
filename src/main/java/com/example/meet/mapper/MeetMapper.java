@@ -35,7 +35,7 @@ public interface MeetMapper {
     default Meet dtoToEntity(CreateMeetRequestDto dto, Member author){
         LocalDate date = null;
         LocalTime time = null;
-        Place place = null;
+        Place place;
 
         if(dto.getDate() != null){
             date = LocalDate.parse(dto.getDate(), DATE_FORMATTER);
@@ -51,18 +51,14 @@ public interface MeetMapper {
 
         place = new Place();
         if(dto.getPlace() != null){
-            if (dto.getPlace().getName() == null) {
-                throw new BusinessException(ErrorCode.PLACE_VALUE_REQUIRED);
+            if (dto.getPlace().getName() != null) {
+                place.setName(dto.getPlace().getName());
+                place.setXPos(dto.getPlace().getXPos());
+                place.setYPos(dto.getPlace().getYPos());
             }
 
-            place.setName(dto.getPlace().getName());
-            place.setXPos(dto.getPlace().getXPos());
-            place.setYPos(dto.getPlace().getYPos());
+            place.setDetail(dto.getPlace().getDetail());
         }
-        else {
-            place = null;
-        }
-
 
         return Meet.builder()
                 .title(dto.getTitle())
@@ -125,6 +121,7 @@ public interface MeetMapper {
                     .name(place.getName())
                     .xPos(xpos)
                     .yPos(ypos)
+                    .detail(place.getDetail())
                     .editable(editable.toString())
                     .build();
         }

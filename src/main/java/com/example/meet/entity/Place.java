@@ -23,6 +23,9 @@ public class Place {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "detail")
+    private String detail;
+
     @Column(name = "x_pos", precision = 20, scale = 14)
     private BigDecimal xPos;
 
