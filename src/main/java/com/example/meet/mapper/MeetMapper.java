@@ -51,7 +51,7 @@ public interface MeetMapper {
 
         place = new Place();
         if(dto.getPlace() != null){
-            if (dto.getPlace().getName() == null || dto.getPlace().getXPos() == null || dto.getPlace().getYPos() == null) {
+            if (dto.getPlace().getName() == null) {
                 throw new BusinessException(ErrorCode.PLACE_VALUE_REQUIRED);
             }
 
