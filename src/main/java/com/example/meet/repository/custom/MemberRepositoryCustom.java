@@ -5,4 +5,6 @@ import java.util.List;
 
 public interface MemberRepositoryCustom {
     List<Member> findMembersWithPrivilegeEndDateOnNextMonth10();
+    List<Member> findMembersWithPrivilegeEndDateOnCurMonth10();
+
 }

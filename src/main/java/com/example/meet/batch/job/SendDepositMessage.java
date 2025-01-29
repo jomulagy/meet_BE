@@ -34,12 +34,11 @@ public class SendDepositMessage extends CommonJob {
     protected String performJob(JobExecutionContext context) {
         LocalDate now = LocalDate.now();
         LocalDate next = now.plusMonths(1);
+        StringBuilder log = new StringBuilder();
+
+        log.append("[");
 
         List<Member> memberList = memberRepository.findMembersWithPrivilegeEndDateOnNextMonth10();
-
-        for(Member member : memberList){
-            member.setIsDepositFalse();
-        }
 
         TemplateArgs templateArgs = TemplateArgs.builder()
                 .year(String.valueOf(now.getYear()))
@@ -48,9 +47,29 @@ public class SendDepositMessage extends CommonJob {
                 .nextMonth(String.valueOf(next.getMonthValue()))
                 .build();
         Message.DEPOSIT.setTemplateArgs(templateArgs);
-        messageManager.sendAll(Message.DEPOSIT).block();
-        messageManager.sendMe(Message.DEPOSIT).block();
 
-        return "전송 완료";
+        for(Member member : memberList){
+            member.setIsDepositFalse();
+
+            if (member.getId().equals(2927398983L)) {
+                messageManager.sendMe(Message.DEPOSIT).block();
+            } else {
+                messageManager.send(Message.DEPOSIT, member).block();
+            }
+
+            log.append(member.getName());
+            log.append(", ");
+        }
+
+        // 마지막 ", " 제거
+        int index = log.lastIndexOf( ", ");
+
+        if (index != -1 && index == log.length() - 2) {
+            log.delete(index, log.length());
+        }
+
+        log.append("]");
+
+        return log.toString();
     }
 }

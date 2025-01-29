@@ -27,4 +27,17 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
                 .where(privilege.endDate.eq(nextMonth10))
                 .fetch();
     }
+
+    @Override
+    public List<Member> findMembersWithPrivilegeEndDateOnCurMonth10() {
+        LocalDateTime month10 = LocalDateTime.now().withDayOfMonth(10);
+
+        QMember member = QMember.member;
+        QPrivilege privilege = QPrivilege.privilege;
+
+        return queryFactory.selectFrom(member)
+                .join(member.privilege, privilege)
+                .where(privilege.endDate.eq(month10))
+                .fetch();
+    }
 }
