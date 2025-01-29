@@ -20,7 +20,7 @@ public class CreateRoutineMeet extends CommonJob {
     }
 
     @Override
-    protected String performJob(JobExecutionContext context) {
+    protected void performJob(JobExecutionContext context) {
         LocalDate date = LocalDate.now();
         List<Integer> quarterList = List.of(2, 3, 4, 1);
         int year = date.getYear();
@@ -42,6 +42,6 @@ public class CreateRoutineMeet extends CommonJob {
 
         meetService.createMeet(inDto);
 
-        return title + " 생성 완료";
+        taskList.add(title + " 생성 완료");
     }
 }

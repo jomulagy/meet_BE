@@ -2,20 +2,16 @@ package com.example.meet.batch.job;
 
 import com.example.meet.batch.CommonJob;
 import com.example.meet.common.dto.TemplateArgs;
-import com.example.meet.common.enumulation.DepositStatus;
 import com.example.meet.common.enumulation.Message;
 import com.example.meet.common.utils.MessageManager;
-import com.example.meet.entity.Deposit;
 import com.example.meet.entity.Member;
 import com.example.meet.repository.BatchLogRepository;
 import com.example.meet.repository.MemberRepository;
 import java.time.LocalDate;
 import org.quartz.JobExecutionContext;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
-import org.springframework.cglib.core.Local;
 import org.springframework.transaction.annotation.Transactional;
 
 public class SendDepositMessage extends CommonJob {
@@ -31,12 +27,9 @@ public class SendDepositMessage extends CommonJob {
 
     @Override
     @Transactional
-    protected String performJob(JobExecutionContext context) {
+    protected void performJob(JobExecutionContext context) {
         LocalDate now = LocalDate.now();
         LocalDate next = now.plusMonths(1);
-        StringBuilder log = new StringBuilder();
-
-        log.append("[");
 
         List<Member> memberList = memberRepository.findMembersWithPrivilegeEndDateOnNextMonth10();
 
@@ -56,20 +49,7 @@ public class SendDepositMessage extends CommonJob {
             } else {
                 messageManager.send(Message.DEPOSIT, member).block();
             }
-
-            log.append(member.getName());
-            log.append(", ");
+            taskList.add(member.getName());
         }
-
-        // 마지막 ", " 제거
-        int index = log.lastIndexOf( ", ");
-
-        if (index != -1 && index == log.length() - 2) {
-            log.delete(index, log.length());
-        }
-
-        log.append("]");
-
-        return log.toString();
     }
 }

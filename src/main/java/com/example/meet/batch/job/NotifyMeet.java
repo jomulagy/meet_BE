@@ -29,15 +29,11 @@ public class NotifyMeet extends CommonJob {
 
     @Override
     @Transactional
-    protected String performJob(JobExecutionContext context) {
-        StringBuilder log = new StringBuilder();
-
+    protected void performJob(JobExecutionContext context) {
         //오늘 날짜인 entity 조회
         LocalDateTime startOfDay = LocalDateTime.now().with(LocalTime.MIN).plusWeeks(1);
         LocalDateTime endOfDay = LocalDateTime.now().with(LocalTime.MAX).plusWeeks(1);
         List<Meet> meetList = meetRepository.findByDateBetween(startOfDay, endOfDay);
-
-        log.append("[");
 
         //알림 전송
         for (Meet meet : meetList) {
@@ -61,19 +57,7 @@ public class NotifyMeet extends CommonJob {
                 }
             }
 
-            log.append(meet.getId());
-            log.append(", ");
+            taskList.add(meet.getId().toString());
         }
-
-        // 마지막 ", " 제거
-        int index = log.lastIndexOf( ", ");
-
-        if (index != -1 && index == log.length() - 2) {
-            log.delete(index, log.length());
-        }
-
-        log.append("]");
-
-        return log.toString();
     }
 }

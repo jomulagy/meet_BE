@@ -21,11 +21,8 @@ public class TerminateParticipateVote extends CommonJob {
     }
 
     @Override
-    protected String performJob(JobExecutionContext context) {
+    protected void performJob(JobExecutionContext context) {
         List<ParticipateVote> participateVoteList = participateVoteRepository.findByEndDateToday();
-        StringBuilder log = new StringBuilder();
-
-        log.append("[");
 
         for(ParticipateVote participateVote : participateVoteList){
             participateVote.setTotalNum();
@@ -42,19 +39,7 @@ public class TerminateParticipateVote extends CommonJob {
                 participateVote.getMeet().setParticipants(participateVoters);
             }
 
-            log.append(participateVote.getMeet().getId());
-            log.append(", ");
+            taskList.add(participateVote.getMeet().getId().toString());
         }
-
-        // 마지막 ", " 제거
-        int index = log.lastIndexOf( ", ");
-
-        if (index != -1 && index == log.length() - 2) {
-            log.delete(index, log.length());
-        }
-
-        log.append("]");
-
-        return log.toString();
     }
 }

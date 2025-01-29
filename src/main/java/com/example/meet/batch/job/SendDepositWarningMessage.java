@@ -8,6 +8,7 @@ import com.example.meet.entity.Member;
 import com.example.meet.repository.BatchLogRepository;
 import com.example.meet.repository.MemberRepository;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import org.quartz.JobExecutionContext;
 
@@ -23,12 +24,9 @@ public class SendDepositWarningMessage extends CommonJob {
     }
 
     @Override
-    protected String performJob(JobExecutionContext context) {
+    protected void performJob(JobExecutionContext context) {
         LocalDate now = LocalDate.now();
         int year = now.getYear();
-        StringBuilder log = new StringBuilder();
-
-        log.append("[");
 
         List<Member> memberList = memberRepository.findMembersWithPrivilegeEndDateOnCurMonth10();
 
@@ -45,19 +43,7 @@ public class SendDepositWarningMessage extends CommonJob {
                 messageManager.send(Message.DEPOSIT, member).block();
             }
 
-            log.append(member.getName());
-            log.append(", ");
+            taskList.add(member.getName());
         }
-
-        // 마지막 ", " 제거
-        int index = log.lastIndexOf( ", ");
-
-        if (index != -1 && index == log.length() - 2) {
-            log.delete(index, log.length());
-        }
-
-        log.append("]");
-
-        return log.toString();
     }
 }

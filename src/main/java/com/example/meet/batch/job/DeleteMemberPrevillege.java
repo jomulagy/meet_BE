@@ -21,35 +21,20 @@ public class DeleteMemberPrevillege extends CommonJob {
 
     @Override
     @Transactional
-    protected String performJob(JobExecutionContext context) {
-        StringBuilder log = new StringBuilder();
+    protected void performJob(JobExecutionContext context) {
         List<Member> memberList = memberRepository.findAll();
 
-        log.append("[");
-
-        for(Member member: memberList){
-            if(!member.hasDeposit()){
+        for(Member member: memberList) {
+            if (!member.hasDeposit()) {
                 continue;
             }
 
             member.setIsDepositFalse();
             member.setPrivilege(MemberPrevillege.denied);
 
-            log.append(member.getName());
-            log.append(", ");
+            taskList.add(member.getName());
         }
-
-        // 마지막 ", " 제거
-        int index = log.lastIndexOf( ", ");
-
-        if (index != -1 && index == log.length() - 2) {
-            log.delete(index, log.length());
-        }
-
-        log.append("]");
 
         memberRepository.saveAll(memberList);
-
-        return log.toString();
     }
 }

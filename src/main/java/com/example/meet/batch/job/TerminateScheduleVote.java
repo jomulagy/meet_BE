@@ -19,30 +19,15 @@ public class TerminateScheduleVote extends CommonJob {
 
     @Override
     @Transactional
-    protected String performJob(JobExecutionContext context) {
+    protected void performJob(JobExecutionContext context) {
         LocalDateTime currentDate = LocalDateTime.now();
         List<ScheduleVote> scheduleVoteList = scheduleVoteRepository.findEventsWithNullDateResultAndEndDateBefore(currentDate);
-        StringBuilder log = new StringBuilder();
-
-        log.append("[");
 
         for(ScheduleVote scheduleVote : scheduleVoteList){
             scheduleVote.setDateResult();
             scheduleVote.getMeet().setDateResult(scheduleVote.getDateResult());
 
-            log.append(scheduleVote.getMeet().getTitle());
-            log.append(", ");
+            taskList.add(scheduleVote.getMeet().getTitle());
         }
-
-        // 마지막 ", " 제거
-        int index = log.lastIndexOf( ", ");
-
-        if (index != -1 && index == log.length() - 2) {
-            log.delete(index, log.length());
-        }
-
-        log.append("]");
-
-        return log.toString();
     }
 }

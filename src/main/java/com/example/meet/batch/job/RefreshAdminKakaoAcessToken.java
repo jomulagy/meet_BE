@@ -30,7 +30,7 @@ public class RefreshAdminKakaoAcessToken extends CommonJob {
     }
 
     @Override
-    protected String performJob(JobExecutionContext context) {
+    protected void performJob(JobExecutionContext context) {
         Token kakaoToken = tokenRepository.findByName("kakao");
         WebClient webClient = WebClient.builder().build();
         webClient.post()
@@ -56,6 +56,6 @@ public class RefreshAdminKakaoAcessToken extends CommonJob {
 
         tokenRepository.save(kakaoToken);
 
-        return "{accessToken = " + kakaoToken.getAccessToken() + ", refreshToken = " + kakaoToken.getRefreshToken() + "}";
+        taskList.add("{accessToken = " + kakaoToken.getAccessToken() + ", refreshToken = " + kakaoToken.getRefreshToken() + "}");
     }
 }

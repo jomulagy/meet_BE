@@ -24,11 +24,7 @@ public class SendParticipateMessage extends CommonJob {
     }
 
     @Override
-    protected String performJob(JobExecutionContext context) {
-        StringBuilder log = new StringBuilder();
-
-        log.append("[");
-
+    protected void performJob(JobExecutionContext context) {
         List<Meet> meetList = meetRepository.findByDateIsNotNullAndPlaceIsNotNullAndParticipantsNumIsNull();
 
         for (Meet meet : meetList) {
@@ -41,19 +37,7 @@ public class SendParticipateMessage extends CommonJob {
             messageManager.sendAll(Message.VOTE).block();
             messageManager.sendMe(Message.VOTE).block();
 
-            log.append(meet.getId());
-            log.append(", ");
+            taskList.add(meet.getId().toString());
         }
-
-        // 마지막 ", " 제거
-        int index = log.lastIndexOf( ", ");
-
-        if (index != -1 && index == log.length() - 2) {
-            log.delete(index, log.length());
-        }
-
-        log.append("]");
-
-        return log.toString();
     }
 }

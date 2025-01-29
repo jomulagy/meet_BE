@@ -19,30 +19,15 @@ public class TerminatePlaceVote extends CommonJob {
 
     @Override
     @Transactional
-    protected String performJob(JobExecutionContext context) {
+    protected void performJob(JobExecutionContext context) {
         LocalDateTime currentDate = LocalDateTime.now();
         List<PlaceVote> placeVoteList = placeVoteRepository.findEventsWithNullDateResultAndEndDateBefore(currentDate);
-        StringBuilder log = new StringBuilder();
-
-        log.append("[");
 
         for(PlaceVote placeVote : placeVoteList){
             placeVote.setPlaceResult();
             placeVote.getMeet().setPlaceResult(placeVote.getPlaceResult());
 
-            log.append(placeVote.getMeet().getTitle());
-            log.append(", ");
+            taskList.add(placeVote.getMeet().getTitle());
         }
-
-        // 마지막 ", " 제거
-        int index = log.lastIndexOf( ", ");
-
-        if (index != -1 && index == log.length() - 2) {
-            log.delete(index, log.length());
-        }
-
-        log.append("]");
-
-        return log.toString();
     }
 }
