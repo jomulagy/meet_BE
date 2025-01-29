@@ -20,6 +20,10 @@ public class TemplateArgs {
     private String but;
     @JsonProperty("year")
     private String year;
+    @JsonProperty("month")
+    private String month;
     @JsonProperty("nextYear")
     private String nextYear;
+    @JsonProperty("nextMonth")
+    private String nextMonth;
 }

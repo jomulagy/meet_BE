@@ -11,7 +11,11 @@ import com.example.meet.repository.BatchLogRepository;
 import com.example.meet.repository.MemberRepository;
 import java.time.LocalDate;
 import org.quartz.JobExecutionContext;
+
+import java.time.LocalDateTime;
 import java.util.List;
+
+import org.springframework.cglib.core.Local;
 import org.springframework.transaction.annotation.Transactional;
 
 public class SendDepositMessage extends CommonJob {
@@ -29,17 +33,19 @@ public class SendDepositMessage extends CommonJob {
     @Transactional
     protected String performJob(JobExecutionContext context) {
         LocalDate now = LocalDate.now();
-        int year = now.getYear();
+        LocalDate next = now.plusMonths(1);
 
-        List<Member> memberList = memberRepository.findAll();
+        List<Member> memberList = memberRepository.findMembersWithPrivilegeEndDateOnNextMonth10();
 
         for(Member member : memberList){
             member.setIsDepositFalse();
         }
 
         TemplateArgs templateArgs = TemplateArgs.builder()
-                .year(String.valueOf(year))
-                .nextYear(String.valueOf(year+1))
+                .year(String.valueOf(now.getYear()))
+                .month(String.valueOf(now.getMonthValue()))
+                .nextYear(String.valueOf(next.getYear()))
+                .nextMonth(String.valueOf(next.getMonthValue()))
                 .build();
         Message.DEPOSIT.setTemplateArgs(templateArgs);
         messageManager.sendAll(Message.DEPOSIT).block();
