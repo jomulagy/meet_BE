@@ -64,7 +64,7 @@ public class PlaceService {
 
         List<FindPlaceVoteItemResponseDto> outDtoList = new ArrayList<>();
 
-        if(meet.getPlace() != null) {
+        if(meet.getPlace() != null && meet.getPlace().getName() != null) {
             List<PlaceVoteItem> placeVoteItemList = meet.getPlaceVote().getPlaceVoteItems();
             for (PlaceVoteItem item : placeVoteItemList) {
                 String isVote = "false";
