@@ -15,6 +15,7 @@ import com.example.meet.common.enumulation.ErrorCode;
 import com.example.meet.common.enumulation.MeetType;
 import com.example.meet.common.enumulation.MemberPrevillege;
 import com.example.meet.common.enumulation.Message;
+import com.example.meet.common.enumulation.PlaceType;
 import com.example.meet.common.exception.BusinessException;
 import com.example.meet.common.utils.MessageManager;
 import com.example.meet.common.utils.ScheduleManager;
@@ -107,8 +108,11 @@ public class MeetService {
         if(entity.getPlaceVote() == null && entity.getPlace().getName() == null){
             PlaceVote placeVote = createPlaceVote(entity);
             placeVoteRepository.save(placeVote);
-            setPlaceVoteItems(placeVote);
-            entity.setPlaceVote(placeVote);
+            if (inDto.getType().equals(MeetType.Routine)) {
+                setPlaceVoteItems(placeVote);
+                entity.setPlaceVote(placeVote);
+            }
+
         }
 
         //참여 여부 투표 연결
@@ -196,6 +200,7 @@ public class MeetService {
 
         PlaceVoteItem placeVoteItem1 = PlaceVoteItem.builder()
                 .place("강남역")
+                .type(PlaceType.SUB)
                 .xPos(BigDecimal.valueOf(37.49809895356626))
                 .yPos(BigDecimal.valueOf(127.02798897144342))
                 .placeVote(placeVote)
@@ -208,6 +213,7 @@ public class MeetService {
                 .place("종각역")
                 .xPos(BigDecimal.valueOf(37.57023519725892))
                 .yPos(BigDecimal.valueOf(126.98313949597043))
+                .type(PlaceType.SUB)
                 .placeVote(placeVote)
                 .editable(false)
                 .author(author)
