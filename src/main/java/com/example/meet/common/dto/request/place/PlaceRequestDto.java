@@ -1,5 +1,6 @@
 package com.example.meet.common.dto.request.place;
 
+import com.example.meet.common.enumulation.PlaceType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
@@ -26,6 +27,10 @@ public class PlaceRequestDto {
     @JsonProperty("yPos")
     @Schema(description = "장소 y 좌표", example = "123.45")
     private BigDecimal yPos;
+
+    @JsonProperty("type")
+    @Schema(description = "장소 타입 (SUB, CTY)", example = "SUB")
+    private PlaceType type;
 
     @JsonProperty("detail")
     @Schema(description = "장소", example = "강남역 삼성 스토어")

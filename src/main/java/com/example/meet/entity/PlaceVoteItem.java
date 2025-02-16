@@ -1,5 +1,6 @@
 package com.example.meet.entity;
 
+import com.example.meet.common.enumulation.PlaceType;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -40,6 +41,9 @@ public class PlaceVoteItem {
     private BigDecimal xPos;
     @Column(name = "y_pos", nullable = false)
     private BigDecimal yPos;
+
+    @Column(name = "type", nullable = false)
+    private PlaceType type;
 
     @Column(name = "editable", nullable = false)
     private Boolean editable;

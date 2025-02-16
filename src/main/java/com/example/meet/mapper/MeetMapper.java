@@ -55,6 +55,7 @@ public interface MeetMapper {
                 place.setName(dto.getPlace().getName());
                 place.setXPos(dto.getPlace().getXPos());
                 place.setYPos(dto.getPlace().getYPos());
+                place.setType(dto.getPlace().getType());
             }
 
             place.setDetail(dto.getPlace().getDetail());

@@ -126,7 +126,7 @@ public class PlaceService {
         List<PlaceVoteItem> placeVoteItemList = meet.getPlaceVote().getPlaceVoteItems();
 
         for(PlaceVoteItem item : placeVoteItemList){
-            if(item.getPlace().equals(inDto.getPlace())){
+            if(item.getPlace().equals(inDto.getPlace().getName())){
                 throw new BusinessException(ErrorCode.PLACE_VOTE_ITEM_DUPLICATED);
             }
         }

@@ -1,5 +1,6 @@
 package com.example.meet.entity;
 
+import com.example.meet.common.enumulation.PlaceType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -31,6 +32,9 @@ public class Place {
 
     @Column(name = "y_pos", precision = 20, scale = 14)
     private BigDecimal yPos;
+
+    @Column(name = "type")
+    private PlaceType type;
 
     @Column(name = "url")
     private String url;

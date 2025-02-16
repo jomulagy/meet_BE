@@ -17,6 +17,7 @@ public interface PlaceVoteItemMapper {
                 .place(inDto.getPlace().getName())
                 .xPos(inDto.getPlace().getXPos())
                 .yPos(inDto.getPlace().getYPos())
+                .type(inDto.getPlace().getType())
                 .editable(true)
                 .author(user)
                 .placeVote(placeVote)

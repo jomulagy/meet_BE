@@ -91,6 +91,7 @@ public class Meet {
             this.place.setName(inDto.getPlace().getName());
             this.place.setXPos(inDto.getPlace().getXPos());
             this.place.setYPos(inDto.getPlace().getYPos());
+            this.place.setType(inDto.getPlace().getType());
         }
         this.place.setDetail(inDto.getPlace().getDetail());
     }
