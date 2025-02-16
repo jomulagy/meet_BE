@@ -102,8 +102,9 @@ public class MeetService {
 
             entity.setScheduleVote(scheduleVote);
         }
+
         //장소 투표 연결
-        if(entity.getPlaceVote() == null && entity.getPlace() == null){
+        if(entity.getPlaceVote() == null && entity.getPlace().getName() == null){
             PlaceVote placeVote = createPlaceVote(entity);
             placeVoteRepository.save(placeVote);
             setPlaceVoteItems(placeVote);
