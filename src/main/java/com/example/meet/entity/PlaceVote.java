@@ -3,6 +3,7 @@ package com.example.meet.entity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -49,11 +50,14 @@ public class PlaceVote {
     @JoinColumn(name = "meet_id", referencedColumnName = "id")
     private Meet meet;
 
-    @OneToMany(mappedBy = "placeVote", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "placeVote", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @Builder.Default
     private List<PlaceVoteItem> placeVoteItems = new ArrayList<>();
 
     public void setPlaceResult(){
+        if(this.placeVoteItems.isEmpty()){
+            return;
+        }
         int max = -1;
         PlaceVoteItem result = this.placeVoteItems.get(0);
         Collections.sort(this.placeVoteItems, Comparator.comparing(PlaceVoteItem::getId));

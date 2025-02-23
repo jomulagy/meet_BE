@@ -51,6 +51,9 @@ public class ScheduleVote {
     private List<ScheduleVoteItem> scheduleVoteItems = new ArrayList<>();
 
     public void setDateResult(){
+        if(this.scheduleVoteItems.isEmpty()){
+            return;
+        }
         int max = -1;
         LocalDateTime result = this.scheduleVoteItems.get(0).getDate();
         Collections.sort(this.scheduleVoteItems, Comparator.comparing(ScheduleVoteItem::getDate));
