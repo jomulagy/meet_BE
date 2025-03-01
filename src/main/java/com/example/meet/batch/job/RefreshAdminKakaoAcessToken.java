@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -30,6 +31,7 @@ public class RefreshAdminKakaoAcessToken extends CommonJob {
     }
 
     @Override
+    @Transactional
     protected String performJob(JobExecutionContext context) {
         Token kakaoToken = tokenRepository.findByName("kakao");
         WebClient webClient = WebClient.builder().build();
