@@ -35,7 +35,7 @@ public class RefreshAdminKakaoAcessToken extends CommonJob {
     protected String performJob(JobExecutionContext context) {
         Token kakaoToken = tokenRepository.findByName("kakao");
         WebClient webClient = WebClient.builder().build();
-        webClient.post()
+        Map response = webClient.post()
                 .uri("https://kauth.kakao.com/oauth/token")
                 .headers(headers -> headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED))
                 .body(BodyInserters.fromFormData("grant_type", "refresh_token")
@@ -45,18 +45,18 @@ public class RefreshAdminKakaoAcessToken extends CommonJob {
                 )
                 .retrieve()
                 .bodyToMono(Map.class)
-                .doOnNext(response -> {
-                    kakaoToken.setAccessToken((String) response.get("access_token"));
-                    int expiresIn = (Integer) response.get("expires_in");
-                    kakaoToken.setExpiresIn(LocalDateTime.now().plusSeconds(expiresIn));
-                    if (response.containsKey("refresh_token")) {
-                        kakaoToken.setRefreshToken((String) response.get("refresh_token"));
-                    }
-                })
-                .then()
                 .block();
 
-        tokenRepository.save(kakaoToken);
+        if(response != null) {
+            kakaoToken.setAccessToken((String) response.get("access_token"));
+            int expiresIn = (Integer) response.get("expires_in");
+            kakaoToken.setExpiresIn(LocalDateTime.now().plusSeconds(expiresIn));
+            if (response.containsKey("refresh_token")) {
+                kakaoToken.setRefreshToken((String) response.get("refresh_token"));
+            }
+
+            tokenRepository.save(kakaoToken);
+        }
 
         return "{accessToken = " + kakaoToken.getAccessToken() + ", refreshToken = " + kakaoToken.getRefreshToken() + "}";
     }
