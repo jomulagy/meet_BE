@@ -19,7 +19,7 @@ import org.quartz.Job;
 @RequiredArgsConstructor
 public enum ScheduledJob {
     RERUN_FAILED_JOBS(RerunFailedJobs.class, "0 0 0 * * ? *"),
-    REFRESH_ADMIN_KAKAO_ACCESS_TOKEN(RefreshAdminKakaoAcessToken.class, "0 5 19 * * ? *"),
+    REFRESH_ADMIN_KAKAO_ACCESS_TOKEN(RefreshAdminKakaoAcessToken.class, "0 5 0 * * ? *"),
     DELETE_MEMBER_PREVILLEGE(DeleteMemberPrevillege.class, "0 10 0 11 1 ? *"),
     TERMINATE_SCHEDULE_VOTE(TerminateScheduleVote.class, "0 15 0 * * ? *"),
     TERMINATE_PLACE_VOTE(TerminatePlaceVote.class, "0 20 0 * * ? *"),

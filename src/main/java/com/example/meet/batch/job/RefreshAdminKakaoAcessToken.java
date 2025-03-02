@@ -58,6 +58,6 @@ public class RefreshAdminKakaoAcessToken extends CommonJob {
             tokenRepository.save(kakaoToken);
         }
 
-        return "{accessToken = " + kakaoToken.getAccessToken() + ", refreshToken = " + kakaoToken.getRefreshToken() + "}";
+        return response.toString();
     }
 }
