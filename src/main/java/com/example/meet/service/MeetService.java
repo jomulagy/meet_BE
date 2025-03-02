@@ -64,6 +64,7 @@ public class MeetService {
 
     private final MessageManager messageManager;
 
+    @Transactional
     public CreateMeetResponseDto createMeet(CreateMeetRequestDto inDto) {
         //로그인 한 유저 확인
         Member user = memberRepository.findById(inDto.getUserId()).orElseThrow(

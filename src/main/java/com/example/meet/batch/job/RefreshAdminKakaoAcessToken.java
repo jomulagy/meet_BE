@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -30,10 +31,11 @@ public class RefreshAdminKakaoAcessToken extends CommonJob {
     }
 
     @Override
+    @Transactional
     protected String performJob(JobExecutionContext context) {
         Token kakaoToken = tokenRepository.findByName("kakao");
         WebClient webClient = WebClient.builder().build();
-        webClient.post()
+        Map response = webClient.post()
                 .uri("https://kauth.kakao.com/oauth/token")
                 .headers(headers -> headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED))
                 .body(BodyInserters.fromFormData("grant_type", "refresh_token")
@@ -43,19 +45,19 @@ public class RefreshAdminKakaoAcessToken extends CommonJob {
                 )
                 .retrieve()
                 .bodyToMono(Map.class)
-                .doOnNext(response -> {
-                    kakaoToken.setAccessToken((String) response.get("access_token"));
-                    int expiresIn = (Integer) response.get("expires_in");
-                    kakaoToken.setExpiresIn(LocalDateTime.now().plusSeconds(expiresIn));
-                    if (response.containsKey("refresh_token")) {
-                        kakaoToken.setRefreshToken((String) response.get("refresh_token"));
-                    }
-                })
-                .then()
                 .block();
 
-        tokenRepository.save(kakaoToken);
+        if(response != null) {
+            kakaoToken.setAccessToken((String) response.get("access_token"));
+            int expiresIn = (Integer) response.get("expires_in");
+            kakaoToken.setExpiresIn(LocalDateTime.now().plusSeconds(expiresIn));
+            if (response.containsKey("refresh_token")) {
+                kakaoToken.setRefreshToken((String) response.get("refresh_token"));
+            }
 
-        return "{accessToken = " + kakaoToken.getAccessToken() + ", refreshToken = " + kakaoToken.getRefreshToken() + "}";
+            tokenRepository.save(kakaoToken);
+        }
+
+        return response.toString();
     }
 }
