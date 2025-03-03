@@ -53,7 +53,7 @@ public class RerunFailedJobs extends CommonJob {
                 log.append(batchLog.getName());
                 log.append(", ");
             } catch (Exception e) {
-                return "Failed to rerun job: " + batchLog.getName();
+                return "Failed to rerun job: " + batchLog.getName() + "\n" + e.getMessage();
             }
         }
 
