@@ -4,6 +4,8 @@ import com.example.meet.batch.CommonJob;
 import com.example.meet.entity.Token;
 import com.example.meet.repository.BatchLogRepository;
 import com.example.meet.repository.TokenRepository;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.util.Map;
 import org.quartz.JobExecutionContext;
@@ -33,6 +35,17 @@ public class RefreshAdminKakaoAcessToken extends CommonJob {
     @Override
     @Transactional
     protected String performJob(JobExecutionContext context) {
+        try{
+            String hostname = InetAddress.getLocalHost().getHostName();
+
+            if(!hostname.equals("43.203.36.37")){
+                return "운영계에서만 수행";
+            }
+        } catch (UnknownHostException e){
+            return "UnknownHostException";
+        }
+
+
         Token kakaoToken = tokenRepository.findByName("kakao");
         WebClient webClient = WebClient.builder().build();
         Map response = webClient.post()
