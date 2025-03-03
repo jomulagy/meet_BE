@@ -13,6 +13,8 @@ import com.example.meet.service.AuthService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.netty.channel.socket.DatagramChannel;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Map;
@@ -35,6 +37,16 @@ public class MessageManager {
     private final AuthService authService;
 
     public Mono<String> sendAll(Message msg){
+        try{
+            String hostname = InetAddress.getLocalHost().getHostName();
+
+            if(!hostname.equals("43.203.36.37")){
+                return Mono.empty();
+            }
+        } catch (UnknownHostException e){
+            return Mono.empty();
+        }
+
         WebClient webClient = WebClient.builder().build();
         String url = "https://kapi.kakao.com/v1/api/talk/friends/message/send";
         List<String> uuids = getAllUUIDs();
@@ -85,6 +97,16 @@ public class MessageManager {
     }
 
     public Mono<String> send(Message message, Member member) {
+        try{
+            String hostname = InetAddress.getLocalHost().getHostName();
+
+            if(!hostname.equals("43.203.36.37")){
+                return Mono.empty();
+            }
+        } catch (UnknownHostException e){
+            return Mono.empty();
+        }
+
         if(member.getUuid() == null){
             return Mono.empty();
         }
@@ -137,6 +159,16 @@ public class MessageManager {
     }
 
     public Mono<String> sendMe(Message message) {
+        try{
+            String hostname = InetAddress.getLocalHost().getHostName();
+
+            if(!hostname.equals("43.203.36.37")){
+                return Mono.empty();
+            }
+        } catch (UnknownHostException e){
+            return Mono.empty();
+        }
+        
         WebClient webClient = WebClient.builder().build();
         String url = "https://kapi.kakao.com/v2/api/talk/memo/send";
 
