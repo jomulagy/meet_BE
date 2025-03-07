@@ -38,7 +38,7 @@ public class MessageManager {
 
     public Mono<String> sendAll(Message msg){
         try{
-            String hostname = InetAddress.getLocalHost().getHostName();
+            String hostname = InetAddress.getLocalHost().getHostAddress();
 
             if(!hostname.equals("43.203.36.37")){
                 return Mono.empty();
@@ -160,7 +160,7 @@ public class MessageManager {
 
     public Mono<String> sendMe(Message message) {
         try{
-            String hostname = InetAddress.getLocalHost().getHostName();
+            String hostname = InetAddress.getLocalHost().getHostAddress();
 
             if(!hostname.equals("43.203.36.37")){
                 return Mono.empty();
@@ -168,7 +168,7 @@ public class MessageManager {
         } catch (UnknownHostException e){
             return Mono.empty();
         }
-        
+
         WebClient webClient = WebClient.builder().build();
         String url = "https://kapi.kakao.com/v2/api/talk/memo/send";
 
