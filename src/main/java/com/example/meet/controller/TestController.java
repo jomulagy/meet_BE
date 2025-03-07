@@ -8,6 +8,8 @@ import com.example.meet.service.AuthService;
 import com.example.meet.service.MeetService;
 import com.example.meet.service.ScheduleService;
 import com.example.meet.service.TestService;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
@@ -32,7 +34,7 @@ public class TestController {
     }
 
     @GetMapping("")
-    public void test(){
-        testService.kakaoMessageTest("16");
+    public void test() throws UnknownHostException {
+        String v = InetAddress.getLocalHost().getHostAddress();
     }
 }

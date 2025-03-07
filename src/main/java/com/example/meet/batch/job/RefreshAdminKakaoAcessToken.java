@@ -36,7 +36,7 @@ public class RefreshAdminKakaoAcessToken extends CommonJob {
     @Transactional
     protected String performJob(JobExecutionContext context) {
         try{
-            String hostname = InetAddress.getLocalHost().getHostName();
+            String hostname = InetAddress.getLocalHost().getHostAddress();
 
             if(!hostname.equals("43.203.36.37")){
                 return "운영계에서만 수행";
