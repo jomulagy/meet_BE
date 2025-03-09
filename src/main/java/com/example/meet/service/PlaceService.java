@@ -62,38 +62,40 @@ public class PlaceService {
                 () -> new BusinessException(ErrorCode.MEET_NOT_EXISTS)
         );
 
-        List<PlaceVoteItem> placeVoteItemList = meet.getPlaceVote().getPlaceVoteItems();
-
         List<FindPlaceVoteItemResponseDto> outDtoList = new ArrayList<>();
-        for(PlaceVoteItem item : placeVoteItemList){
-            String isVote = "false";
-            if(item.getPlaceVoters().contains(user)){
-                isVote = "true";
-            }
-            List<SimpleMemberResponseDto> memberList = new ArrayList<>();
-            item.getPlaceVoters().forEach(member -> {
-                        memberList.add(SimpleMemberResponseDto.builder()
-                                .id(member.getId().toString())
-                                .name(member.getName())
-                                .build());
-                    }
-            );
 
-            //수정 가능 여부 확인
-            String editable = "false";
-            if(item.getAuthor().equals(user) && item.getEditable() && item.getPlaceVoters().isEmpty()){
-                editable = "true";
-            }
-            outDtoList.add(
-                    FindPlaceVoteItemResponseDto.builder()
-                            .id(item.getId().toString())
-                            .place(item.getPlace())
-                            .editable(editable)
-                            .isVote(isVote)
-                            .memberList(memberList)
-                            .build()
-            );
+        if(meet.getPlaceVote() != null && meet.getPlaceVote().getPlaceVoteItems() != null) {
+            List<PlaceVoteItem> placeVoteItemList = meet.getPlaceVote().getPlaceVoteItems();
+            for (PlaceVoteItem item : placeVoteItemList) {
+                String isVote = "false";
+                if (item.getPlaceVoters().contains(user)) {
+                    isVote = "true";
+                }
+                List<SimpleMemberResponseDto> memberList = new ArrayList<>();
+                item.getPlaceVoters().forEach(member -> {
+                            memberList.add(SimpleMemberResponseDto.builder()
+                                    .id(member.getId().toString())
+                                    .name(member.getName())
+                                    .build());
+                        }
+                );
 
+                //수정 가능 여부 확인
+                String editable = "false";
+                if (item.getAuthor().equals(user) && item.getEditable() && item.getPlaceVoters().isEmpty()) {
+                    editable = "true";
+                }
+                outDtoList.add(
+                        FindPlaceVoteItemResponseDto.builder()
+                                .id(item.getId().toString())
+                                .place(item.getPlace())
+                                .editable(editable)
+                                .isVote(isVote)
+                                .memberList(memberList)
+                                .build()
+                );
+
+            }
         }
 
         return outDtoList;
@@ -110,7 +112,7 @@ public class PlaceService {
             throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
         }
 
-        if(inDto.getPlace() == null || inDto.getPlace().isEmpty()){
+        if(inDto.getPlace() == null || inDto.getPlace().getName().isEmpty()){
             throw new BusinessException(ErrorCode.PLACE_VALUE_REQUIRED);
         }
         Meet meet = meetRepository.findById(inDto.getMeetId()).orElseThrow(
@@ -124,7 +126,7 @@ public class PlaceService {
         List<PlaceVoteItem> placeVoteItemList = meet.getPlaceVote().getPlaceVoteItems();
 
         for(PlaceVoteItem item : placeVoteItemList){
-            if(item.getPlace().equals(inDto.getPlace())){
+            if(item.getPlace().equals(inDto.getPlace().getName())){
                 throw new BusinessException(ErrorCode.PLACE_VOTE_ITEM_DUPLICATED);
             }
         }
@@ -243,7 +245,10 @@ public class PlaceService {
         );
 
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String endDate = meet.getPlaceVote().getEndDate().format(dateTimeFormatter);
+        String endDate = null;
+        if(meet.getPlaceVote() != null){
+            endDate = meet.getPlaceVote().getEndDate().format(dateTimeFormatter);
+        }
         Boolean isAuthor = meet.getAuthor().equals(user);
 
         return FindPlaceVoteResponseDto.builder()

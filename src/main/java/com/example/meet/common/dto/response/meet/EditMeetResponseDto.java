@@ -1,5 +1,6 @@
 package com.example.meet.common.dto.response.meet;
 
+import com.example.meet.common.dto.response.place.FindSimplePlaceResponseDto;
 import com.example.meet.common.enumulation.MeetType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
@@ -24,7 +25,7 @@ public class EditMeetResponseDto {
     @Schema(description = "모임 날짜", example = "2024-07-05")
     private String date;
     @Schema(description = "모임장소", example = "강남역")
-    private String place;
+    private FindSimplePlaceResponseDto place;
     @Schema(description = "참여자 수", example = "2")
     private String participantsNum;
     @Schema(description = "참여자 이름 리스트", example = "['김지훈','장지연']")

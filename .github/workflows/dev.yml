@@ -41,41 +41,69 @@ jobs:
         chmod +x ./gradlew
         ./gradlew clean build -x test
 
-    # docker hub login
-    - name: Login to Docker hub
-      run: |
-        echo "your_access_token" |
-        docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}      
-
-      # dockerfile을 통해 이미지를 빌드하고, 이를 docker repo로 push 합니다.
-    # 이 때 사용되는 ${{ secrets.DOCKER_REPO }}/directors-dev 가 위에서 만든 도커 repository 입니다.
-    - name: Build and push Docker image
-      uses: docker/build-push-action@v2
+    # 빌드 결과물을 artifact로 업로드
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
       with:
-        context: .
-        file: ./Dockerfile
-        push: true
-        tags: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:dev
+        name: build-artifacts
+        path: build/libs/
 
-    # appleboy/ssh-action@master 액션을 사용하여 지정한 서버에 ssh로 접속하고, script를 실행합니다.
-    # script의 내용은 도커의 기존 프로세스들을 제거하고, docker repo로부터 방금 위에서 push한 내용을 pull 받아 실행하는 것입니다.
-    # 실행 시, docker-compose를 사용합니다.
-    - name: Deploy to server
-      uses: appleboy/ssh-action@master
-      id: deploy
-      with:
-        host: ${{ secrets.HOST_DEV }}
-        username: ubuntu
-        key: ${{ secrets.KEY }}
-        envs: GITHUB_SHA
-        script: |
-          sudo timedatectl set-timezone Asia/Seoul
-          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker stop meetDev || true
-          docker rm meetDev || true
-          docker rmi $(docker images -q --filter "reference=*:*dev") || true
-          docker rm $(docker ps -a -q -f status=exited) || true
-          docker rm $(docker ps -a -q -f status=created) || true
-          
-          docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:dev
-          docker run -d --restart on-failure:5 -p 8001:8001 -v /home/ubuntu/data:/data -v /etc/localtime:/etc/localtime:ro -v /etc/timezone:/etc/timezone:ro --name meetDev -e SPRING_PROFILES_ACTIVE=dev ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:dev
+  docker:
+    runs-on: ubuntu-latest # ubuntu 최신 버전에서 script를 실행
+    needs: build  # build 작업이 완료된 후 실행됨
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 빌드한 아티팩트 다운로드
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          path: build/libs  # 다운받을 위치 (Dockerfile에서 참조할 경로)
+
+      # docker hub login
+      - name: Login to Docker hub
+        run: |
+          echo "your_access_token" |
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}      
+
+        # dockerfile을 통해 이미지를 빌드하고, 이를 docker repo로 push 합니다.
+      # 이 때 사용되는 ${{ secrets.DOCKER_REPO }}/directors-dev 가 위에서 만든 도커 repository 입니다.
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:dev
+
+  deploy:
+    runs-on: ubuntu-latest # ubuntu 최신 버전에서 script를 실행
+    needs: docker  # build 작업이 완료된 후 실행됨
+
+    steps:
+      # appleboy/ssh-action@master 액션을 사용하여 지정한 서버에 ssh로 접속하고, script를 실행합니다.
+      # script의 내용은 도커의 기존 프로세스들을 제거하고, docker repo로부터 방금 위에서 push한 내용을 pull 받아 실행하는 것입니다.
+      # 실행 시, docker-compose를 사용합니다.
+      - name: Deploy to server
+        uses: appleboy/ssh-action@master
+        id: deploy
+        with:
+          host: ${{ secrets.HOST_DEV }}
+          username: ubuntu
+          key: ${{ secrets.KEY }}
+          envs: GITHUB_SHA
+          script: |
+            sudo timedatectl set-timezone Asia/Seoul
+            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+            docker stop meetDev || true
+            docker rm meetDev || true
+            docker rmi $(docker images -q --filter "reference=*:*dev") || true
+            docker rm $(docker ps -a -q -f status=exited) || true
+            docker rm $(docker ps -a -q -f status=created) || true
+            
+            docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:dev
+            docker run -d --restart on-failure:5 -p 8001:8001 -v /home/ubuntu/data:/data -v /etc/localtime:/etc/localtime:ro -v /etc/timezone:/etc/timezone:ro --name meetDev -e SPRING_PROFILES_ACTIVE=de ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:dev
+
