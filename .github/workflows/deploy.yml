@@ -32,7 +32,6 @@ jobs:
           cd ./src/main/resources
           touch ./application-deploy.yml
           echo "${{ secrets.PROPERTIES_DEPLOY }}" > ./application-deploy.yml
-          echo ./application-deploy.yml
         shell: bash
 
       # gradle을 통해 소스를 빌드.
