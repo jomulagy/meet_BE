@@ -28,7 +28,7 @@ public class TerminatePlaceVote extends CommonJob {
 
         for(PlaceVote placeVote : placeVoteList){
             placeVote.setPlaceResult();
-            placeVote.getMeet().setPlaceResult(placeVote.getPlaceResult());
+            placeVote.getMeet().setPlace();
 
             log.append(placeVote.getMeet().getTitle());
             log.append(", ");

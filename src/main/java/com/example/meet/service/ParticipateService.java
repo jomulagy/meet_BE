@@ -6,6 +6,8 @@ import com.example.meet.common.dto.response.member.SimpleMemberResponseDto;
 import com.example.meet.common.dto.response.participate.FindParticipateVoteItemResponseDto;
 import com.example.meet.common.dto.response.participate.FindParticipateVoteResponseDto;
 import com.example.meet.common.dto.response.participate.UpdateParticipateVoteResponseDto;
+import com.example.meet.common.dto.response.place.FindPlaceVoteItemResponseDto;
+import com.example.meet.common.dto.response.place.FindSimplePlaceResponseDto;
 import com.example.meet.common.enumulation.ErrorCode;
 import com.example.meet.common.enumulation.MemberPrevillege;
 import com.example.meet.common.exception.BusinessException;
@@ -36,6 +38,7 @@ public class ParticipateService {
         String endDate = null;
         String date = null;
         String time = null;
+        String place = null;
 
         //로그인 한 유저 확인
         Member user = memberRepository.findById(inDto.getUserId()).orElseThrow(
@@ -62,13 +65,17 @@ public class ParticipateService {
             time = meet.getDate().format(DateTimeFormatter.ofPattern("HH시 mm분"));
         }
 
+        if(meet.getPlace() != null){
+            place = meet.getPlace().getName();
+        }
+
         Boolean isAuthor = meet.getAuthor().equals(user);
 
         return FindParticipateVoteResponseDto.builder()
                 .meetTitle(meet.getTitle())
                 .date(date)
                 .time(time)
-                .place(meet.getPlace())
+                .place(place)
                 .endDate(endDate)
                 .isAuthor(isAuthor.toString())
                 .build();

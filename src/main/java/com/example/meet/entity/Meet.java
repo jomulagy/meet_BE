@@ -15,10 +15,8 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -50,8 +48,8 @@ public class Meet {
     @Column(name = "date")
     private LocalDateTime date;
 
-    @Column(name = "place")
-    private String place;
+    @OneToOne(mappedBy = "meet", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Place place;
 
     @Column(name = "participantsNum")
     private Long participantsNum;
@@ -82,8 +80,20 @@ public class Meet {
         this.date = this.scheduleVote.getDateResult();
     }
 
-    void setPlace(){
-        this.place = this.placeVote.getPlaceResult();
+    public void setPlace(){
+        this.place.setName(this.placeVote.getPlaceResult());
+        this.place.setXPos(this.placeVote.getXPos());
+        this.place.setYPos(this.placeVote.getYPos());
+    }
+
+    void setPlace(EditMeetRequestDto inDto){
+        if(inDto.getPlace().getName() != null){
+            this.place.setName(inDto.getPlace().getName());
+            this.place.setXPos(inDto.getPlace().getXPos());
+            this.place.setYPos(inDto.getPlace().getYPos());
+            this.place.setType(inDto.getPlace().getType());
+        }
+        this.place.setDetail(inDto.getPlace().getDetail());
     }
     void setParticipateNum(){
         this.participantsNum = this.participateVote.getTotalNum();
@@ -114,15 +124,14 @@ public class Meet {
             LocalTime time = (inDto.getTime() != null) ? inDto.getTime() : LocalTime.of(0, 0);
             this.date = LocalDateTime.of(inDto.getDate(), time);
         }
-        this.place = inDto.getPlace();
+
+        if(inDto.getPlace() != null){
+            this.setPlace(inDto);
+        }
     }
 
     public void setDateResult(LocalDateTime dateResult) {
         this.date = dateResult;
-    }
-
-    public void setPlaceResult(String place) {
-        this.place = place;
     }
 
     public void setParticipantsNum(long totalNum) {
