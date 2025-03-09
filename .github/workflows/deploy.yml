@@ -16,37 +16,37 @@ jobs:
     runs-on: ubuntu-latest # ubuntu 최신 버전에서 script를 실행
 
     steps:
-    # 지정한 저장소(현재 REPO)에서 코드를 워크플로우 환경으로 가져오도록 하는 github action
-    - uses: actions/checkout@v3
+      # 지정한 저장소(현재 REPO)에서 코드를 워크플로우 환경으로 가져오도록 하는 github action
+      - uses: actions/checkout@v3
 
-    # open jdk 17 버전 환경을 세팅
-    - name: Set up JDK 17
-      uses: actions/setup-java@v3
-      with:
-        java-version: '17'
-        distribution: "adopt"
+      # open jdk 17 버전 환경을 세팅
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: "adopt"
 
-    # Github secrets로부터 데이터를 받아서, 워크 플로우에 파일을 생성
-    - name: Make application.properties
-      run: |
-        cd ./src/main/resources
-        touch ./application-dev.yml
-        echo "${{ secrets.PROPERTIES_DEPLOY }}" > ./application-deploy.yml
-        cat ./application-deploy.yml
-      shell: bash
+      # Github secrets로부터 데이터를 받아서, 워크 플로우에 파일을 생성
+      - name: Make application.properties
+        run: |
+          cd ./src/main/resources
+          touch ./application-dev.yml
+          echo "${{ secrets.PROPERTIES_DEPLOY }}" > ./application-dev.yml
+        shell: bash
 
-    # gradle을 통해 소스를 빌드.
-    - name: Build with Gradle
-      run: |
-        chmod +x ./gradlew
-        ./gradlew clean build -x test
+      # gradle을 통해 소스를 빌드.
+      - name: Build with Gradle
+        run: |
+          chmod +x ./gradlew
+          ./gradlew clean build -x test
 
-    # 빌드 결과물을 artifact로 업로드
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: build-artifacts
-        path: build/libs/
+
+      # 빌드 결과물을 artifact로 업로드
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: build/libs/
 
   docker:
     runs-on: ubuntu-latest # ubuntu 최신 버전에서 script를 실행
@@ -58,7 +58,7 @@ jobs:
 
       # 빌드한 아티팩트 다운로드
       - name: Download build artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: build-artifacts
           path: build/libs  # 다운받을 위치 (Dockerfile에서 참조할 경로)
@@ -84,9 +84,11 @@ jobs:
     needs: docker  # build 작업이 완료된 후 실행됨
 
     steps:
-        # appleboy/ssh-action@master 액션을 사용하여 지정한 서버에 ssh로 접속하고, script를 실행합니다.
-        # script의 내용은 도커의 기존 프로세스들을 제거하고, docker repo로부터 방금 위에서 push한 내용을 pull 받아 실행하는 것입니다.
-        # 실행 시, docker-compose를 사용합니다.
+
+      # appleboy/ssh-action@master 액션을 사용하여 지정한 서버에 ssh로 접속하고, script를 실행합니다.
+      # script의 내용은 도커의 기존 프로세스들을 제거하고, docker repo로부터 방금 위에서 push한 내용을 pull 받아 실행하는 것입니다.
+      # 실행 시, docker-compose를 사용합니다.
+
       - name: Deploy to server
         uses: appleboy/ssh-action@master
         id: deploy
@@ -102,8 +104,7 @@ jobs:
             docker rm meetService || true
             docker rmi $(docker images -q --filter "reference=*:*deploy") || true
             docker rm $(docker ps -a -q -f status=exited) || true
-            docker rm $(docker ps -a -q -f status=created) || true
-  
+            docker rm $(docker ps -a -q -f status=created) || true            
             docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:deploy
-            docker run -d --restart on-failure:5 -p 8080:8080 -v /home/ubuntu/data:/data -v /etc/localtime:/etc/localtime:ro -v /etc/timezone:/etc/timezone:ro --name meetService -e SPRING_PROFILES_ACTIVE=deploy ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:deploy
+            docker run -d --restart on-failure:5 -p 8080:8080 -v /home/ubuntu/data:/data -v /etc/localtime:/etc/localtime:ro -v /etc/timezone:/etc/timezone:ro --name meetService -e SPRING_PROFILES_ACTIVE=dev,deploy ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:deploy
 
