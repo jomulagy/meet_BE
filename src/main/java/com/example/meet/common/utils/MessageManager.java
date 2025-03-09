@@ -6,27 +6,20 @@ import com.example.meet.common.enumulation.MemberPrevillege;
 import com.example.meet.common.enumulation.Message;
 import com.example.meet.common.exception.BusinessException;
 import com.example.meet.entity.Member;
-import com.example.meet.entity.Token;
 import com.example.meet.repository.MemberRepository;
-import com.example.meet.repository.TokenRepository;
 import com.example.meet.service.AuthService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.netty.channel.socket.DatagramChannel;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Map;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import java.util.List;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -35,15 +28,11 @@ public class MessageManager {
     private final MemberRepository memberRepository;
     private final ObjectMapper objectMapper;
     private final AuthService authService;
+    @Value("${spring.profiles.active:}")
+    private String activeProfiles;
 
     public Mono<String> sendAll(Message msg){
-        try{
-            String hostname = InetAddress.getLocalHost().getHostAddress();
-
-            if(!hostname.equals("43.203.36.37")){
-                return Mono.empty();
-            }
-        } catch (UnknownHostException e){
+        if(!activeProfiles.contains("deploy")){
             return Mono.empty();
         }
 
@@ -97,13 +86,7 @@ public class MessageManager {
     }
 
     public Mono<String> send(Message message, Member member) {
-        try{
-            String hostname = InetAddress.getLocalHost().getHostName();
-
-            if(!hostname.equals("43.203.36.37")){
-                return Mono.empty();
-            }
-        } catch (UnknownHostException e){
+        if(!activeProfiles.contains("deploy")){
             return Mono.empty();
         }
 
@@ -159,13 +142,7 @@ public class MessageManager {
     }
 
     public Mono<String> sendMe(Message message) {
-        try{
-            String hostname = InetAddress.getLocalHost().getHostAddress();
-
-            if(!hostname.equals("43.203.36.37")){
-                return Mono.empty();
-            }
-        } catch (UnknownHostException e){
+        if(!activeProfiles.contains("deploy")){
             return Mono.empty();
         }
 

@@ -32,6 +32,7 @@ jobs:
         cd ./src/main/resources
         touch ./application-dev.yml
         echo "${{ secrets.PROPERTIES_DEV }}" > ./application-dev.yml
+        cat ./application-dev.yml
       shell: bash
 
     # gradle을 통해 소스를 빌드.
@@ -77,4 +78,4 @@ jobs:
           docker rm $(docker ps -a -q -f status=created) || true
           
           docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:dev
-          docker run -d --restart on-failure:5 -p 8001:8001 -v /home/ubuntu/data:/data -v /etc/localtime:/etc/localtime:ro -v /etc/timezone:/etc/timezone:ro --name meetDev ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:dev
+          docker run -d --restart on-failure:5 -p 8001:8001 -v /home/ubuntu/data:/data -v /etc/localtime:/etc/localtime:ro -v /etc/timezone:/etc/timezone:ro --name meetDev -e SPRING_PROFILES_ACTIVE=dev ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:dev
