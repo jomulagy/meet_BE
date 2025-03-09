@@ -34,7 +34,7 @@ public class TestController {
     }
 
     @GetMapping("")
-    public CommonResponse<String> test() throws UnknownHostException {
-        return CommonResponse.success(activeProfiles);
+    public CommonResponse<Boolean> test() throws UnknownHostException {
+        return CommonResponse.success(activeProfiles.contains("deploy"));
     }
 }
