@@ -30,8 +30,8 @@ jobs:
       - name: Make application.properties
         run: |
           cd ./src/main/resources
-          touch ./application-deploy.yml
-          echo "${{ secrets.PROPERTIES_DEPLOY }}" > ./application-deploy.yml
+          touch ./application.yml
+          echo "${{ secrets.PROPERTIES_DEPLOY }}" > ./application.yml
         shell: bash
 
       # gradle을 통해 소스를 빌드.
