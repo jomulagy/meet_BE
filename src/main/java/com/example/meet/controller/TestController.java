@@ -1,18 +1,15 @@
 package com.example.meet.controller;
 
 import com.example.meet.common.CommonResponse;
-import com.example.meet.common.dto.request.CreateMeetRequestDto;
-import com.example.meet.entity.Token;
 import com.example.meet.repository.TokenRepository;
 import com.example.meet.service.AuthService;
 import com.example.meet.service.MeetService;
 import com.example.meet.service.ScheduleService;
 import com.example.meet.service.TestService;
-import java.net.InetAddress;
 import java.net.UnknownHostException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Repository;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +24,9 @@ public class TestController {
     private final MeetService meetService;
     private final AuthService authService;
     private final TokenRepository tokenRepository;
+    private final Environment environment;
+    @Value("${spring.profiles.active:}")
+    private String activeProfiles;
 
     @GetMapping("/kakao/message")
     public Mono<String> kakaoMessageTest(){
@@ -34,7 +34,7 @@ public class TestController {
     }
 
     @GetMapping("")
-    public void test() throws UnknownHostException {
-        String v = InetAddress.getLocalHost().getHostAddress();
+    public CommonResponse<String> test() throws UnknownHostException {
+        return CommonResponse.success(activeProfiles);
     }
 }

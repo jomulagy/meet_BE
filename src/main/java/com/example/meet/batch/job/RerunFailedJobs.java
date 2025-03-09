@@ -48,12 +48,12 @@ public class RerunFailedJobs extends CommonJob {
                         .startNow()
                         .build();
 
-                scheduler.scheduleJob(jobDetail, trigger);
-
                 log.append(batchLog.getName());
                 log.append(", ");
+
+                scheduler.scheduleJob(jobDetail, trigger);
             } catch (Exception e) {
-                return "Failed to rerun job: " + batchLog.getName() + "\n" + e.getMessage();
+                super.insertBatch(batchLog.getName(), "FAILURE", e.getMessage());
             }
         }
 
