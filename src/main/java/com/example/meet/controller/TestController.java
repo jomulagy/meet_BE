@@ -34,7 +34,8 @@ public class TestController {
     }
 
     @GetMapping("")
-    public void test() throws UnknownHostException {
+    public CommonResponse<String> test() throws UnknownHostException {
         String v = InetAddress.getLocalHost().getHostAddress();
+        return CommonResponse.success(v);
     }
 }
