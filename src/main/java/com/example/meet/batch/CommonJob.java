@@ -35,7 +35,7 @@ public abstract class CommonJob implements Job {
     protected abstract String performJob(JobExecutionContext context);
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    private void insertBatch(String name, String status, String message){
+    protected void insertBatch(String name, String status, String message){
         BatchLog log = new BatchLog();
         log.setName(name);
         log.setStatus(status);
