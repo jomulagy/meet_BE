@@ -21,7 +21,7 @@ public class CreatePlaceVoteItemRequestDto {
 
     @NotNull
     @Schema(description = "장소", example = "강남역")
-    private String place;
+    private PlaceRequestDto place;
 
     @Schema(hidden = true)
     private Long userId;
