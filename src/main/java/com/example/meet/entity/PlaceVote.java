@@ -37,12 +37,6 @@ public class PlaceVote {
     @Column(name = "place_result")
     private String placeResult;
 
-    @Column(name = "x_pos")
-    private BigDecimal xPos;
-
-    @Column(name = "y_pos")
-    private BigDecimal yPos;
-
     @Column(name = "end_date")
     private LocalDateTime endDate;
 
@@ -70,7 +64,5 @@ public class PlaceVote {
         }
 
         this.placeResult = result.getPlace();
-        this.xPos = result.getXPos();
-        this.yPos = result.getYPos();
     }
 }

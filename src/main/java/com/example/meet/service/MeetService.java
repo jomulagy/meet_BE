@@ -200,9 +200,6 @@ public class MeetService {
 
         PlaceVoteItem placeVoteItem1 = PlaceVoteItem.builder()
                 .place("강남역")
-                .type(PlaceType.SUB)
-                .xPos(BigDecimal.valueOf(37.49809895356626))
-                .yPos(BigDecimal.valueOf(127.02798897144342))
                 .placeVote(placeVote)
                 .editable(false)
                 .author(author)
@@ -211,9 +208,6 @@ public class MeetService {
 
         PlaceVoteItem placeVoteItem2 = PlaceVoteItem.builder()
                 .place("종각역")
-                .xPos(BigDecimal.valueOf(37.57023519725892))
-                .yPos(BigDecimal.valueOf(126.98313949597043))
-                .type(PlaceType.SUB)
                 .placeVote(placeVote)
                 .editable(false)
                 .author(author)
