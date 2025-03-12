@@ -112,7 +112,7 @@ public class PlaceService {
             throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
         }
 
-        if(inDto.getPlace() == null || inDto.getPlace().getName().isEmpty()){
+        if(inDto.getPlace() == null || inDto.getPlace().isEmpty()){
             throw new BusinessException(ErrorCode.PLACE_VALUE_REQUIRED);
         }
         Meet meet = meetRepository.findById(inDto.getMeetId()).orElseThrow(
@@ -126,7 +126,7 @@ public class PlaceService {
         List<PlaceVoteItem> placeVoteItemList = meet.getPlaceVote().getPlaceVoteItems();
 
         for(PlaceVoteItem item : placeVoteItemList){
-            if(item.getPlace().equals(inDto.getPlace().getName())){
+            if(item.getPlace().equals(inDto.getPlace())){
                 throw new BusinessException(ErrorCode.PLACE_VOTE_ITEM_DUPLICATED);
             }
         }
