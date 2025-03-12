@@ -53,12 +53,7 @@ public interface MeetMapper {
         if(dto.getPlace() != null){
             if (dto.getPlace().getName() != null) {
                 place.setName(dto.getPlace().getName());
-                place.setXPos(dto.getPlace().getXPos());
-                place.setYPos(dto.getPlace().getYPos());
-                place.setType(dto.getPlace().getType());
             }
-
-            place.setDetail(dto.getPlace().getDetail());
         }
 
         return Meet.builder()
@@ -107,22 +102,8 @@ public interface MeetMapper {
         }
 
         if(place != null){
-            String xpos = null;
-            String ypos = null;
-
-            if(place.getXPos() != null){
-                xpos = place.getXPos().toString();
-            }
-
-            if(place.getYPos() != null){
-                ypos = place.getYPos().toString();
-            }
-
             placeResponseDto = FindSimplePlaceResponseDto.builder()
                     .name(place.getName())
-                    .xPos(xpos)
-                    .yPos(ypos)
-                    .detail(place.getDetail())
                     .editable(editable.toString())
                     .build();
         }
@@ -191,8 +172,6 @@ public interface MeetMapper {
 
         FindSimplePlaceResponseDto place = FindSimplePlaceResponseDto.builder()
                 .name(entity.getPlace().getName())
-                .xPos(entity.getPlace().getXPos().toString())
-                .yPos(entity.getPlace().getYPos().toString())
                 .build();
 
         return EditMeetResponseDto.builder()

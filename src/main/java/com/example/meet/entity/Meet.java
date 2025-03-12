@@ -88,7 +88,6 @@ public class Meet {
         if(inDto.getPlace().getName() != null){
             this.place.setName(inDto.getPlace().getName());
         }
-        this.place.setDetail(inDto.getPlace().getDetail());
     }
     void setParticipateNum(){
         this.participantsNum = this.participateVote.getTotalNum();
