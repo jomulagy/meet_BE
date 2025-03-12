@@ -82,16 +82,11 @@ public class Meet {
 
     public void setPlace(){
         this.place.setName(this.placeVote.getPlaceResult());
-        this.place.setXPos(this.placeVote.getXPos());
-        this.place.setYPos(this.placeVote.getYPos());
     }
 
     void setPlace(EditMeetRequestDto inDto){
         if(inDto.getPlace().getName() != null){
             this.place.setName(inDto.getPlace().getName());
-            this.place.setXPos(inDto.getPlace().getXPos());
-            this.place.setYPos(inDto.getPlace().getYPos());
-            this.place.setType(inDto.getPlace().getType());
         }
         this.place.setDetail(inDto.getPlace().getDetail());
     }
