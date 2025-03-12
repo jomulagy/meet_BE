@@ -14,10 +14,7 @@ public interface PlaceVoteItemMapper {
 
     default PlaceVoteItem toEntity(CreatePlaceVoteItemRequestDto inDto, PlaceVote placeVote, Member user){
         return PlaceVoteItem.builder()
-                .place(inDto.getPlace().getName())
-                .xPos(inDto.getPlace().getXPos())
-                .yPos(inDto.getPlace().getYPos())
-                .type(inDto.getPlace().getType())
+                .place(inDto.getPlace())
                 .editable(true)
                 .author(user)
                 .placeVote(placeVote)

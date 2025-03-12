@@ -37,13 +37,6 @@ public class PlaceVoteItem {
 
     @Column(name = "place", nullable = false)
     private String place;
-    @Column(name = "x_pos", nullable = false)
-    private BigDecimal xPos;
-    @Column(name = "y_pos", nullable = false)
-    private BigDecimal yPos;
-
-    @Column(name = "type", nullable = false)
-    private PlaceType type;
 
     @Column(name = "editable", nullable = false)
     private Boolean editable;
