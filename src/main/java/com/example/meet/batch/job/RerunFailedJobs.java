@@ -38,7 +38,7 @@ public class RerunFailedJobs extends CommonJob {
 
         for (BatchLog batchLog : failedJobs) {
             try {
-                Class<? extends Job> job = ScheduledJob.valueOf(batchLog.getName()).getJobClass();
+                Class<? extends Job> job = ScheduledJob.valueOf(toSnakeCase(batchLog.getName())).getJobClass();
 
                 JobDetail jobDetail = JobBuilder.newJob(job)
                         .withIdentity(batchLog.getName() + "_retry")
@@ -67,5 +67,9 @@ public class RerunFailedJobs extends CommonJob {
         log.append("]");
 
         return log.toString();
+    }
+
+    private String toSnakeCase(String str) {
+        return str.replaceAll("([a-z])([A-Z])", "$1_$2").toUpperCase();
     }
 }
