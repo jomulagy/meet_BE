@@ -49,7 +49,7 @@ public class PlaceVoteItem {
     @JoinColumn(name = "placeVote_id")
     private PlaceVote placeVote;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "place_vote_item_member",
             joinColumns = @JoinColumn(name = "placeVoteItem_id"),
