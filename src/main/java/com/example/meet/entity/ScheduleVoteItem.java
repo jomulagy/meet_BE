@@ -49,7 +49,7 @@ public class ScheduleVoteItem {
     @JoinColumn(name = "scheduleVote_id")
     private ScheduleVote scheduleVote;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "schedule_vote_item_member",
             joinColumns = @JoinColumn(name = "scheduleVoteItem_id"),
