@@ -93,6 +93,11 @@ public interface MeetMapper {
             editable = true;
         }
 
+        placeResponseDto = FindSimplePlaceResponseDto.builder()
+                .value(entity.getPlace())
+                .editable(editable.toString())
+                .build();
+
         Long participantsNum = entity.getParticipantsNum();
         if(entity.getParticipantsNum() == null){
             participantsNum = 0L;
@@ -109,7 +114,7 @@ public interface MeetMapper {
                 .content(entity.getContent())
                 .type(entity.getType())
                 .date(dateResponseDto)
-                .place(entity.getPlace())
+                .place(placeResponseDto)
                 .participantsNum(String.valueOf(participantsNum))
                 .participants(participants)
                 .isAuthor(String.valueOf(entity.getAuthor().equals(user)))
