@@ -48,6 +48,12 @@ jobs:
           name: build-artifacts
           path: build/libs/
 
+      - name: Upload application-dev.yml
+        uses: actions/upload-artifact@v4
+        with:
+          name: application-deploy-file
+          path: ./src/main/resources/application-dev.yml
+
   docker:
     runs-on: ubuntu-latest # ubuntu 최신 버전에서 script를 실행
     needs: build  # build 작업이 완료된 후 실행됨
