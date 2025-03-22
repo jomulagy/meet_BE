@@ -49,18 +49,11 @@ public interface MeetMapper {
             dateTime = date.atTime(time);
         }
 
-        place = new Place();
-        if(dto.getPlace() != null){
-            if (dto.getPlace().getName() != null) {
-                place.setName(dto.getPlace().getName());
-            }
-        }
-
         return Meet.builder()
                 .title(dto.getTitle())
                 .type(dto.getType())
                 .date(dateTime)
-                .place(place)
+                .place(dto.getPlace())
                 .content(dto.getContent())
                 .author(author)
                 .build();
@@ -73,7 +66,6 @@ public interface MeetMapper {
     default FindMeetResponseDto EntityToDto(Meet entity, @Context Member user){
         FindSimpleDateResponseDto dateResponseDto;
         FindSimplePlaceResponseDto placeResponseDto = null;
-        Place place = entity.getPlace();
 
         String date = null;
         String time = null;
@@ -101,13 +93,6 @@ public interface MeetMapper {
             editable = true;
         }
 
-        if(place != null){
-            placeResponseDto = FindSimplePlaceResponseDto.builder()
-                    .name(place.getName())
-                    .editable(editable.toString())
-                    .build();
-        }
-
         Long participantsNum = entity.getParticipantsNum();
         if(entity.getParticipantsNum() == null){
             participantsNum = 0L;
@@ -124,7 +109,7 @@ public interface MeetMapper {
                 .content(entity.getContent())
                 .type(entity.getType())
                 .date(dateResponseDto)
-                .place(placeResponseDto)
+                .place(entity.getPlace())
                 .participantsNum(String.valueOf(participantsNum))
                 .participants(participants)
                 .isAuthor(String.valueOf(entity.getAuthor().equals(user)))
@@ -141,15 +126,11 @@ public interface MeetMapper {
             date = entity.getDate().format(dateTimeFormatter);
         }
 
-        if(entity.getPlace() != null){
-            place = entity.getPlace().getName();
-        }
-
         return FindMeetSimpleResponseDto.builder()
                 .id(entity.getId())
                 .title(entity.getTitle())
                 .date(date)
-                .place(place)
+                .place(entity.getPlace())
                 .build();
     }
 
@@ -170,17 +151,13 @@ public interface MeetMapper {
             participants.add(m.getName());
         }
 
-        FindSimplePlaceResponseDto place = FindSimplePlaceResponseDto.builder()
-                .name(entity.getPlace().getName())
-                .build();
-
         return EditMeetResponseDto.builder()
                 .id(entity.getId())
                 .title(entity.getTitle())
                 .content(entity.getContent())
                 .type(entity.getType())
                 .date(date)
-                .place(place)
+                .place(entity.getPlace())
                 .participantsNum(String.valueOf(participantsNum))
                 .participants(participants)
                 .build();

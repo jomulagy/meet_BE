@@ -29,7 +29,7 @@ public class EditMeetRequestDto {
     @Schema(description = "모임 시간", example = "19:00")
     private LocalTime time;
     @Schema(description = "모임장소", example = "강남역")
-    private PlaceRequestDto place;
+    private String place;
 
 
 }

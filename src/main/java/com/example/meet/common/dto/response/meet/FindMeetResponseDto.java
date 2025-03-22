@@ -26,7 +26,7 @@ public class FindMeetResponseDto {
     @Schema(description = "모임 날짜")
     private FindSimpleDateResponseDto date;
     @Schema(description = "모임장소")
-    private FindSimplePlaceResponseDto place;
+    private String place;
     @Schema(description = "작성자 여부", example = "true")
     private String isAuthor;
     @Schema(description = "참여자 수", example = "2")

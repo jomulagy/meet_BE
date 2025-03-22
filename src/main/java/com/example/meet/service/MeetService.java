@@ -88,10 +88,6 @@ public class MeetService {
         }
 
         Meet meet = meetRepository.save(entity);
-        if(entity.getPlace() != null){
-            entity.getPlace().setMeet(meet);
-            placeRepository.save(entity.getPlace());
-        }
 
         //일정 투표 연결
         if(entity.getScheduleVote() == null && entity.getDate() == null){
@@ -105,7 +101,7 @@ public class MeetService {
         }
 
         //장소 투표 연결
-        if(entity.getPlaceVote() == null && entity.getPlace().getName() == null){
+        if(entity.getPlaceVote() == null){
             PlaceVote placeVote = createPlaceVote(entity);
             placeVoteRepository.save(placeVote);
             if (inDto.getType().equals(MeetType.Routine)) {
@@ -308,7 +304,7 @@ public class MeetService {
         }
 
         //투표한 필드는 편집 불가(장소)
-        if(meet.getPlace() != null && meet.getPlaceVote() != null && meet.getPlaceVote().getPlaceResult() != null && !Objects.equals(inDto.getPlace().getName(), meet.getPlace().getName())){
+        if(meet.getPlace() != null && meet.getPlaceVote() != null && meet.getPlaceVote().getPlaceResult() != null && !Objects.equals(inDto.getPlace(), meet.getPlace())){
             throw new BusinessException(ErrorCode.VOTE_REQUIRED);
         }
 

@@ -143,13 +143,13 @@ public class MeetController {
                     )
             })
     @Parameter(name = "meetId", description = "모임 id", example = "1")
-    public CommonResponse<FindMeetResponseDto> findMeet(@RequestParam String meetId){
+    public CommonResponse<FindMeetResponseDto> findMeet(@RequestParam(name = "meetId") Long meetId){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         FindMeetRequestDto inDto = FindMeetRequestDto.builder()
                 .userId(parseLong(userDetails.getUsername()))
-                .meetId(parseLong(meetId))
+                .meetId(meetId)
                 .build();
 
         return CommonResponse.success(meetService.findMeet(inDto));

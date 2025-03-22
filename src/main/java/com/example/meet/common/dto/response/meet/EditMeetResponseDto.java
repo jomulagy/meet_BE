@@ -25,7 +25,7 @@ public class EditMeetResponseDto {
     @Schema(description = "모임 날짜", example = "2024-07-05")
     private String date;
     @Schema(description = "모임장소", example = "강남역")
-    private FindSimplePlaceResponseDto place;
+    private String place;
     @Schema(description = "참여자 수", example = "2")
     private String participantsNum;
     @Schema(description = "참여자 이름 리스트", example = "['김지훈','장지연']")

@@ -48,8 +48,8 @@ public class Meet {
     @Column(name = "date")
     private LocalDateTime date;
 
-    @OneToOne(mappedBy = "meet", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Place place;
+    @Column(name = "place")
+    private String place;
 
     @Column(name = "participantsNum")
     private Long participantsNum;
@@ -81,13 +81,11 @@ public class Meet {
     }
 
     public void setPlace(){
-        this.place.setName(this.placeVote.getPlaceResult());
+        this.place = this.placeVote.getPlaceResult();
     }
 
     void setPlace(EditMeetRequestDto inDto){
-        if(inDto.getPlace().getName() != null){
-            this.place.setName(inDto.getPlace().getName());
-        }
+        this.place = inDto.getPlace();
     }
     void setParticipateNum(){
         this.participantsNum = this.participateVote.getTotalNum();

@@ -1,0 +1,44 @@
+spring:
+  profiles: deploy
+  application:
+    name: meet
+  datasource:
+    url: jdbc:mysql://13.125.161.163:3306/meet?serverTimezone=Asia/Seoul
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: jomulagy
+    password: kjh980309@
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update
+  main:
+    allow-bean-definition-overriding: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: jomulagy088@gmail.com
+    password: jzgn idem boln hsmt
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql: TRACE
+jwt:
+  secret: 0b149e2f33aa49a57845f395075b636ded6c8f3ef46e3049571dc795c0f3a427
+
+kakao:
+  rest-api-key: 86a527ceaedd9951ed011a5f0011bb5d
+  client-secret: eRfO6ALPE8YfosnnQt3VTdt2pRZUhv7r
+
