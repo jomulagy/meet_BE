@@ -41,7 +41,7 @@ public class ParticipateVoteItem {
     @JoinColumn(name = "participateVote_id")
     private ParticipateVote participateVote;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "participate_vote_item_member",
             joinColumns = @JoinColumn(name = "participateVoteItem_id"),

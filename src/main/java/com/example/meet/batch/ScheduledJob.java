@@ -23,7 +23,7 @@ public enum ScheduledJob {
     DELETE_MEMBER_PREVILLEGE(DeleteMemberPrevillege.class, "0 10 0 11 1 ? *"),
     TERMINATE_SCHEDULE_VOTE(TerminateScheduleVote.class, "0 15 0 * * ? *"),
     TERMINATE_PLACE_VOTE(TerminatePlaceVote.class, "0 20 0 * * ? *"),
-    TERMINATE_PARTICIPATE_VOTE(TerminateParticipateVote.class, "0 20 22 * * ? *"),
+    TERMINATE_PARTICIPATE_VOTE(TerminateParticipateVote.class, "0 34 22 * * ? *"),
     CREATE_ROUTINE_MEET(CreateRoutineMeet.class, "0 0 8 1 3,6,9,12 ? *"),
     SEND_PARTICIPATE_MESSAGE(SendParticipateMessage.class, "0 30 08 * * ? *"),
     SEND_DEPOSIT_MESSAGE(SendDepositMessage.class, "0 35 08 25 12 ? *"),
