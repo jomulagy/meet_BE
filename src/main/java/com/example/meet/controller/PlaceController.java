@@ -12,7 +12,6 @@ import com.example.meet.common.dto.response.place.DeletePlaceVoteItemResponseDto
 import com.example.meet.common.dto.response.place.FindPlaceVoteItemResponseDto;
 import com.example.meet.common.dto.request.place.FindPlaceVoteRequestDto;
 import com.example.meet.common.dto.response.place.FindPlaceVoteResponseDto;
-import com.example.meet.common.dto.response.place.UpdatePlaceVoteResponseDto;
 import com.example.meet.service.PlaceService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -191,43 +190,5 @@ public class PlaceController {
                 .build();
 
         return CommonResponse.success(placeService.deletePlaceVoteItem(inDto));
-    }
-
-    @PutMapping("")
-    @Tag(name = "place vote", description = "모임 장소 투표")
-    @Operation(summary = "장소 투표 저장",
-            description = "Authorization header require<br>type - Routine",
-            responses = {
-                    @ApiResponse(responseCode = "200",
-                            description = "성공",
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = UpdatePlaceVoteResponseDto.class)
-                            )
-                    ),
-                    @ApiResponse(responseCode = "404",
-                            description = "존재하지 않는 멤버, 존재하지 않는 모임",
-                            content = @Content(
-                                    mediaType = "application/json"
-                            )
-                    ),
-                    @ApiResponse(responseCode = "403",
-                            description = "멤버 권한이 없음",
-                            content = @Content(
-                                    mediaType = "application/json"
-                            )
-                    )
-            })
-    public CommonResponse<UpdatePlaceVoteResponseDto> updatePlaceVote(@RequestBody UpdatePlaceVoteRequestDto requestDto){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
-        UpdatePlaceVoteRequestDto inDto = UpdatePlaceVoteRequestDto.builder()
-                .userId(parseLong(userDetails.getUsername()))
-                .meetId(requestDto.getMeetId())
-                .placeVoteItemList(requestDto.getPlaceVoteItemList())
-                .build();
-
-        return CommonResponse.success(placeService.updatePlaceVote(inDto));
     }
 }

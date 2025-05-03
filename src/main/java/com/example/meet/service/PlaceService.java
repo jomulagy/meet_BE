@@ -11,14 +11,12 @@ import com.example.meet.common.dto.response.place.CreatePlaceVoteItemResponseDto
 import com.example.meet.common.dto.response.place.DeletePlaceVoteItemResponseDto;
 import com.example.meet.common.dto.response.place.FindPlaceVoteItemResponseDto;
 import com.example.meet.common.dto.response.place.FindPlaceVoteResponseDto;
-import com.example.meet.common.dto.response.place.UpdatePlaceVoteResponseDto;
 import com.example.meet.common.enumulation.ErrorCode;
 import com.example.meet.common.enumulation.MemberPrevillege;
 import com.example.meet.common.exception.BusinessException;
 import com.example.meet.entity.Meet;
 import com.example.meet.entity.Member;
 
-import com.example.meet.entity.PlaceVote;
 import com.example.meet.entity.PlaceVoteItem;
 import com.example.meet.mapper.PlaceVoteItemMapper;
 import com.example.meet.repository.MeetRepository;
@@ -31,7 +29,6 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -184,7 +181,7 @@ public class PlaceService {
         return null;
     }
 
-    public UpdatePlaceVoteResponseDto updatePlaceVote(UpdatePlaceVoteRequestDto inDto) {
+    public void updatePlaceVote(UpdatePlaceVoteRequestDto inDto) {
         //로그인 한 유저 확인
         Member user = memberRepository.findById(inDto.getUserId()).orElseThrow(
                 () -> new BusinessException(ErrorCode.MEMBER_NOT_EXISTS)
@@ -226,7 +223,6 @@ public class PlaceService {
             placeVoteItemRepository.save(item);
         }
 
-        return null;
     }
 
     public FindPlaceVoteResponseDto findPlaceVote(FindPlaceVoteRequestDto inDto) {
