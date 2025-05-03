@@ -37,9 +37,9 @@ public class PlaceVoteItem {
 
     @Column(name = "place", nullable = false)
     private String place;
-    @Column(name = "x_pos", nullable = false)
+    @Column(name = "x_pos", nullable = true)
     private BigDecimal xPos;
-    @Column(name = "y_pos", nullable = false)
+    @Column(name = "y_pos", nullable = true)
     private BigDecimal yPos;
 
     @Column(name = "type", nullable = false)
