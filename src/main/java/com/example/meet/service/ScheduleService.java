@@ -6,7 +6,8 @@ import com.example.meet.common.dto.request.CreateScheduleVoteItemRequestDto;
 import com.example.meet.common.dto.request.DeleteScheduleVoteItemRequestDto;
 import com.example.meet.common.dto.request.FindScheduleVoteItemRequestDto;
 import com.example.meet.common.dto.request.FindScheduleVoteRequestDto;
-import com.example.meet.common.dto.request.UpdateScheduleVoteRequestDto;
+import com.example.meet.common.dto.request.VoteRequestDto;
+import com.example.meet.common.dto.request.schedule.UpdateScheduleVoteRequestDto;
 import com.example.meet.common.dto.response.DeleteScheduleVoteItemResponseDto;
 import com.example.meet.common.dto.response.FindScheduleVoteItemResponseDto;
 import com.example.meet.common.dto.response.FindScheduleVoteResponseDto;
@@ -15,10 +16,9 @@ import com.example.meet.common.enumulation.ErrorCode;
 import com.example.meet.common.enumulation.MemberPrevillege;
 import com.example.meet.common.exception.BusinessException;
 import com.example.meet.common.dto.response.CreateScheduleVoteItemResponseDto;
-import com.example.meet.common.dto.response.UpdateScheduleVoteResponseDto;
+import com.example.meet.common.dto.response.meet.VoteResponseDto;
 import com.example.meet.entity.Meet;
 import com.example.meet.entity.Member;
-import com.example.meet.entity.ScheduleVote;
 import com.example.meet.entity.ScheduleVoteItem;
 import com.example.meet.mapper.ScheduleVoteItemMapper;
 import com.example.meet.repository.MeetRepository;
@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -185,7 +184,7 @@ public class ScheduleService {
         return null;
     }
 
-    public UpdateScheduleVoteResponseDto updateScheduleVote(UpdateScheduleVoteRequestDto inDto) {
+    public void updateScheduleVote(UpdateScheduleVoteRequestDto inDto) {
         //로그인 한 유저 확인
         Member user = memberRepository.findById(inDto.getUserId()).orElseThrow(
                 () -> new BusinessException(ErrorCode.MEMBER_NOT_EXISTS)
@@ -226,8 +225,6 @@ public class ScheduleService {
 
             scheduleVoteItemRepository.save(item);
         }
-
-        return null;
     }
 
     public FindScheduleVoteResponseDto findScheduleVote(FindScheduleVoteRequestDto inDto) {

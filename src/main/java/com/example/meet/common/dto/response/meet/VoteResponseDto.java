@@ -1,4 +1,4 @@
-package com.example.meet.common.dto.response.place;
+package com.example.meet.common.dto.response.meet;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Builder
-public class UpdatePlaceVoteResponseDto {
+public class VoteResponseDto {
 
 }

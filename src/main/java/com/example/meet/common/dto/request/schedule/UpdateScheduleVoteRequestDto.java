@@ -1,4 +1,4 @@
-package com.example.meet.common.dto.request.place;
+package com.example.meet.common.dto.request.schedule;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UpdatePlaceVoteRequestDto {
+public class UpdateScheduleVoteRequestDto {
     @Schema(hidden = true)
     private Long userId;
 
@@ -19,5 +19,5 @@ public class UpdatePlaceVoteRequestDto {
     private Long meetId;
 
     @Schema(description = "장소 투표 항목 id", example = "[1,2,3]")
-    private List<Long> placeVoteItemList;
+    private List<Long> scheduleVoteItemList;
 }

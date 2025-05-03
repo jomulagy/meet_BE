@@ -7,10 +7,16 @@ import com.example.meet.common.dto.request.CreateMeetRequestDto;
 import com.example.meet.common.dto.request.DeleteMeetRequestDto;
 import com.example.meet.common.dto.request.EditMeetRequestDto;
 import com.example.meet.common.dto.request.FindMeetRequestDto;
+import com.example.meet.common.dto.request.VoteRequestDto;
+import com.example.meet.common.dto.request.place.CreatePlaceVoteItemRequestDto;
+import com.example.meet.common.dto.request.place.UpdatePlaceVoteRequestDto;
+import com.example.meet.common.dto.request.schedule.UpdateScheduleVoteRequestDto;
 import com.example.meet.common.dto.response.meet.CreateMeetResponseDto;
 import com.example.meet.common.dto.response.meet.EditMeetResponseDto;
 import com.example.meet.common.dto.response.meet.FindMeetResponseDto;
 import com.example.meet.common.dto.response.meet.FindMeetSimpleResponseDto;
+import com.example.meet.common.dto.response.meet.VoteResponseDto;
+import com.example.meet.common.dto.response.place.CreatePlaceVoteItemResponseDto;
 import com.example.meet.service.MeetService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -239,5 +245,42 @@ public class MeetController {
         return CommonResponse.success();
     }
 
+    @PostMapping("/vote")
+    @Tag(name = "Meet", description = "모임")
+    @Operation(summary = "투표하기",
+            description = "Authorization header require",
+            responses = {
+                    @ApiResponse(responseCode = "200",
+                            description = "성공",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = VoteResponseDto.class)
+                            )
+                    ),
+                    @ApiResponse(responseCode = "404",
+                            description = "존재하지 않는 멤버, 존재하지 않는 모임",
+                            content = @Content(
+                                    mediaType = "application/json"
+                            )
+                    ),
+                    @ApiResponse(responseCode = "403",
+                            description = "멤버 권한이 없음",
+                            content = @Content(
+                                    mediaType = "application/json"
+                            )
+                    )
+            })
+    public CommonResponse<VoteResponseDto> vote(@RequestBody VoteRequestDto request){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
+        VoteRequestDto inDto = VoteRequestDto.builder()
+                .userId(parseLong(userDetails.getUsername()))
+                .meetId(request.getMeetId())
+                .scheduleVoteItemList(request.getScheduleVoteItemList())
+                .placeVoteItemList(request.getPlaceVoteItemList())
+                .build();
+
+        return CommonResponse.success(meetService.vote(inDto));
+    }
 }

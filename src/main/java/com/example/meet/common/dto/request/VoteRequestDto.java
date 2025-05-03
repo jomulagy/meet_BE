@@ -11,10 +11,12 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UpdateScheduleVoteRequestDto {
+public class VoteRequestDto {
     @Schema(hidden = true)
     private Long userId;
     private Long meetId;
     @Schema(description = "일정 투표 항목 id", example = "[1,2,3]")
     private List<Long> scheduleVoteItemList;
+    @Schema(description = "장소 투표 항목 id", example = "[1,2,3]")
+    private List<Long> placeVoteItemList;
 }
