@@ -245,7 +245,7 @@ public class MeetController {
         return CommonResponse.success();
     }
 
-    @PostMapping("/vote")
+    @PutMapping("/vote")
     @Tag(name = "Meet", description = "모임")
     @Operation(summary = "투표하기",
             description = "Authorization header require",
