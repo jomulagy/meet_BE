@@ -104,11 +104,6 @@ public class MeetService {
         if(entity.getPlaceVote() == null){
             PlaceVote placeVote = createPlaceVote(entity);
             placeVoteRepository.save(placeVote);
-            if (inDto.getType().equals(MeetType.Routine)) {
-                setPlaceVoteItems(placeVote);
-                entity.setPlaceVote(placeVote);
-            }
-
         }
 
         //참여 여부 투표 연결
@@ -189,30 +184,6 @@ public class MeetService {
         }
         scheduleVoteRepository.save(scheduleVote);
 
-    }
-
-    private void setPlaceVoteItems(PlaceVote placeVote) {
-        Member author = memberRepository.findById(Long.valueOf("2927398983")).orElseThrow();
-
-        PlaceVoteItem placeVoteItem1 = PlaceVoteItem.builder()
-                .place("강남역")
-                .placeVote(placeVote)
-                .editable(false)
-                .author(author)
-                .build();
-        placeVoteItemRepository.save(placeVoteItem1);
-
-        PlaceVoteItem placeVoteItem2 = PlaceVoteItem.builder()
-                .place("종각역")
-                .placeVote(placeVote)
-                .editable(false)
-                .author(author)
-                .build();
-        placeVoteItemRepository.save(placeVoteItem2);
-
-        placeVote.getPlaceVoteItems().add(placeVoteItem1);
-        placeVote.getPlaceVoteItems().add(placeVoteItem2);
-        placeVoteRepository.save(placeVote);
     }
 
     private void setParticiapteVoteItems(ParticipateVote participateVote) {
