@@ -67,7 +67,7 @@ public class PlaceController {
                     )
             })
     @Parameter(name = "meetId", description = "모임 id", example = "1")
-    public CommonResponse<FindPlaceVoteResponseDto> findPlaceVote(@RequestParam String meetId){
+    public CommonResponse<FindPlaceVoteResponseDto> findPlaceVote(@RequestParam(name = "meetId") String meetId){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 

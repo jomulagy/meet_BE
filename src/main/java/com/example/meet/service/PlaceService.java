@@ -15,6 +15,7 @@ import com.example.meet.infrastructure.dto.response.place.UpdatePlaceVoteRespons
 import com.example.meet.infrastructure.enumulation.ErrorCode;
 import com.example.meet.infrastructure.enumulation.MemberPrevillege;
 import com.example.meet.infrastructure.exception.BusinessException;
+import com.example.meet.infrastructure.utils.DateTimeUtils;
 import com.example.meet.meet.domain.entity.Meet;
 import com.example.meet.entity.Member;
 
@@ -242,10 +243,9 @@ public class PlaceService {
                 () -> new BusinessException(ErrorCode.MEET_NOT_EXISTS)
         );
 
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String endDate = null;
         if(meet.getPlaceVote() != null){
-            endDate = meet.getEndDate().format(dateTimeFormatter);
+            endDate = DateTimeUtils.formatWithOffset(meet.getEndDate());
         }
         Boolean isAuthor = meet.getAuthor().equals(user);
 

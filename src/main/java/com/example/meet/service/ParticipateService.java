@@ -10,6 +10,7 @@ import com.example.meet.infrastructure.enumulation.ErrorCode;
 import com.example.meet.infrastructure.enumulation.MemberPrevillege;
 import com.example.meet.infrastructure.exception.BusinessException;
 import com.example.meet.infrastructure.dto.request.participate.UpdateParticipateVoteRequestDto;
+import com.example.meet.infrastructure.utils.DateTimeUtils;
 import com.example.meet.meet.domain.entity.Meet;
 import com.example.meet.entity.Member;
 import com.example.meet.entity.ParticipateVoteItem;
@@ -51,14 +52,12 @@ public class ParticipateService {
                 () -> new BusinessException(ErrorCode.MEET_NOT_EXISTS)
         );
 
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
         if( meet.getParticipateVote().getEndDate() != null){
-            endDate = meet.getParticipateVote().getEndDate().format(dateTimeFormatter);
+            endDate = DateTimeUtils.formatWithOffset(meet.getParticipateVote().getEndDate());
         }
 
         if( meet.getDate() != null){
-            date = meet.getDate().format(dateTimeFormatter);
+            date = meet.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
             time = meet.getDate().format(DateTimeFormatter.ofPattern("HH시 mm분"));
         }
 

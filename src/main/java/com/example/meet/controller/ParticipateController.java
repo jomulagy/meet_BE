@@ -61,7 +61,7 @@ public class ParticipateController {
                     )
             })
     @Parameter(name = "meetId", description = "모임 id", example = "1")
-    public CommonResponse<FindParticipateVoteResponseDto> findParticipateVote(@RequestParam String meetId){
+    public CommonResponse<FindParticipateVoteResponseDto> findParticipateVote(@RequestParam(name = "meetId") String meetId){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 

@@ -16,6 +16,7 @@ import com.example.meet.infrastructure.enumulation.MemberPrevillege;
 import com.example.meet.infrastructure.exception.BusinessException;
 import com.example.meet.infrastructure.dto.response.CreateScheduleVoteItemResponseDto;
 import com.example.meet.infrastructure.dto.response.UpdateScheduleVoteResponseDto;
+import com.example.meet.infrastructure.utils.DateTimeUtils;
 import com.example.meet.meet.domain.entity.Meet;
 import com.example.meet.entity.Member;
 import com.example.meet.entity.ScheduleVoteItem;
@@ -245,10 +246,9 @@ public class ScheduleService {
                 () -> new BusinessException(ErrorCode.MEET_NOT_EXISTS)
         );
 
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String endDate = null;
         if(meet.getScheduleVote() != null){
-            endDate = meet.getEndDate().format(dateTimeFormatter);
+            endDate = DateTimeUtils.formatWithOffset(meet.getEndDate());
         }
         Boolean isAuthor = meet.getAuthor().equals(user);
 
