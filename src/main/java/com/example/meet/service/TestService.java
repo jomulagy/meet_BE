@@ -1,8 +1,8 @@
 package com.example.meet.service;
 
-import com.example.meet.common.dto.TemplateArgs;
-import com.example.meet.common.enumulation.Message;
-import com.example.meet.common.utils.MessageManager;
+import com.example.meet.infrastructure.dto.TemplateArgs;
+import com.example.meet.infrastructure.enumulation.Message;
+import com.example.meet.infrastructure.utils.MessageManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

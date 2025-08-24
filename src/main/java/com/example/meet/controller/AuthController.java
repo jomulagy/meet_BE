@@ -2,20 +2,15 @@ package com.example.meet.controller;
 
 import static java.lang.Long.parseLong;
 
-import com.example.meet.common.CommonResponse;
-import com.example.meet.common.dto.request.KakaoTokenRequestDto;
-import com.example.meet.common.auth.JwtTokenResponseDto;
-import com.example.meet.common.dto.response.AdminAccessTokenResponseDto;
-import com.example.meet.common.exception.BusinessException;
+import com.example.meet.infrastructure.CommonResponse;
+import com.example.meet.infrastructure.dto.request.KakaoTokenRequestDto;
+import com.example.meet.infrastructure.auth.JwtTokenResponseDto;
+import com.example.meet.infrastructure.dto.response.AdminAccessTokenResponseDto;
 import com.example.meet.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

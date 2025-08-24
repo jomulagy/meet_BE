@@ -1,26 +1,25 @@
 package com.example.meet.service;
 
 
-import com.example.meet.common.dto.request.place.CreatePlaceVoteItemRequestDto;
-import com.example.meet.common.dto.request.place.DeletePlaceVoteItemRequestDto;
-import com.example.meet.common.dto.request.place.FindPlaceVoteItemRequestDto;
-import com.example.meet.common.dto.request.place.FindPlaceVoteRequestDto;
-import com.example.meet.common.dto.request.place.UpdatePlaceVoteRequestDto;
-import com.example.meet.common.dto.response.member.SimpleMemberResponseDto;
-import com.example.meet.common.dto.response.place.CreatePlaceVoteItemResponseDto;
-import com.example.meet.common.dto.response.place.DeletePlaceVoteItemResponseDto;
-import com.example.meet.common.dto.response.place.FindPlaceVoteItemResponseDto;
-import com.example.meet.common.dto.response.place.FindPlaceVoteResponseDto;
-import com.example.meet.common.dto.response.place.UpdatePlaceVoteResponseDto;
-import com.example.meet.common.enumulation.ErrorCode;
-import com.example.meet.common.enumulation.MemberPrevillege;
-import com.example.meet.common.exception.BusinessException;
-import com.example.meet.entity.Meet;
+import com.example.meet.infrastructure.dto.request.place.CreatePlaceVoteItemRequestDto;
+import com.example.meet.infrastructure.dto.request.place.DeletePlaceVoteItemRequestDto;
+import com.example.meet.infrastructure.dto.request.place.FindPlaceVoteItemRequestDto;
+import com.example.meet.infrastructure.dto.request.place.FindPlaceVoteRequestDto;
+import com.example.meet.infrastructure.dto.request.place.UpdatePlaceVoteRequestDto;
+import com.example.meet.infrastructure.dto.response.member.SimpleMemberResponseDto;
+import com.example.meet.infrastructure.dto.response.place.CreatePlaceVoteItemResponseDto;
+import com.example.meet.infrastructure.dto.response.place.DeletePlaceVoteItemResponseDto;
+import com.example.meet.infrastructure.dto.response.place.FindPlaceVoteItemResponseDto;
+import com.example.meet.infrastructure.dto.response.place.FindPlaceVoteResponseDto;
+import com.example.meet.infrastructure.dto.response.place.UpdatePlaceVoteResponseDto;
+import com.example.meet.infrastructure.enumulation.ErrorCode;
+import com.example.meet.infrastructure.enumulation.MemberPrevillege;
+import com.example.meet.infrastructure.exception.BusinessException;
+import com.example.meet.meet.domain.entity.Meet;
 import com.example.meet.entity.Member;
 
-import com.example.meet.entity.PlaceVote;
 import com.example.meet.entity.PlaceVoteItem;
-import com.example.meet.mapper.PlaceVoteItemMapper;
+import com.example.meet.infrastructure.mapper.PlaceVoteItemMapper;
 import com.example.meet.repository.MeetRepository;
 import com.example.meet.repository.MemberRepository;
 import com.example.meet.repository.PlaceVoteItemRepository;
@@ -31,7 +30,6 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -119,7 +117,7 @@ public class PlaceService {
                 () -> new BusinessException(ErrorCode.MEET_NOT_EXISTS)
         );
 
-        if(meet.getPlaceVote().getEndDate() != null && meet.getPlaceVote().getEndDate().isBefore(LocalDateTime.now())){
+        if(meet.getEndDate() != null && meet.getEndDate().isBefore(LocalDateTime.now())){
             throw new BusinessException(ErrorCode.PLACE_VOTE_END);
         }
 
@@ -175,7 +173,7 @@ public class PlaceService {
                 () -> new BusinessException(ErrorCode.PLACE_VOTE_ITEM_NOT_EXISTS)
         );
 
-        if(placeVoteItem.getPlaceVote().getEndDate() != null && placeVoteItem.getPlaceVote().getEndDate().isBefore(LocalDateTime.now())){
+        if(placeVoteItem.getPlaceVote().getMeet().getEndDate() != null && placeVoteItem.getPlaceVote().getMeet().getEndDate().isBefore(LocalDateTime.now())){
             throw new BusinessException(ErrorCode.PLACE_VOTE_END);
         }
 
@@ -199,7 +197,7 @@ public class PlaceService {
                 () -> new BusinessException(ErrorCode.MEET_NOT_EXISTS)
         );
 
-        if(meet.getPlaceVote() != null && meet.getPlaceVote().getEndDate() != null && meet.getPlaceVote().getEndDate().isBefore(LocalDateTime.now())){
+        if(meet.getPlaceVote() != null && meet.getEndDate() != null && meet.getEndDate().isBefore(LocalDateTime.now())){
             throw new BusinessException(ErrorCode.PLACE_VOTE_END);
         }
 
@@ -247,7 +245,7 @@ public class PlaceService {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String endDate = null;
         if(meet.getPlaceVote() != null){
-            endDate = meet.getPlaceVote().getEndDate().format(dateTimeFormatter);
+            endDate = meet.getEndDate().format(dateTimeFormatter);
         }
         Boolean isAuthor = meet.getAuthor().equals(user);
 

@@ -1,6 +1,6 @@
 package com.example.meet.repository;
 
-import com.example.meet.entity.Meet;
+import com.example.meet.meet.domain.entity.Meet;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -13,4 +13,5 @@ public interface MeetRepository extends JpaRepository<Meet, Long> {
     @EntityGraph(attributePaths = {"participants"})
     List<Meet> findByDateBetween(LocalDateTime startOfDay, LocalDateTime endOfDay);
     List<Meet> findByDateIsNotNullAndPlaceIsNotNullAndParticipantsNumIsNull();
+
 }

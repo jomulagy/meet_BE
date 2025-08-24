@@ -3,7 +3,7 @@ package com.example.meet.batch;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.example.meet.MeetApplication;
-import com.example.meet.entity.Meet;
+import com.example.meet.meet.domain.entity.Meet;
 import com.example.meet.entity.Member;
 import com.example.meet.repository.MeetRepository;
 import java.time.LocalDateTime;

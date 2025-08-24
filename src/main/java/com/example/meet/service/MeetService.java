@@ -2,32 +2,30 @@ package com.example.meet.service;
 
 import static java.lang.Long.parseLong;
 
-import com.example.meet.common.dto.TemplateArgs;
-import com.example.meet.common.dto.request.CreateMeetRequestDto;
-import com.example.meet.common.dto.request.DeleteMeetRequestDto;
-import com.example.meet.common.dto.request.EditMeetRequestDto;
-import com.example.meet.common.dto.request.FindMeetRequestDto;
-import com.example.meet.common.dto.response.meet.CreateMeetResponseDto;
-import com.example.meet.common.dto.response.meet.EditMeetResponseDto;
-import com.example.meet.common.dto.response.meet.FindMeetResponseDto;
-import com.example.meet.common.dto.response.meet.FindMeetSimpleResponseDto;
-import com.example.meet.common.enumulation.ErrorCode;
-import com.example.meet.common.enumulation.MeetType;
-import com.example.meet.common.enumulation.MemberPrevillege;
-import com.example.meet.common.enumulation.Message;
-import com.example.meet.common.enumulation.PlaceType;
-import com.example.meet.common.exception.BusinessException;
-import com.example.meet.common.utils.MessageManager;
-import com.example.meet.common.utils.ScheduleManager;
-import com.example.meet.entity.Meet;
+import com.example.meet.infrastructure.dto.TemplateArgs;
+import com.example.meet.infrastructure.dto.request.CreateMeetRequestDto;
+import com.example.meet.infrastructure.dto.request.DeleteMeetRequestDto;
+import com.example.meet.infrastructure.dto.request.EditMeetRequestDto;
+import com.example.meet.infrastructure.dto.request.FindMeetRequestDto;
+import com.example.meet.infrastructure.dto.response.meet.CreateMeetResponseDto;
+import com.example.meet.infrastructure.dto.response.meet.EditMeetResponseDto;
+import com.example.meet.infrastructure.dto.response.meet.FindMeetResponseDto;
+import com.example.meet.infrastructure.dto.response.meet.FindMeetSimpleResponseDto;
+import com.example.meet.infrastructure.enumulation.ErrorCode;
+import com.example.meet.infrastructure.enumulation.MeetType;
+import com.example.meet.infrastructure.enumulation.MemberPrevillege;
+import com.example.meet.infrastructure.enumulation.Message;
+import com.example.meet.infrastructure.exception.BusinessException;
+import com.example.meet.infrastructure.utils.MessageManager;
+import com.example.meet.infrastructure.utils.ScheduleManager;
+import com.example.meet.meet.domain.entity.Meet;
 import com.example.meet.entity.Member;
 import com.example.meet.entity.ParticipateVote;
 import com.example.meet.entity.ParticipateVoteItem;
 import com.example.meet.entity.PlaceVote;
-import com.example.meet.entity.PlaceVoteItem;
 import com.example.meet.entity.ScheduleVote;
 import com.example.meet.entity.ScheduleVoteItem;
-import com.example.meet.mapper.MeetMapper;
+import com.example.meet.infrastructure.mapper.MeetMapper;
 import com.example.meet.repository.MeetRepository;
 import com.example.meet.repository.MemberRepository;
 import com.example.meet.repository.ParticipateVoteItemRepository;
@@ -37,7 +35,6 @@ import com.example.meet.repository.PlaceVoteItemRepository;
 import com.example.meet.repository.PlaceVoteRepository;
 import com.example.meet.repository.ScheduleVoteItemRepository;
 import com.example.meet.repository.ScheduleVoteRepository;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -47,10 +44,8 @@ import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.event.TransactionalEventListener;
 
 @Slf4j
 @Service
@@ -131,30 +126,19 @@ public class MeetService {
         LocalDateTime endDate = tomorrowDate.atTime(LocalTime.of(0, 0));
 
         return ScheduleVote.builder()
-                .endDate(endDate)
                 .meet(meet)
                 .build();
     }
 
     private PlaceVote createPlaceVote(Meet meet) {
-        LocalDate currentDate = LocalDate.now();
-        LocalDate tomorrowDate = currentDate.plusDays(2);
-        LocalDateTime endDate = tomorrowDate.atTime(LocalTime.of(0, 0));
-
         return PlaceVote.builder()
-                .endDate(endDate)
                 .meet(meet)
                 .build();
     }
 
     private ParticipateVote createParticipateVote(Meet meet) {
-        LocalDate currentDate = LocalDate.now();
-        LocalDate tomorrowDate = currentDate.plusDays(3);
-        LocalDateTime endDate = tomorrowDate.atTime(LocalTime.of(0, 16));
-
         return ParticipateVote.builder()
                 .totalNum(0)
-                .endDate(endDate)
                 .meet(meet)
                 .build();
     }

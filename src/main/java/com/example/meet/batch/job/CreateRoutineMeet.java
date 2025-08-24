@@ -3,8 +3,8 @@ package com.example.meet.batch.job;
 import static java.lang.Long.parseLong;
 
 import com.example.meet.batch.CommonJob;
-import com.example.meet.common.dto.request.CreateMeetRequestDto;
-import com.example.meet.common.enumulation.MeetType;
+import com.example.meet.infrastructure.dto.request.CreateMeetRequestDto;
+import com.example.meet.infrastructure.enumulation.MeetType;
 import com.example.meet.repository.BatchLogRepository;
 import com.example.meet.service.MeetService;
 import java.time.LocalDate;

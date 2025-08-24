@@ -2,17 +2,17 @@ package com.example.meet.controller;
 
 import static java.lang.Long.parseLong;
 
-import com.example.meet.common.CommonResponse;
-import com.example.meet.common.dto.request.place.CreatePlaceVoteItemRequestDto;
-import com.example.meet.common.dto.request.place.DeletePlaceVoteItemRequestDto;
-import com.example.meet.common.dto.request.place.FindPlaceVoteItemRequestDto;
-import com.example.meet.common.dto.request.place.UpdatePlaceVoteRequestDto;
-import com.example.meet.common.dto.response.place.CreatePlaceVoteItemResponseDto;
-import com.example.meet.common.dto.response.place.DeletePlaceVoteItemResponseDto;
-import com.example.meet.common.dto.response.place.FindPlaceVoteItemResponseDto;
-import com.example.meet.common.dto.request.place.FindPlaceVoteRequestDto;
-import com.example.meet.common.dto.response.place.FindPlaceVoteResponseDto;
-import com.example.meet.common.dto.response.place.UpdatePlaceVoteResponseDto;
+import com.example.meet.infrastructure.CommonResponse;
+import com.example.meet.infrastructure.dto.request.place.CreatePlaceVoteItemRequestDto;
+import com.example.meet.infrastructure.dto.request.place.DeletePlaceVoteItemRequestDto;
+import com.example.meet.infrastructure.dto.request.place.FindPlaceVoteItemRequestDto;
+import com.example.meet.infrastructure.dto.request.place.UpdatePlaceVoteRequestDto;
+import com.example.meet.infrastructure.dto.response.place.CreatePlaceVoteItemResponseDto;
+import com.example.meet.infrastructure.dto.response.place.DeletePlaceVoteItemResponseDto;
+import com.example.meet.infrastructure.dto.response.place.FindPlaceVoteItemResponseDto;
+import com.example.meet.infrastructure.dto.request.place.FindPlaceVoteRequestDto;
+import com.example.meet.infrastructure.dto.response.place.FindPlaceVoteResponseDto;
+import com.example.meet.infrastructure.dto.response.place.UpdatePlaceVoteResponseDto;
 import com.example.meet.service.PlaceService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

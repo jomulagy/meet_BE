@@ -2,25 +2,24 @@ package com.example.meet.service;
 
 import static java.lang.Long.parseLong;
 
-import com.example.meet.common.dto.request.CreateScheduleVoteItemRequestDto;
-import com.example.meet.common.dto.request.DeleteScheduleVoteItemRequestDto;
-import com.example.meet.common.dto.request.FindScheduleVoteItemRequestDto;
-import com.example.meet.common.dto.request.FindScheduleVoteRequestDto;
-import com.example.meet.common.dto.request.UpdateScheduleVoteRequestDto;
-import com.example.meet.common.dto.response.DeleteScheduleVoteItemResponseDto;
-import com.example.meet.common.dto.response.FindScheduleVoteItemResponseDto;
-import com.example.meet.common.dto.response.FindScheduleVoteResponseDto;
-import com.example.meet.common.dto.response.member.SimpleMemberResponseDto;
-import com.example.meet.common.enumulation.ErrorCode;
-import com.example.meet.common.enumulation.MemberPrevillege;
-import com.example.meet.common.exception.BusinessException;
-import com.example.meet.common.dto.response.CreateScheduleVoteItemResponseDto;
-import com.example.meet.common.dto.response.UpdateScheduleVoteResponseDto;
-import com.example.meet.entity.Meet;
+import com.example.meet.infrastructure.dto.request.CreateScheduleVoteItemRequestDto;
+import com.example.meet.infrastructure.dto.request.DeleteScheduleVoteItemRequestDto;
+import com.example.meet.infrastructure.dto.request.FindScheduleVoteItemRequestDto;
+import com.example.meet.infrastructure.dto.request.FindScheduleVoteRequestDto;
+import com.example.meet.infrastructure.dto.request.UpdateScheduleVoteRequestDto;
+import com.example.meet.infrastructure.dto.response.DeleteScheduleVoteItemResponseDto;
+import com.example.meet.infrastructure.dto.response.FindScheduleVoteItemResponseDto;
+import com.example.meet.infrastructure.dto.response.FindScheduleVoteResponseDto;
+import com.example.meet.infrastructure.dto.response.member.SimpleMemberResponseDto;
+import com.example.meet.infrastructure.enumulation.ErrorCode;
+import com.example.meet.infrastructure.enumulation.MemberPrevillege;
+import com.example.meet.infrastructure.exception.BusinessException;
+import com.example.meet.infrastructure.dto.response.CreateScheduleVoteItemResponseDto;
+import com.example.meet.infrastructure.dto.response.UpdateScheduleVoteResponseDto;
+import com.example.meet.meet.domain.entity.Meet;
 import com.example.meet.entity.Member;
-import com.example.meet.entity.ScheduleVote;
 import com.example.meet.entity.ScheduleVoteItem;
-import com.example.meet.mapper.ScheduleVoteItemMapper;
+import com.example.meet.infrastructure.mapper.ScheduleVoteItemMapper;
 import com.example.meet.repository.MeetRepository;
 import com.example.meet.repository.MemberRepository;
 import com.example.meet.repository.ScheduleVoteItemRepository;
@@ -31,7 +30,6 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -118,7 +116,7 @@ public class ScheduleService {
                 () -> new BusinessException(ErrorCode.MEET_NOT_EXISTS)
         );
 
-        if(meet.getScheduleVote().getEndDate() != null && meet.getScheduleVote().getEndDate().isBefore(LocalDateTime.now())){
+        if(meet.getEndDate() != null && meet.getEndDate().isBefore(LocalDateTime.now())){
             throw new BusinessException(ErrorCode.SCHEDULE_VOTE_END);
         }
 
@@ -176,7 +174,9 @@ public class ScheduleService {
                 () -> new BusinessException(ErrorCode.SCHEDULE_VOTE_ITEM_NOT_EXISTS)
         );
 
-        if(scheduleVoteItem.getScheduleVote().getEndDate() != null && scheduleVoteItem.getScheduleVote().getEndDate().isBefore(LocalDateTime.now())){
+        Meet meet = scheduleVoteItem.getScheduleVote().getMeet();
+
+        if(meet.getEndDate() != null && meet.getEndDate().isBefore(LocalDateTime.now())){
             throw new BusinessException(ErrorCode.SCHEDULE_VOTE_END);
         }
 
@@ -200,7 +200,7 @@ public class ScheduleService {
                 () -> new BusinessException(ErrorCode.MEET_NOT_EXISTS)
         );
 
-        if(meet.getScheduleVote() != null && meet.getScheduleVote().getEndDate() != null && meet.getScheduleVote().getEndDate().isBefore(LocalDateTime.now())){
+        if(meet.getScheduleVote() != null && meet.getEndDate() != null && meet.getEndDate().isBefore(LocalDateTime.now())){
             throw new BusinessException(ErrorCode.SCHEDULE_VOTE_END);
         }
 
@@ -248,7 +248,7 @@ public class ScheduleService {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String endDate = null;
         if(meet.getScheduleVote() != null){
-            endDate = meet.getScheduleVote().getEndDate().format(dateTimeFormatter);
+            endDate = meet.getEndDate().format(dateTimeFormatter);
         }
         Boolean isAuthor = meet.getAuthor().equals(user);
 

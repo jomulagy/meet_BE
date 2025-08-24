@@ -1,6 +1,6 @@
 package com.example.meet.entity;
 
-import com.example.meet.common.enumulation.PlaceType;
+import com.example.meet.meet.domain.entity.Meet;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,7 +9,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import java.math.BigDecimal;
 import lombok.Data;
 
 @Entity

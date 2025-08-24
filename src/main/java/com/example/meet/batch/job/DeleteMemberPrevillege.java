@@ -1,7 +1,7 @@
 package com.example.meet.batch.job;
 
 import com.example.meet.batch.CommonJob;
-import com.example.meet.common.enumulation.MemberPrevillege;
+import com.example.meet.infrastructure.enumulation.MemberPrevillege;
 import com.example.meet.entity.Member;
 import com.example.meet.repository.BatchLogRepository;
 import com.example.meet.repository.MemberRepository;

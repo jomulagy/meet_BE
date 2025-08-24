@@ -12,6 +12,4 @@ import java.util.List;
 
 @Repository
 public interface ScheduleVoteRepository extends JpaRepository<ScheduleVote, Long> {
-    @Query("SELECT e FROM ScheduleVote e WHERE e.dateResult IS NULL AND e.endDate <= :currentDate")
-    List<ScheduleVote> findEventsWithNullDateResultAndEndDateBefore(@Param("currentDate") LocalDateTime currentDate);
 }

@@ -1,14 +1,14 @@
 package com.example.meet.service;
 
-import com.example.meet.common.auth.JwtTokenProvider;
-import com.example.meet.common.dto.request.Batch.BatchRequestDto;
-import com.example.meet.common.dto.request.KakaoTokenRequestDto;
-import com.example.meet.common.auth.JwtTokenResponseDto;
-import com.example.meet.common.dto.response.AdminAccessTokenResponseDto;
-import com.example.meet.common.dto.response.KakaoUserInfoResponseDto;
-import com.example.meet.common.exception.BusinessException;
-import com.example.meet.common.enumulation.ErrorCode;
-import com.example.meet.common.enumulation.MemberPrevillege;
+import com.example.meet.infrastructure.auth.JwtTokenProvider;
+import com.example.meet.infrastructure.dto.request.Batch.BatchRequestDto;
+import com.example.meet.infrastructure.dto.request.KakaoTokenRequestDto;
+import com.example.meet.infrastructure.auth.JwtTokenResponseDto;
+import com.example.meet.infrastructure.dto.response.AdminAccessTokenResponseDto;
+import com.example.meet.infrastructure.dto.response.KakaoUserInfoResponseDto;
+import com.example.meet.infrastructure.exception.BusinessException;
+import com.example.meet.infrastructure.enumulation.ErrorCode;
+import com.example.meet.infrastructure.enumulation.MemberPrevillege;
 import com.example.meet.entity.Member;
 import com.example.meet.entity.Token;
 import com.example.meet.repository.MemberRepository;

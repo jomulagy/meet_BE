@@ -2,15 +2,15 @@ package com.example.meet.controller;
 
 import static java.lang.Long.parseLong;
 
-import com.example.meet.common.CommonResponse;
-import com.example.meet.common.dto.request.CreateMeetRequestDto;
-import com.example.meet.common.dto.request.DeleteMeetRequestDto;
-import com.example.meet.common.dto.request.EditMeetRequestDto;
-import com.example.meet.common.dto.request.FindMeetRequestDto;
-import com.example.meet.common.dto.response.meet.CreateMeetResponseDto;
-import com.example.meet.common.dto.response.meet.EditMeetResponseDto;
-import com.example.meet.common.dto.response.meet.FindMeetResponseDto;
-import com.example.meet.common.dto.response.meet.FindMeetSimpleResponseDto;
+import com.example.meet.infrastructure.CommonResponse;
+import com.example.meet.infrastructure.dto.request.CreateMeetRequestDto;
+import com.example.meet.infrastructure.dto.request.DeleteMeetRequestDto;
+import com.example.meet.infrastructure.dto.request.EditMeetRequestDto;
+import com.example.meet.infrastructure.dto.request.FindMeetRequestDto;
+import com.example.meet.infrastructure.dto.response.meet.CreateMeetResponseDto;
+import com.example.meet.infrastructure.dto.response.meet.EditMeetResponseDto;
+import com.example.meet.infrastructure.dto.response.meet.FindMeetResponseDto;
+import com.example.meet.infrastructure.dto.response.meet.FindMeetSimpleResponseDto;
 import com.example.meet.service.MeetService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

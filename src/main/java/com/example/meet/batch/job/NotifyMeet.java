@@ -1,10 +1,10 @@
 package com.example.meet.batch.job;
 
 import com.example.meet.batch.CommonJob;
-import com.example.meet.common.dto.TemplateArgs;
-import com.example.meet.common.enumulation.Message;
-import com.example.meet.common.utils.MessageManager;
-import com.example.meet.entity.Meet;
+import com.example.meet.infrastructure.dto.TemplateArgs;
+import com.example.meet.infrastructure.enumulation.Message;
+import com.example.meet.infrastructure.utils.MessageManager;
+import com.example.meet.meet.domain.entity.Meet;
 import com.example.meet.entity.Member;
 import com.example.meet.repository.BatchLogRepository;
 import com.example.meet.repository.MeetRepository;

@@ -2,13 +2,13 @@ package com.example.meet.controller;
 
 import static java.lang.Long.parseLong;
 
-import com.example.meet.common.CommonResponse;
-import com.example.meet.common.dto.request.participate.UpdateParticipateVoteRequestDto;
-import com.example.meet.common.dto.request.participate.FindParticipateVoteItemRequestDto;
-import com.example.meet.common.dto.request.participate.FindParticipateVoteRequestDto;
-import com.example.meet.common.dto.response.participate.FindParticipateVoteItemResponseDto;
-import com.example.meet.common.dto.response.participate.FindParticipateVoteResponseDto;
-import com.example.meet.common.dto.response.participate.UpdateParticipateVoteResponseDto;
+import com.example.meet.infrastructure.CommonResponse;
+import com.example.meet.infrastructure.dto.request.participate.UpdateParticipateVoteRequestDto;
+import com.example.meet.infrastructure.dto.request.participate.FindParticipateVoteItemRequestDto;
+import com.example.meet.infrastructure.dto.request.participate.FindParticipateVoteRequestDto;
+import com.example.meet.infrastructure.dto.response.participate.FindParticipateVoteItemResponseDto;
+import com.example.meet.infrastructure.dto.response.participate.FindParticipateVoteResponseDto;
+import com.example.meet.infrastructure.dto.response.participate.UpdateParticipateVoteResponseDto;
 import com.example.meet.service.ParticipateService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

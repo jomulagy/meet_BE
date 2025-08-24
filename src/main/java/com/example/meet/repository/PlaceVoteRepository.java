@@ -12,7 +12,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PlaceVoteRepository extends JpaRepository<PlaceVote, Long> {
-    @Query("SELECT e FROM PlaceVote e WHERE e.placeResult IS NULL AND e.endDate <= :currentDate")
-    List<PlaceVote> findEventsWithNullDateResultAndEndDateBefore(@Param("currentDate") LocalDateTime currentDate);
-
 }

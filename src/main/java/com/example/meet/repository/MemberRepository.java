@@ -1,6 +1,6 @@
 package com.example.meet.repository;
 
-import com.example.meet.common.enumulation.MemberPrevillege;
+import com.example.meet.infrastructure.enumulation.MemberPrevillege;
 import com.example.meet.entity.Member;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;

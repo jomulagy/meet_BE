@@ -2,17 +2,17 @@ package com.example.meet.controller;
 
 import static java.lang.Long.parseLong;
 
-import com.example.meet.common.CommonResponse;
-import com.example.meet.common.dto.response.UpdateScheduleVoteResponseDto;
-import com.example.meet.common.dto.request.CreateScheduleVoteItemRequestDto;
-import com.example.meet.common.dto.request.DeleteScheduleVoteItemRequestDto;
-import com.example.meet.common.dto.request.FindScheduleVoteItemRequestDto;
-import com.example.meet.common.dto.request.FindScheduleVoteRequestDto;
-import com.example.meet.common.dto.request.UpdateScheduleVoteRequestDto;
-import com.example.meet.common.dto.response.CreateScheduleVoteItemResponseDto;
-import com.example.meet.common.dto.response.DeleteScheduleVoteItemResponseDto;
-import com.example.meet.common.dto.response.FindScheduleVoteItemResponseDto;
-import com.example.meet.common.dto.response.FindScheduleVoteResponseDto;
+import com.example.meet.infrastructure.CommonResponse;
+import com.example.meet.infrastructure.dto.response.UpdateScheduleVoteResponseDto;
+import com.example.meet.infrastructure.dto.request.CreateScheduleVoteItemRequestDto;
+import com.example.meet.infrastructure.dto.request.DeleteScheduleVoteItemRequestDto;
+import com.example.meet.infrastructure.dto.request.FindScheduleVoteItemRequestDto;
+import com.example.meet.infrastructure.dto.request.FindScheduleVoteRequestDto;
+import com.example.meet.infrastructure.dto.request.UpdateScheduleVoteRequestDto;
+import com.example.meet.infrastructure.dto.response.CreateScheduleVoteItemResponseDto;
+import com.example.meet.infrastructure.dto.response.DeleteScheduleVoteItemResponseDto;
+import com.example.meet.infrastructure.dto.response.FindScheduleVoteItemResponseDto;
+import com.example.meet.infrastructure.dto.response.FindScheduleVoteResponseDto;
 import com.example.meet.service.ScheduleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

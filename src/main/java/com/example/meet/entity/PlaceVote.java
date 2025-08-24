@@ -1,5 +1,6 @@
 package com.example.meet.entity;
 
+import com.example.meet.meet.domain.entity.Meet;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,8 +12,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -36,9 +35,6 @@ public class PlaceVote {
 
     @Column(name = "place_result")
     private String placeResult;
-
-    @Column(name = "end_date")
-    private LocalDateTime endDate;
 
     @OneToOne
     @JoinColumn(name = "meet_id", referencedColumnName = "id")

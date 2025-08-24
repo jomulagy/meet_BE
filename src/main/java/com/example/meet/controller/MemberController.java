@@ -2,14 +2,14 @@ package com.example.meet.controller;
 
 import static java.lang.Long.parseLong;
 
-import com.example.meet.common.CommonResponse;
-import com.example.meet.common.dto.request.member.EditMemberPrevillegeRequestDto;
-import com.example.meet.common.dto.request.MemberListRequestDto;
-import com.example.meet.common.dto.request.MemberRequestDto;
-import com.example.meet.common.dto.request.member.EditMemberDepositRequestDto;
-import com.example.meet.common.dto.response.member.MemberDepositResponseDto;
-import com.example.meet.common.dto.response.member.MemberPrevillegeResponseDto;
-import com.example.meet.common.dto.response.member.MemberResponseDto;
+import com.example.meet.infrastructure.CommonResponse;
+import com.example.meet.infrastructure.dto.request.member.EditMemberPrevillegeRequestDto;
+import com.example.meet.infrastructure.dto.request.MemberListRequestDto;
+import com.example.meet.infrastructure.dto.request.MemberRequestDto;
+import com.example.meet.infrastructure.dto.request.member.EditMemberDepositRequestDto;
+import com.example.meet.infrastructure.dto.response.member.MemberDepositResponseDto;
+import com.example.meet.infrastructure.dto.response.member.MemberPrevillegeResponseDto;
+import com.example.meet.infrastructure.dto.response.member.MemberResponseDto;
 import com.example.meet.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;

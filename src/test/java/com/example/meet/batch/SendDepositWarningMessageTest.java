@@ -4,7 +4,7 @@ import static org.mockito.Mockito.mock;
 
 import com.example.meet.MeetApplication;
 import com.example.meet.batch.job.SendDepositWarningMessage;
-import com.example.meet.common.utils.MessageManager;
+import com.example.meet.infrastructure.utils.MessageManager;
 import com.example.meet.repository.BatchLogRepository;
 import com.example.meet.repository.MemberRepository;
 import org.junit.jupiter.api.Test;

@@ -1,5 +1,6 @@
 package com.example.meet.entity;
 
+import com.example.meet.meet.domain.entity.Meet;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,8 +14,6 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
