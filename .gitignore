@@ -45,6 +45,6 @@ src/main/resources/application-dev.yml
 # Gradle
 **/build/
 # QueryDSL generated Q-types (옵션)
-**/Q*.java
+**/generated/**/Q*.java
 **/generated/**/annotationProcessor/**
 **/generated/**/querydsl/**
