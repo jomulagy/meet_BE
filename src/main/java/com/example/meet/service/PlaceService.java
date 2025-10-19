@@ -26,7 +26,6 @@ import com.example.meet.repository.MemberRepository;
 import com.example.meet.repository.PlaceVoteItemRepository;
 import com.example.meet.repository.PlaceVoteRepository;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -245,8 +244,7 @@ public class PlaceService {
 
         String endDate = null;
         if(meet.getPlaceVote() != null){
-            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일");
-            endDate = meet.getEndDate().format(dateFormatter);
+            endDate = DateTimeUtils.formatWithOffset(meet.getEndDate());
         }
         Boolean isAuthor = meet.getAuthor().equals(user);
 

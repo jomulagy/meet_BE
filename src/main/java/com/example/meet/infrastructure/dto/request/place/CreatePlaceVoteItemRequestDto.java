@@ -6,17 +6,17 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString(exclude = {"meetId", "userId"})
 public class CreatePlaceVoteItemRequestDto {
-    @NotNull
     @Schema(description = "모임 id", example = "1")
     private Long meetId;
 
-    @NotNull
     @Schema(description = "장소", example = "강남역")
     private String place;
 

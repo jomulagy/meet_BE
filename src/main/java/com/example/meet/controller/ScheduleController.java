@@ -105,7 +105,7 @@ public class ScheduleController {
                     )
             })
     @Parameter(name = "meetId", description = "모임 id", example = "1")
-    public CommonResponse<List<FindScheduleVoteItemResponseDto>> findScheduleVoteItemList(@RequestParam String meetId){
+    public CommonResponse<List<FindScheduleVoteItemResponseDto>> findScheduleVoteItemList(@RequestParam(name = "meetId") String meetId){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
