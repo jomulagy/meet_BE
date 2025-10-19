@@ -1,4 +1,4 @@
-package com.example.meet.meet.domain.entity;
+package com.example.meet.meet.application.domain.entity;
 
 import com.example.meet.infrastructure.dto.request.EditMeetRequestDto;
 import com.example.meet.infrastructure.enumulation.MeetType;
@@ -42,9 +42,6 @@ public class Meet {
 
     @Column(name = "title", nullable = false)
     private String title;
-
-    @Column(name = "type", nullable = false)
-    private MeetType type;
 
     @Column(name = "content")
     private String content;

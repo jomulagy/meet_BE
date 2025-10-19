@@ -11,7 +11,7 @@ import com.example.meet.infrastructure.enumulation.MemberPrevillege;
 import com.example.meet.infrastructure.exception.BusinessException;
 import com.example.meet.infrastructure.dto.request.participate.UpdateParticipateVoteRequestDto;
 import com.example.meet.infrastructure.utils.DateTimeUtils;
-import com.example.meet.meet.domain.entity.Meet;
+import com.example.meet.meet.application.domain.entity.Meet;
 import com.example.meet.entity.Member;
 import com.example.meet.entity.ParticipateVoteItem;
 import com.example.meet.repository.MeetRepository;

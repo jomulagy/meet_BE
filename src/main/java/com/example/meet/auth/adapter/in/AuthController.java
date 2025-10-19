@@ -1,7 +1,8 @@
-package com.example.meet.controller;
+package com.example.meet.auth.adapter.in;
 
 import static java.lang.Long.parseLong;
 
+import com.example.meet.auth.application.port.in.AuthLoginUseCase;
 import com.example.meet.infrastructure.CommonResponse;
 import com.example.meet.infrastructure.dto.request.KakaoTokenRequestDto;
 import com.example.meet.infrastructure.auth.JwtTokenResponseDto;
@@ -28,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @Slf4j
 public class AuthController {
-
+    private final AuthLoginUseCase authLoginUseCase;
     private final AuthService authService;
 
     @PostMapping("/login")
@@ -49,7 +50,7 @@ public class AuthController {
                     )}
     )
     public CommonResponse<JwtTokenResponseDto> login(@RequestBody KakaoTokenRequestDto request) {
-        JwtTokenResponseDto jwtTokenResponseDto = authService.login(request);
+        JwtTokenResponseDto jwtTokenResponseDto = authLoginUseCase.login(request);
         return CommonResponse.success(jwtTokenResponseDto);
     }
 

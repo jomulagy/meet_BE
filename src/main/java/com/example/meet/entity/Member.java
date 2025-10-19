@@ -1,7 +1,7 @@
 package com.example.meet.entity;
 
 import com.example.meet.infrastructure.enumulation.MemberPrevillege;
-import com.example.meet.meet.domain.entity.Meet;
+import com.example.meet.meet.application.domain.entity.Meet;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

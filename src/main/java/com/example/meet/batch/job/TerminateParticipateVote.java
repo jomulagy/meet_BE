@@ -1,7 +1,7 @@
 package com.example.meet.batch.job;
 
 import com.example.meet.batch.CommonJob;
-import com.example.meet.meet.domain.entity.Meet;
+import com.example.meet.meet.application.domain.entity.Meet;
 import com.example.meet.entity.Member;
 import com.example.meet.entity.ParticipateVote;
 import com.example.meet.entity.ParticipateVoteItem;

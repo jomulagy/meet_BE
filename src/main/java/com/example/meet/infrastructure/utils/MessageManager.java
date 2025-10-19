@@ -142,9 +142,9 @@ public class MessageManager {
     }
 
     public Mono<String> sendMe(Message message) {
-        if(!activeProfiles.contains("deploy")){
-            return Mono.empty();
-        }
+//        if(!activeProfiles.contains("deploy")){
+//            return Mono.empty();
+//        }
 
         WebClient webClient = WebClient.builder().build();
         String url = "https://kapi.kakao.com/v2/api/talk/memo/send";

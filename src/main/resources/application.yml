@@ -2,7 +2,7 @@ spring:
   application:
     name: meet
   datasource:
-    url: jdbc:mysql://13.125.161.163:3306/meetLocal?serverTimezone=Asia/Seoul
+    url: jdbc:mysql://43.201.235.31:3306/meet?serverTimezone=Asia/Seoul
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: jomulagy
     password: kjh980309@
@@ -12,17 +12,6 @@ spring:
       ddl-auto: update
   main:
     allow-bean-definition-overriding: true
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: jomulagy088@gmail.com
-    password: jzgn idem boln hsmt
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
 
 logging:
   level:

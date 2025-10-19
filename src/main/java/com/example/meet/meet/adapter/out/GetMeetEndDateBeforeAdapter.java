@@ -1,9 +1,9 @@
 package com.example.meet.meet.adapter.out;
 
-import static com.example.meet.meet.domain.entity.QMeet.meet;
+import static com.example.meet.meet.application.domain.entity.QMeet.meet;
 
-import com.example.meet.meet.domain.entity.Meet;
-import com.example.meet.meet.port.out.GetMeetEndDateBeforePort;
+import com.example.meet.meet.application.domain.entity.Meet;
+import com.example.meet.meet.application.port.out.GetMeetEndDateBeforePort;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.LocalDateTime;
 import java.util.List;

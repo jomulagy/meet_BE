@@ -16,7 +16,7 @@ import com.example.meet.infrastructure.enumulation.ErrorCode;
 import com.example.meet.infrastructure.enumulation.MemberPrevillege;
 import com.example.meet.infrastructure.exception.BusinessException;
 import com.example.meet.infrastructure.utils.DateTimeUtils;
-import com.example.meet.meet.domain.entity.Meet;
+import com.example.meet.meet.application.domain.entity.Meet;
 import com.example.meet.entity.Member;
 
 import com.example.meet.entity.PlaceVoteItem;
@@ -26,7 +26,6 @@ import com.example.meet.repository.MemberRepository;
 import com.example.meet.repository.PlaceVoteItemRepository;
 import com.example.meet.repository.PlaceVoteRepository;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

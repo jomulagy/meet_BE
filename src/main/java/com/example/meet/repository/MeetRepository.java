@@ -1,6 +1,6 @@
 package com.example.meet.repository;
 
-import com.example.meet.meet.domain.entity.Meet;
+import com.example.meet.meet.application.domain.entity.Meet;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.data.jpa.repository.EntityGraph;

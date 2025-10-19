@@ -1,13 +1,13 @@
 package com.example.meet.infrastructure.mapper;
 
-import com.example.meet.infrastructure.dto.request.CreateMeetRequestDto;
-import com.example.meet.infrastructure.dto.response.meet.CreateMeetResponseDto;
+import com.example.meet.meet.adapter.in.dto.CreateMeetRequestDto;
+import com.example.meet.meet.adapter.in.dto.CreateMeetResponseDto;
 import com.example.meet.infrastructure.dto.response.meet.EditMeetResponseDto;
 import com.example.meet.infrastructure.dto.response.meet.FindMeetResponseDto;
 import com.example.meet.infrastructure.dto.response.date.FindSimpleDateResponseDto;
 import com.example.meet.infrastructure.dto.response.meet.FindMeetSimpleResponseDto;
 import com.example.meet.infrastructure.dto.response.place.FindSimplePlaceResponseDto;
-import com.example.meet.meet.domain.entity.Meet;
+import com.example.meet.meet.application.domain.entity.Meet;
 import com.example.meet.entity.Member;
 import com.example.meet.entity.Place;
 import java.time.LocalDate;
@@ -33,10 +33,8 @@ public interface MeetMapper {
     default Meet dtoToEntity(CreateMeetRequestDto dto, Member author){
         LocalDate date = null;
         LocalTime time = null;
-        LocalDate currentDate = LocalDate.now();
-        LocalDate tomorrowDate = currentDate.plusDays(2);
-        LocalDateTime endDate = tomorrowDate.atTime(LocalTime.of(0, 0));
-        Place place;
+        LocalDate voteDeadLine = LocalDate.parse(dto.getVoteDeadline(), DATE_FORMATTER);
+        LocalDateTime endDate = voteDeadLine.atTime(LocalTime.of(23, 59));
 
         if(dto.getDate() != null){
             date = LocalDate.parse(dto.getDate(), DATE_FORMATTER);
@@ -52,7 +50,6 @@ public interface MeetMapper {
 
         return Meet.builder()
                 .title(dto.getTitle())
-                .type(dto.getType())
                 .date(dateTime)
                 .place(dto.getPlace())
                 .content(dto.getContent())
@@ -114,7 +111,6 @@ public interface MeetMapper {
                 .id(entity.getId())
                 .title(entity.getTitle())
                 .content(entity.getContent())
-                .type(entity.getType())
                 .date(dateResponseDto)
                 .place(placeResponseDto)
                 .participantsNum(String.valueOf(participantsNum))
@@ -162,7 +158,6 @@ public interface MeetMapper {
                 .id(entity.getId())
                 .title(entity.getTitle())
                 .content(entity.getContent())
-                .type(entity.getType())
                 .date(date)
                 .place(entity.getPlace())
                 .participantsNum(String.valueOf(participantsNum))

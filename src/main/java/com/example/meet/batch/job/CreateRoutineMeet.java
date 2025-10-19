@@ -3,20 +3,19 @@ package com.example.meet.batch.job;
 import static java.lang.Long.parseLong;
 
 import com.example.meet.batch.CommonJob;
-import com.example.meet.infrastructure.dto.request.CreateMeetRequestDto;
-import com.example.meet.infrastructure.enumulation.MeetType;
+import com.example.meet.meet.adapter.in.dto.CreateMeetRequestDto;
+import com.example.meet.meet.application.port.in.CreateMeetUseCase;
 import com.example.meet.repository.BatchLogRepository;
-import com.example.meet.service.MeetService;
 import java.time.LocalDate;
 import java.util.List;
 import org.quartz.JobExecutionContext;
 
 public class CreateRoutineMeet extends CommonJob {
-    private final MeetService meetService;
+    private final CreateMeetUseCase createMeetUseCase;
 
-    public CreateRoutineMeet(BatchLogRepository batchLogRepository, MeetService meetService) {
+    public CreateRoutineMeet(BatchLogRepository batchLogRepository, CreateMeetUseCase createMeetUseCase) {
         super(batchLogRepository);
-        this.meetService = meetService;
+        this.createMeetUseCase = createMeetUseCase;
     }
 
     @Override
@@ -37,10 +36,9 @@ public class CreateRoutineMeet extends CommonJob {
         CreateMeetRequestDto inDto = CreateMeetRequestDto.builder()
                 .userId(parseLong("2927398983"))
                 .title(title)
-                .type(MeetType.Routine)
                 .build();
 
-        meetService.createMeet(inDto);
+        createMeetUseCase.create(inDto);
 
         return title + " 생성 완료";
     }

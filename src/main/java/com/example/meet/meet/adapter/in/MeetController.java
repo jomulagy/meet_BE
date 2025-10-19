@@ -1,16 +1,17 @@
-package com.example.meet.controller;
+package com.example.meet.meet.adapter.in;
 
 import static java.lang.Long.parseLong;
 
 import com.example.meet.infrastructure.CommonResponse;
-import com.example.meet.infrastructure.dto.request.CreateMeetRequestDto;
+import com.example.meet.meet.adapter.in.dto.CreateMeetRequestDto;
 import com.example.meet.infrastructure.dto.request.DeleteMeetRequestDto;
 import com.example.meet.infrastructure.dto.request.EditMeetRequestDto;
 import com.example.meet.infrastructure.dto.request.FindMeetRequestDto;
-import com.example.meet.infrastructure.dto.response.meet.CreateMeetResponseDto;
+import com.example.meet.meet.adapter.in.dto.CreateMeetResponseDto;
 import com.example.meet.infrastructure.dto.response.meet.EditMeetResponseDto;
 import com.example.meet.infrastructure.dto.response.meet.FindMeetResponseDto;
 import com.example.meet.infrastructure.dto.response.meet.FindMeetSimpleResponseDto;
+import com.example.meet.meet.application.port.in.CreateMeetUseCase;
 import com.example.meet.service.MeetService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -37,6 +38,7 @@ import java.util.List;
 @RequestMapping("/meet")
 public class MeetController {
     private final MeetService meetService;
+    private final CreateMeetUseCase createMeetUseCase;
 
     @PostMapping("")
     @Tag(name = "Meet", description = "모임")
@@ -71,14 +73,15 @@ public class MeetController {
         CreateMeetRequestDto inDto = CreateMeetRequestDto.builder()
                 .userId(parseLong(userDetails.getUsername()))
                 .title(requestDto.getTitle())
-                .type(requestDto.getType())
                 .date(requestDto.getDate())
                 .time(requestDto.getTime())
                 .place(requestDto.getPlace())
                 .content(requestDto.getContent())
+                .voteDeadline(requestDto.getVoteDeadline())
+                .participationDeadline(requestDto.getParticipationDeadline())
                 .build();
 
-        return CommonResponse.success(meetService.createMeet(inDto));
+        return CommonResponse.success(createMeetUseCase.create(inDto));
     }
 
     @GetMapping("/list")

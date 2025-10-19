@@ -1,15 +1,15 @@
 package com.example.meet.infrastructure.mapper;
 
-import com.example.meet.infrastructure.dto.response.meet.CreateMeetResponseDto;
 import com.example.meet.infrastructure.dto.response.meet.FindMeetSimpleResponseDto;
-import com.example.meet.meet.domain.entity.Meet;
+import com.example.meet.meet.adapter.in.dto.CreateMeetResponseDto;
+import com.example.meet.meet.application.domain.entity.Meet;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-08-24T21:44:45+0900",
+    date = "2025-10-20T00:42:05+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.10 (Azul Systems, Inc.)"
 )
 public class MeetMapperImpl implements MeetMapper {

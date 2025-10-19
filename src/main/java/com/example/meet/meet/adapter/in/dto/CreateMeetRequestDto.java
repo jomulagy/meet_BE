@@ -1,4 +1,4 @@
-package com.example.meet.infrastructure.dto.request;
+package com.example.meet.meet.adapter.in.dto;
 
 import com.example.meet.infrastructure.enumulation.MeetType;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -11,7 +11,7 @@ import lombok.ToString;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = {"userId", "type", "title", "date", "time"})
+@ToString(exclude = {"userId", "title", "date", "time", "voteDeadline", "participationDeadline"})
 @Builder
 public class CreateMeetRequestDto {
     @Schema(hidden = true)
@@ -19,9 +19,6 @@ public class CreateMeetRequestDto {
 
     @Schema(description = "제목", example = "3분기 정기 일정")
     private String title;
-
-    @Schema(description = "모임 종류(사용자가 생성할 경우 CUSTOM)", example = "CUSTOM")
-    private MeetType type;
 
     @Schema(description = "날짜", example = "2024-07-05")
     private String date;
@@ -31,6 +28,10 @@ public class CreateMeetRequestDto {
 
     private String place;
 
-    @Schema(description = "내용", example = "내용", required = false)
+    @Schema(description = "내용", example = "내용")
     private String content;
+
+    private String voteDeadline;
+
+    private String participationDeadline;
 }
