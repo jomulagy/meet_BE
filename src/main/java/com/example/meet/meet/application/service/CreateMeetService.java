@@ -128,13 +128,15 @@ public class CreateMeetService implements CreateMeetUseCase {
         LocalDate today = LocalDate.now();
 
         // 다음 분기의 첫 번째 달 계산
-        int nextQuarterStartMonth = ScheduleManager.calculateNextQuarterStartMonth(today.getMonthValue());
-        if(nextQuarterStartMonth < today.getMonthValue()){
+        // 다음 달 계산
+        int nextMonth = today.getMonthValue() + 1;
+        if (nextMonth > 12) {
+            nextMonth = 1;
             today = today.plusYears(1);
         }
 
         // 해당 월의 첫 번째 날과 마지막 날 가져오기
-        YearMonth nextQuarterMonth = YearMonth.of(today.getYear(), nextQuarterStartMonth);
+        YearMonth nextQuarterMonth = YearMonth.of(today.getYear(), nextMonth);
         LocalDate firstDayOfNextQuarterMonth = nextQuarterMonth.atDay(1);
         LocalDate lastDayOfNextQuarterMonth = nextQuarterMonth.atEndOfMonth();
 
