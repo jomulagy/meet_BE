@@ -9,7 +9,7 @@ import com.example.meet.infrastructure.dto.response.KakaoUserInfoResponseDto;
 import com.example.meet.infrastructure.enumulation.ErrorCode;
 import com.example.meet.infrastructure.enumulation.MemberPrevillege;
 import com.example.meet.infrastructure.exception.BusinessException;
-import com.example.meet.repository.MemberRepository;
+import com.example.meet.infrastructure.repository.MemberRepository;
 import com.example.meet.token.application.port.out.TokenPort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

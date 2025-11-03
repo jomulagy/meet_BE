@@ -13,7 +13,7 @@ import com.example.meet.infrastructure.enumulation.ErrorCode;
 import com.example.meet.infrastructure.enumulation.MemberPrevillege;
 import com.example.meet.entity.Member;
 import com.example.meet.infrastructure.mapper.MemberMapper;
-import com.example.meet.repository.MemberRepository;
+import com.example.meet.infrastructure.repository.MemberRepository;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;

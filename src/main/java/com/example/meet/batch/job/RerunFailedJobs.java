@@ -3,7 +3,7 @@ package com.example.meet.batch.job;
 import com.example.meet.batch.CommonJob;
 import com.example.meet.batch.ScheduledJob;
 import com.example.meet.entity.BatchLog;
-import com.example.meet.repository.BatchLogRepository;
+import com.example.meet.infrastructure.repository.BatchLogRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.quartz.Job;

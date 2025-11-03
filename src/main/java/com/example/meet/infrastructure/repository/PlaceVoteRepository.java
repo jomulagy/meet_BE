@@ -1,4 +1,4 @@
-package com.example.meet.repository;
+package com.example.meet.infrastructure.repository;
 
 import com.example.meet.entity.PlaceVote;
 import com.example.meet.entity.ScheduleVote;

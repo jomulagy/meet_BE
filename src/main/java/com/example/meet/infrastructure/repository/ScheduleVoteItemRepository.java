@@ -1,4 +1,4 @@
-package com.example.meet.repository;
+package com.example.meet.infrastructure.repository;
 
 import com.example.meet.entity.ScheduleVoteItem;
 import org.springframework.data.jpa.repository.JpaRepository;

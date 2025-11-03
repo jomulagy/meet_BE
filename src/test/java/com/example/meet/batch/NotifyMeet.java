@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import com.example.meet.MeetApplication;
 import com.example.meet.meet.application.domain.entity.Meet;
 import com.example.meet.entity.Member;
-import com.example.meet.repository.MeetRepository;
+import com.example.meet.infrastructure.repository.MeetRepository;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;

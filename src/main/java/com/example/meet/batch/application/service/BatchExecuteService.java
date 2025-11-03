@@ -4,7 +4,7 @@ import com.example.meet.batch.ScheduledJob;
 import com.example.meet.batch.adapter.in.dto.in.BatchExecuteRequestDto;
 import com.example.meet.batch.application.port.in.BatchExecutePort;
 import com.example.meet.entity.BatchLog;
-import com.example.meet.repository.BatchLogRepository;
+import com.example.meet.infrastructure.repository.BatchLogRepository;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.quartz.*;

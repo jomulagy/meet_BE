@@ -2,7 +2,7 @@ package com.example.meet.batch;
 
 
 import com.example.meet.entity.BatchLog;
-import com.example.meet.repository.BatchLogRepository;
+import com.example.meet.infrastructure.repository.BatchLogRepository;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.quartz.Job;

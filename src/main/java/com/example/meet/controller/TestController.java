@@ -1,7 +1,7 @@
 package com.example.meet.controller;
 
 import com.example.meet.infrastructure.CommonResponse;
-import com.example.meet.repository.TokenRepository;
+import com.example.meet.infrastructure.repository.TokenRepository;
 import com.example.meet.service.AuthService;
 import com.example.meet.service.MeetService;
 import com.example.meet.service.ScheduleService;

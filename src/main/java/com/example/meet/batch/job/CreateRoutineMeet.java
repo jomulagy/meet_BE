@@ -5,7 +5,7 @@ import static java.lang.Long.parseLong;
 import com.example.meet.batch.CommonJob;
 import com.example.meet.meet.adapter.in.dto.CreateMeetRequestDto;
 import com.example.meet.meet.application.port.in.CreateMeetUseCase;
-import com.example.meet.repository.BatchLogRepository;
+import com.example.meet.infrastructure.repository.BatchLogRepository;
 import java.time.LocalDate;
 import java.util.List;
 import org.quartz.JobExecutionContext;

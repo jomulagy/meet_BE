@@ -2,8 +2,8 @@ package com.example.meet.batch.job;
 
 import com.example.meet.batch.CommonJob;
 import com.example.meet.entity.Token;
-import com.example.meet.repository.BatchLogRepository;
-import com.example.meet.repository.TokenRepository;
+import com.example.meet.infrastructure.repository.BatchLogRepository;
+import com.example.meet.infrastructure.repository.TokenRepository;
 import java.time.LocalDateTime;
 import java.util.Map;
 import org.quartz.JobExecutionContext;

@@ -21,10 +21,10 @@ import com.example.meet.entity.Member;
 
 import com.example.meet.entity.PlaceVoteItem;
 import com.example.meet.infrastructure.mapper.PlaceVoteItemMapper;
-import com.example.meet.repository.MeetRepository;
-import com.example.meet.repository.MemberRepository;
-import com.example.meet.repository.PlaceVoteItemRepository;
-import com.example.meet.repository.PlaceVoteRepository;
+import com.example.meet.infrastructure.repository.MeetRepository;
+import com.example.meet.infrastructure.repository.MemberRepository;
+import com.example.meet.infrastructure.repository.PlaceVoteItemRepository;
+import com.example.meet.infrastructure.repository.PlaceVoteRepository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

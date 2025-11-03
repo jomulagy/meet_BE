@@ -6,7 +6,7 @@ import com.example.meet.infrastructure.enumulation.MemberPrevillege;
 import com.example.meet.infrastructure.enumulation.Message;
 import com.example.meet.infrastructure.exception.BusinessException;
 import com.example.meet.entity.Member;
-import com.example.meet.repository.MemberRepository;
+import com.example.meet.infrastructure.repository.MemberRepository;
 import com.example.meet.service.AuthService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
