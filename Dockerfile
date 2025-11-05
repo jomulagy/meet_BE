@@ -1,4 +1,4 @@
-FROM openjdk:17
+FROM eclipse-temurin:17-jre-alpine
 
 ARG JAR_FILE=./build/libs/meet-0.0.1-SNAPSHOT.jar
 
