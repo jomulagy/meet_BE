@@ -1,4 +1,4 @@
-package com.example.meet.infrastructure.dto.response.place;
+package com.example.meet.place.adapter.out.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 public class FindPlaceVoteResponseDto {
     private String meetTitle;
     private String endDate;
-    private String isAuthor;
+    private boolean isAuthor;
 }

@@ -4,13 +4,13 @@ package com.example.meet.service;
 import com.example.meet.infrastructure.dto.request.place.CreatePlaceVoteItemRequestDto;
 import com.example.meet.infrastructure.dto.request.place.DeletePlaceVoteItemRequestDto;
 import com.example.meet.infrastructure.dto.request.place.FindPlaceVoteItemRequestDto;
-import com.example.meet.infrastructure.dto.request.place.FindPlaceVoteRequestDto;
+import com.example.meet.place.adapter.out.dto.request.FindPlaceVoteRequestDto;
 import com.example.meet.infrastructure.dto.request.place.UpdatePlaceVoteRequestDto;
 import com.example.meet.infrastructure.dto.response.member.SimpleMemberResponseDto;
 import com.example.meet.infrastructure.dto.response.place.CreatePlaceVoteItemResponseDto;
 import com.example.meet.infrastructure.dto.response.place.DeletePlaceVoteItemResponseDto;
 import com.example.meet.infrastructure.dto.response.place.FindPlaceVoteItemResponseDto;
-import com.example.meet.infrastructure.dto.response.place.FindPlaceVoteResponseDto;
+import com.example.meet.place.adapter.out.dto.response.FindPlaceVoteResponseDto;
 import com.example.meet.infrastructure.dto.response.place.UpdatePlaceVoteResponseDto;
 import com.example.meet.infrastructure.enumulation.ErrorCode;
 import com.example.meet.infrastructure.enumulation.MemberPrevillege;
@@ -226,33 +226,4 @@ public class PlaceService {
 
         return null;
     }
-
-    public FindPlaceVoteResponseDto findPlaceVote(FindPlaceVoteRequestDto inDto) {
-        //로그인 한 유저 확인
-        Member user = memberRepository.findById(inDto.getUserId()).orElseThrow(
-                () -> new BusinessException(ErrorCode.MEMBER_NOT_EXISTS)
-        );
-
-        //로그인 한 유저의 권한 확인
-        if(user.getPrevillege().equals(MemberPrevillege.denied)){
-            throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
-        }
-
-        Meet meet = meetRepository.findById(inDto.getMeetId()).orElseThrow(
-                () -> new BusinessException(ErrorCode.MEET_NOT_EXISTS)
-        );
-
-        String endDate = null;
-        if(meet.getPlaceVote() != null){
-            endDate = DateTimeUtils.formatWithOffset(meet.getEndDate());
-        }
-        Boolean isAuthor = meet.getAuthor().equals(user);
-
-        return FindPlaceVoteResponseDto.builder()
-                .meetTitle(meet.getTitle())
-                .endDate(endDate)
-                .isAuthor(isAuthor.toString())
-                .build();
-    }
-
 }

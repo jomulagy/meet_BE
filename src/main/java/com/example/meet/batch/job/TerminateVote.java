@@ -7,7 +7,7 @@ import com.example.meet.infrastructure.dto.TemplateArgs;
 import com.example.meet.infrastructure.enumulation.Message;
 import com.example.meet.infrastructure.utils.MessageManager;
 import com.example.meet.meet.application.domain.entity.Meet;
-import com.example.meet.meet.application.port.out.GetMeetEndDateBeforePort;
+import com.example.meet.meet.application.port.out.GetMeetPort;
 import com.example.meet.infrastructure.repository.BatchLogRepository;
 import com.example.meet.infrastructure.repository.MeetRepository;
 import com.example.meet.infrastructure.repository.PlaceVoteRepository;
@@ -22,17 +22,17 @@ public class TerminateVote extends CommonJob {
     private final ScheduleVoteRepository scheduleVoteRepository;
     private final PlaceVoteRepository placeVoteRepository;
     private final MeetRepository meetRepository;
-    private final GetMeetEndDateBeforePort getMeetEndDateBeforePort;
+    private final GetMeetPort getMeetPort;
     private final MessageManager messageManager;
 
     public TerminateVote(BatchLogRepository batchLogRepository, ScheduleVoteRepository scheduleVoteRepository,
-            PlaceVoteRepository placeVoteRepository, MeetRepository meetRepository,
-            GetMeetEndDateBeforePort getMeetEndDateBeforePort, MessageManager messageManager) {
+                         PlaceVoteRepository placeVoteRepository, MeetRepository meetRepository,
+                         GetMeetPort getMeetPort, MessageManager messageManager) {
         super(batchLogRepository);
         this.scheduleVoteRepository = scheduleVoteRepository;
         this.placeVoteRepository = placeVoteRepository;
         this.meetRepository = meetRepository;
-        this.getMeetEndDateBeforePort = getMeetEndDateBeforePort;
+        this.getMeetPort = getMeetPort;
         this.messageManager = messageManager;
     }
 
@@ -40,7 +40,7 @@ public class TerminateVote extends CommonJob {
     @Transactional
     protected String performJob(JobExecutionContext context) {
         LocalDateTime currentDate = LocalDateTime.now();
-        List<Meet> meetList = getMeetEndDateBeforePort.get(currentDate);
+        List<Meet> meetList = getMeetPort.getMeetEndDateBeforePort(currentDate);
         StringBuilder log = new StringBuilder();
 
         log.append("[");

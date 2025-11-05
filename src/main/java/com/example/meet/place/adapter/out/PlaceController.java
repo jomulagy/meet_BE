@@ -1,4 +1,4 @@
-package com.example.meet.controller;
+package com.example.meet.place.adapter.out;
 
 import static java.lang.Long.parseLong;
 
@@ -10,9 +10,10 @@ import com.example.meet.infrastructure.dto.request.place.UpdatePlaceVoteRequestD
 import com.example.meet.infrastructure.dto.response.place.CreatePlaceVoteItemResponseDto;
 import com.example.meet.infrastructure.dto.response.place.DeletePlaceVoteItemResponseDto;
 import com.example.meet.infrastructure.dto.response.place.FindPlaceVoteItemResponseDto;
-import com.example.meet.infrastructure.dto.request.place.FindPlaceVoteRequestDto;
-import com.example.meet.infrastructure.dto.response.place.FindPlaceVoteResponseDto;
+import com.example.meet.place.adapter.out.dto.request.FindPlaceVoteRequestDto;
+import com.example.meet.place.adapter.out.dto.response.FindPlaceVoteResponseDto;
 import com.example.meet.infrastructure.dto.response.place.UpdatePlaceVoteResponseDto;
+import com.example.meet.place.application.port.in.GetPlaceVoteUseCase;
 import com.example.meet.service.PlaceService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -40,6 +41,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/meet/place")
 public class PlaceController {
     private final PlaceService placeService;
+    private final GetPlaceVoteUseCase getPlaceVoteUseCase;
 
     @GetMapping("")
     @Tag(name = "place vote", description = "모임 장소 투표")
@@ -76,7 +78,7 @@ public class PlaceController {
                 .meetId(parseLong(meetId))
                 .build();
 
-        return CommonResponse.success(placeService.findPlaceVote(inDto));
+        return CommonResponse.success(getPlaceVoteUseCase.findPlaceVote(inDto));
     }
 
     @GetMapping("/item/list")
