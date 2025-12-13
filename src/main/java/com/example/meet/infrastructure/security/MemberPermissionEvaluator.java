@@ -6,6 +6,7 @@ import com.example.meet.infrastructure.enumulation.MemberPrevillege;
 import com.example.meet.infrastructure.exception.BusinessException;
 import com.example.meet.member.application.port.out.GetMemberPort;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 @Component("memberPermissionEvaluator")

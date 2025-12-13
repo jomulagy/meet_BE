@@ -177,11 +177,11 @@ public class ScheduleVoteService implements ScheduleVoteUseCase {
                     .orElseThrow(() -> new BusinessException(ErrorCode.SCHEDULE_VOTE_ITEM_NOT_EXISTS));
         }
 
-        List<UpdateVotePort.UpdateVoteItemCommand> commands = inDto.getVoteItems().stream()
-                .map(item -> new UpdateVotePort.UpdateVoteItemCommand(item.getVoteItemId(), item.getIsVote()))
+        List<UpdateVoteItemRequestDto> voteItemList = inDto.getVoteItems().stream()
+                .map(item -> new UpdateVoteItemRequestDto(item.getVoteItemId(), item.isVote()))
                 .toList();
 
-        updateVotePort.updateVoteItems(vote.getId(), user, commands);
+        updateVotePort.updateVoteItems(vote.getId(), user, voteItemList);
 
         return UpdateVoteResponseDto.builder()
                 .status("success")

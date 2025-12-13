@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @Builder
 public class UpdateVoteItemRequestDto {
     private Long voteItemId;
-    private Boolean isVote;
+    private boolean isVote;
 }

@@ -1,18 +1,20 @@
 package com.example.meet.vote.adapter.out;
 
 import com.example.meet.entity.Member;
+import com.example.meet.vote.adapter.in.dto.in.UpdateVoteItemRequestDto;
 import com.example.meet.vote.adapter.out.jpa.VoteItemJpaRepository;
 import com.example.meet.vote.application.domain.entity.VoteItem;
 import com.example.meet.vote.application.port.out.UpdateVotePort;
-import com.example.meet.vote.application.port.out.UpdateVotePort.UpdateVoteItemCommand;
-import com.example.meet.vote.application.domain.entity.QVoteItem;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
+
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+
+import static com.example.meet.vote.application.domain.entity.QVoteItem.voteItem;
 
 @Repository
 @RequiredArgsConstructor
@@ -21,8 +23,7 @@ public class UpdateVoteAdapter implements UpdateVotePort {
     private final VoteItemJpaRepository voteItemJpaRepository;
 
     @Override
-    public void updateVoteItems(Long voteId, Member voter, List<UpdateVoteItemCommand> commands) {
-        QVoteItem voteItem = QVoteItem.voteItem;
+    public void updateVoteItems(Long voteId, Member voter, List<UpdateVoteItemRequestDto> dtoList) {
         List<VoteItem> voteItems = queryFactory.selectFrom(voteItem)
                 .leftJoin(voteItem.voters).fetchJoin()
                 .where(voteItem.vote.id.eq(voteId))
@@ -31,14 +32,14 @@ public class UpdateVoteAdapter implements UpdateVotePort {
         Map<Long, VoteItem> voteItemMap = voteItems.stream()
                 .collect(Collectors.toMap(VoteItem::getId, Function.identity()));
 
-        for (UpdateVoteItemCommand command : commands) {
-            VoteItem item = voteItemMap.get(command.voteItemId());
+        for (UpdateVoteItemRequestDto dto : dtoList) {
+            VoteItem item = voteItemMap.get(dto.getVoteItemId());
             if (item == null) {
                 continue;
             }
 
             boolean containsUser = item.getVoters().contains(voter);
-            boolean shouldContain = Boolean.TRUE.equals(command.isVote());
+            boolean shouldContain = dto.isVote();
 
             if (containsUser && !shouldContain) {
                 item.getVoters().removeIf(member -> member.equals(voter));
