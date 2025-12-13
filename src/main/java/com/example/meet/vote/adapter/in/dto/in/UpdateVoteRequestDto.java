@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class UpdateVoteRequestDto {
-    private Long userId;
     private Long meetId;
     private List<Long> voteItemIdList;
 }

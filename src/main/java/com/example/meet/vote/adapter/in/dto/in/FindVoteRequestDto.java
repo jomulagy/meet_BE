@@ -10,6 +10,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class FindVoteRequestDto {
-    private Long userId;
     private Long meetId;
 }
