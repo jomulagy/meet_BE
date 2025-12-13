@@ -23,6 +23,7 @@ import com.example.meet.infrastructure.repository.MeetRepository;
 import com.example.meet.infrastructure.repository.MemberRepository;
 import com.example.meet.infrastructure.repository.PlaceVoteItemRepository;
 import com.example.meet.infrastructure.repository.PlaceVoteRepository;
+import com.example.meet.vote.application.port.in.PlaceVoteUseCase;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,10 +42,15 @@ public class PlaceService {
     private final MeetRepository meetRepository;
     private final PlaceVoteRepository placeVoteRepository;
     private final PlaceVoteItemRepository placeVoteItemRepository;
+    private final PlaceVoteUseCase placeVoteUseCase;
 
     private final PlaceVoteItemMapper placeVoteItemMapper = PlaceVoteItemMapper.INSTANCE;
 
     public List<FindPlaceVoteItemResponseDto> findPlaceVoteItemList(FindPlaceVoteItemRequestDto inDto) {
+        return placeVoteUseCase.findPlaceVoteItemList(inDto);
+    }
+
+    private List<FindPlaceVoteItemResponseDto> findPlaceVoteItemListLegacy(FindPlaceVoteItemRequestDto inDto) {
 
         //로그인 한 유저 확인
         Member user = memberRepository.findById(inDto.getUserId()).orElseThrow(
@@ -101,6 +107,10 @@ public class PlaceService {
 
     @PreAuthorize("@memberPermissionEvaluator.hasAccess(authentication)")
     public CreatePlaceVoteItemResponseDto createPlaceVoteItem(CreatePlaceVoteItemRequestDto inDto) {
+        return placeVoteUseCase.createPlaceVoteItem(inDto);
+    }
+
+    private CreatePlaceVoteItemResponseDto createPlaceVoteItemLegacy(CreatePlaceVoteItemRequestDto inDto) {
         //로그인 한 유저 확인
         Member user = getLogginedInfoUseCase.get();
 
@@ -153,6 +163,11 @@ public class PlaceService {
 
     @Transactional
     public DeletePlaceVoteItemResponseDto deletePlaceVoteItem(DeletePlaceVoteItemRequestDto inDto) {
+        return placeVoteUseCase.deletePlaceVoteItem(inDto);
+    }
+
+    @Transactional
+    public DeletePlaceVoteItemResponseDto deletePlaceVoteItemLegacy(DeletePlaceVoteItemRequestDto inDto) {
         //로그인 한 유저 확인
         Member user = memberRepository.findById(inDto.getUserId()).orElseThrow(
                 () -> new BusinessException(ErrorCode.MEMBER_NOT_EXISTS)
@@ -177,6 +192,10 @@ public class PlaceService {
     }
 
     public UpdatePlaceVoteResponseDto updatePlaceVote(UpdatePlaceVoteRequestDto inDto) {
+        return placeVoteUseCase.updatePlaceVote(inDto);
+    }
+
+    public UpdatePlaceVoteResponseDto updatePlaceVoteLegacy(UpdatePlaceVoteRequestDto inDto) {
         //로그인 한 유저 확인
         Member user = memberRepository.findById(inDto.getUserId()).orElseThrow(
                 () -> new BusinessException(ErrorCode.MEMBER_NOT_EXISTS)

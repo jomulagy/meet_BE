@@ -47,6 +47,30 @@ public class CreateVoteItemService implements CreateVoteItemUseCase {
         Meet meet = getMeetUseCase.get(inDto.getMeetId());
         Vote vote = getVoteUseCase.getActiveVote(meet).vote();
 
+        VoteItem voteItem = buildVoteItem(inDto, vote, user);
+
+        VoteItem saved = createVoteItemPort.create(voteItem);
+
+        List<SimpleMemberResponseDto> memberList = new ArrayList<>();
+        saved.getVoters().forEach(member -> memberList.add(
+                SimpleMemberResponseDto.builder()
+                        .id(member.getId().toString())
+                        .name(member.getName())
+                        .build()
+        ));
+
+        return CreateVoteItemResponseDto.builder()
+                .id(saved.getId().toString())
+                .date(saved.getDateTime() != null ? saved.getDateTime().toLocalDate().toString() : null)
+                .time(saved.getDateTime() != null ? saved.getDateTime().toLocalTime().toString() : null)
+                .content(saved.getContent())
+                .editable("true")
+                .isVote("true")
+                .memberList(memberList)
+                .build();
+    }
+
+    private VoteItem buildVoteItem(CreateVoteItemRequestDto inDto, Vote vote, Member user) {
         // request를 dateTime으로 변환
         DateTimeFormatter DATE_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         DateTimeFormatter TIME_FMT = DateTimeFormatter.ofPattern("HH:mm");
@@ -73,29 +97,21 @@ public class CreateVoteItemService implements CreateVoteItemUseCase {
                     });
         }
 
-        VoteItem voteItem = VoteItem.builder()
+        if (inDto.getContent() != null) {
+            vote.getVoteItems().stream()
+                    .filter(item -> inDto.getContent().equals(item.getContent()))
+                    .findAny()
+                    .ifPresent(item -> {
+                        throw new BusinessException(ErrorCode.SCHEDULE_VOTE_ITEM_DUPLICATED);
+                    });
+        }
+
+        return VoteItem.builder()
+                .author(user)
+                .content(inDto.getContent())
                 .dateTime(targetDateTime)
                 .editable(Boolean.TRUE)
                 .vote(vote)
-                .build();
-
-        VoteItem saved = createVoteItemPort.create(voteItem);
-
-        List<SimpleMemberResponseDto> memberList = new ArrayList<>();
-        saved.getVoters().forEach(member -> memberList.add(
-                SimpleMemberResponseDto.builder()
-                        .id(member.getId().toString())
-                        .name(member.getName())
-                        .build()
-        ));
-
-        return CreateVoteItemResponseDto.builder()
-                .id(saved.getId().toString())
-                .date(saved.getDateTime().toLocalDate().toString())
-                .time(saved.getDateTime().toLocalTime().toString())
-                .editable("true")
-                .isVote("true")
-                .memberList(memberList)
                 .build();
     }
 }

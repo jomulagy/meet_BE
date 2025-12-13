@@ -50,8 +50,9 @@ public class GetVoteItemService implements GetVoteItemUseCase {
 
             responseList.add(GetVoteItemResponseDto.builder()
                     .id(item.getId().toString())
-                    .date(item.getDateTime().toLocalDate().toString())
-                    .time(item.getDateTime().toLocalTime().toString())
+                    .date(item.getDateTime() != null ? item.getDateTime().toLocalDate().toString() : null)
+                    .time(item.getDateTime() != null ? item.getDateTime().toLocalTime().toString() : null)
+                    .content(item.getContent())
                     .editable(editable)
                     .isVote(isVote)
                     .memberList(memberList)

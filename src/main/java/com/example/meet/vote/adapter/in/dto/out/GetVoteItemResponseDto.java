@@ -15,6 +15,7 @@ public class GetVoteItemResponseDto {
     private String id;
     private String date;
     private String time;
+    private String content;
     private String editable;
     private String isVote;
     private List<SimpleMemberResponseDto> memberList;

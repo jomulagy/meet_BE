@@ -13,4 +13,5 @@ public class CreateVoteItemRequestDto {
     private Long meetId;
     private String date;
     private String time;
+    private String content;
 }
