@@ -11,25 +11,17 @@ import com.example.meet.infrastructure.enumulation.ErrorCode;
 import com.example.meet.infrastructure.enumulation.MemberPrevillege;
 import com.example.meet.infrastructure.exception.BusinessException;
 import com.example.meet.infrastructure.mapper.MeetMapper;
-import com.example.meet.infrastructure.utils.MessageManager;
-import com.example.meet.meet.application.domain.entity.Meet;
 import com.example.meet.infrastructure.repository.MeetRepository;
 import com.example.meet.infrastructure.repository.MemberRepository;
-import com.example.meet.infrastructure.repository.ParticipateVoteItemRepository;
-import com.example.meet.infrastructure.repository.ParticipateVoteRepository;
-import com.example.meet.infrastructure.repository.PlaceRepository;
-import com.example.meet.infrastructure.repository.PlaceVoteItemRepository;
-import com.example.meet.infrastructure.repository.PlaceVoteRepository;
-import com.example.meet.infrastructure.repository.ScheduleVoteItemRepository;
-import com.example.meet.infrastructure.repository.ScheduleVoteRepository;
-
-import java.util.List;
-import java.util.Objects;
+import com.example.meet.meet.application.domain.entity.Meet;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -38,15 +30,6 @@ public class MeetService {
     private final MeetRepository meetRepository;
     private final MeetMapper meetMapper = MeetMapper.INSTANCE;
     private final MemberRepository memberRepository;
-    private final ScheduleVoteRepository scheduleVoteRepository;
-    private final ScheduleVoteItemRepository scheduleVoteItemRepository;
-    private final PlaceVoteRepository placeVoteRepository;
-    private final PlaceVoteItemRepository placeVoteItemRepository;
-    private final ParticipateVoteRepository participateVoteRepository;
-    private final ParticipateVoteItemRepository participateVoteItemRepository;
-    private final PlaceRepository placeRepository;
-
-    private final MessageManager messageManager;
 
     public List<FindMeetSimpleResponseDto> findMeetList(FindMeetRequestDto inDto) {
         //로그인 한 유저 확인

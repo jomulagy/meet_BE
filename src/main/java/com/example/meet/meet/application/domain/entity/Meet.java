@@ -1,11 +1,9 @@
 package com.example.meet.meet.application.domain.entity;
 
 import com.example.meet.infrastructure.dto.request.EditMeetRequestDto;
-import com.example.meet.infrastructure.enumulation.MeetType;
 import com.example.meet.entity.Member;
 import com.example.meet.entity.ParticipateVote;
 import com.example.meet.entity.PlaceVote;
-import com.example.meet.entity.ScheduleVote;
 import com.example.meet.vote.application.domain.entity.Vote;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

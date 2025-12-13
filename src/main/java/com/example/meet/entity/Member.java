@@ -2,6 +2,7 @@ package com.example.meet.entity;
 
 import com.example.meet.infrastructure.enumulation.MemberPrevillege;
 import com.example.meet.meet.application.domain.entity.Meet;
+import com.example.meet.vote.application.domain.entity.VoteItem;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -43,14 +44,14 @@ public class Member {
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
-    private List<ScheduleVoteItem> scheduleVoteItemList = new ArrayList<>();
+    private List<VoteItem> scheduleVoteItemList = new ArrayList<>();
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<PlaceVoteItem> placeVoteItemList = new ArrayList<>();
 
     @ManyToMany(mappedBy = "scheduleVoters")
-    private List<ScheduleVoteItem> scheduleVoters = new ArrayList<>();
+    private List<VoteItem> scheduleVoters = new ArrayList<>();
 
     @ManyToMany(mappedBy = "placeVoters")
     private List<PlaceVoteItem> placeVoteItems = new ArrayList<>();
