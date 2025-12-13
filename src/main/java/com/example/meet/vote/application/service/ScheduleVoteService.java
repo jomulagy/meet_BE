@@ -12,6 +12,7 @@ import com.example.meet.vote.adapter.in.dto.in.CreateVoteItemRequestDto;
 import com.example.meet.vote.adapter.in.dto.in.DeleteVoteItemRequestDto;
 import com.example.meet.vote.adapter.in.dto.in.FindVoteItemRequestDto;
 import com.example.meet.vote.adapter.in.dto.in.FindVoteRequestDto;
+import com.example.meet.vote.adapter.in.dto.in.UpdateVoteItemRequestDto;
 import com.example.meet.vote.adapter.in.dto.in.UpdateVoteRequestDto;
 import com.example.meet.vote.adapter.in.dto.out.CreateVoteItemResponseDto;
 import com.example.meet.vote.adapter.in.dto.out.DeleteVoteItemResponseDto;
@@ -24,6 +25,7 @@ import com.example.meet.vote.application.port.in.ScheduleVoteUseCase;
 import com.example.meet.vote.application.port.out.CreateVotePort;
 import com.example.meet.vote.application.port.out.GetVoteItemPort;
 import com.example.meet.vote.application.port.out.GetVotePort;
+import com.example.meet.vote.application.port.out.UpdateVotePort;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +42,7 @@ public class ScheduleVoteService implements ScheduleVoteUseCase {
     private final GetVotePort getVotePort;
     private final CreateVotePort createVotePort;
     private final GetVoteItemPort getVoteItemPort;
+    private final UpdateVotePort updateVotePort;
 
     @Override
     @PreAuthorize("@memberPermissionEvaluator.hasAccess(authentication)")
@@ -162,31 +165,23 @@ public class ScheduleVoteService implements ScheduleVoteUseCase {
     @Override
     @Transactional
     @PreAuthorize("@memberPermissionEvaluator.hasAccess(authentication)")
-    public UpdateVoteResponseDto update(UpdateVoteRequestDto inDto) {
+    public UpdateVoteResponseDto vote(UpdateVoteRequestDto inDto) {
         Member user = getLogginedInfoUseCase.get();
         Meet meet = getMeet(inDto.getMeetId());
         Vote vote = getVote(meet);
 
         validateVoteIsActive(meet);
 
-        for (Long id : inDto.getVoteItemIdList()) {
-            getVoteItemPort.get(id)
+        for (UpdateVoteItemRequestDto voteItem : inDto.getVoteItems()) {
+            getVoteItemPort.get(voteItem.getVoteItemId())
                     .orElseThrow(() -> new BusinessException(ErrorCode.SCHEDULE_VOTE_ITEM_NOT_EXISTS));
         }
 
-        for (VoteItem item : vote.getVoteItems()) {
-            List<Long> memberIds = item.getVoters().stream().map(Member::getId).toList();
-            boolean containsUser = memberIds.contains(user.getId());
-            boolean shouldContain = inDto.getVoteItemIdList().contains(item.getId());
+        List<UpdateVotePort.UpdateVoteItemCommand> commands = inDto.getVoteItems().stream()
+                .map(item -> new UpdateVotePort.UpdateVoteItemCommand(item.getVoteItemId(), item.getIsVote()))
+                .toList();
 
-            if (containsUser && !shouldContain) {
-                item.getVoters().removeIf(member -> member.equals(user));
-            } else if (!containsUser && shouldContain) {
-                item.getVoters().add(user);
-            }
-
-            getVoteItemPort.save(item);
-        }
+        updateVotePort.updateVoteItems(vote.getId(), user, commands);
 
         return UpdateVoteResponseDto.builder()
                 .status("success")

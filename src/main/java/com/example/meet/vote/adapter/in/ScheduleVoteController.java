@@ -56,12 +56,12 @@ public class ScheduleVoteController {
     }
 
     @PutMapping("")
-    public CommonResponse<UpdateVoteResponseDto> updateVote(@RequestBody UpdateVoteRequestDto requestDto) {
+    public CommonResponse<UpdateVoteResponseDto> vote(@RequestBody UpdateVoteRequestDto requestDto) {
         UpdateVoteRequestDto inDto = UpdateVoteRequestDto.builder()
                 .meetId(requestDto.getMeetId())
-                .voteItemIdList(requestDto.getVoteItemIdList())
+                .voteItems(requestDto.getVoteItems())
                 .build();
 
-        return CommonResponse.success(scheduleVoteUseCase.update(inDto));
+        return CommonResponse.success(scheduleVoteUseCase.vote(inDto));
     }
 }
