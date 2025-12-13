@@ -38,7 +38,7 @@ public class CreateVoteItemService implements CreateVoteItemUseCase {
     public CreateVoteItemResponseDto createItem(CreateVoteItemRequestDto inDto) {
         Member user = getLogginedInfoUseCase.get();
         Meet meet = getMeetUseCase.get(inDto.getMeetId());
-        Vote vote = getVoteUseCase.getActiveVote(meet);
+        Vote vote = getVoteUseCase.getActiveVote(meet).vote();
 
         vote.getVoteItems().stream()
                 .filter(item -> item.getContent().equals(inDto.getContent()))

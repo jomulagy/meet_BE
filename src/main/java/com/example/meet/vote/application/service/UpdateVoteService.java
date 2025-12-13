@@ -36,7 +36,7 @@ public class UpdateVoteService implements UpdateVoteUseCase {
     public UpdateVoteResponseDto vote(UpdateVoteRequestDto inDto) {
         Member user = getLogginedInfoUseCase.get();
         Meet meet = getMeetUseCase.get(inDto.getMeetId());
-        Vote vote = getVoteUseCase.getActiveVote(meet);
+        Vote vote = getVoteUseCase.getActiveVote(meet).vote();
 
         for (UpdateVoteItemRequestDto voteItem : inDto.getVoteItems()) {
             getVoteItemPort.get(voteItem.getVoteItemId())

@@ -5,7 +5,7 @@ import com.example.meet.vote.adapter.in.dto.in.FindVoteItemRequestDto;
 import com.example.meet.vote.adapter.in.dto.in.FindVoteRequestDto;
 import com.example.meet.vote.adapter.in.dto.out.FindVoteItemResponseDto;
 import com.example.meet.vote.adapter.in.dto.out.FindVoteResponseDto;
-import com.example.meet.vote.application.domain.entity.Vote;
+import com.example.meet.vote.application.domain.vo.VoteResult;
 import java.util.List;
 
 public interface GetVoteUseCase {
@@ -13,7 +13,7 @@ public interface GetVoteUseCase {
 
     List<FindVoteItemResponseDto> getItemList(FindVoteItemRequestDto inDto);
 
-    Vote getVote(Meet meet);
+    VoteResult getVote(Meet meet);
 
-    Vote getActiveVote(Meet meet);
+    VoteResult getActiveVote(Meet meet);
 }

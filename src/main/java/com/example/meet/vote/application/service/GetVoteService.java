@@ -15,6 +15,7 @@ import com.example.meet.vote.adapter.in.dto.out.FindVoteResponseDto;
 import com.example.meet.vote.application.domain.entity.Vote;
 import com.example.meet.vote.application.domain.entity.VoteItem;
 import com.example.meet.vote.application.port.in.GetVoteUseCase;
+import com.example.meet.vote.application.domain.vo.VoteResult;
 import com.example.meet.vote.application.port.out.GetVotePort;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class GetVoteService implements GetVoteUseCase {
     public FindVoteResponseDto get(FindVoteRequestDto inDto) {
         Member user = getLogginedInfoUseCase.get();
         Meet meet = getMeetUseCase.get(inDto.getMeetId());
-        Vote vote = getVote(meet);
+        Vote vote = getVote(meet).vote();
 
         String endDate = vote.getEndDate() != null ? DateTimeUtils.formatWithOffset(vote.getEndDate()) : null;
         boolean isAuthor = meet.getAuthor().equals(user);
@@ -53,7 +54,7 @@ public class GetVoteService implements GetVoteUseCase {
     public List<FindVoteItemResponseDto> getItemList(FindVoteItemRequestDto inDto) {
         Member user = getLogginedInfoUseCase.get();
         Meet meet = getMeetUseCase.get(inDto.getMeetId());
-        Vote vote = getVote(meet);
+        Vote vote = getVote(meet).vote();
 
         List<FindVoteItemResponseDto> responseList = new ArrayList<>();
 
@@ -84,12 +85,13 @@ public class GetVoteService implements GetVoteUseCase {
     }
 
     @Override
-    public Vote getVote(Meet meet) {
-        return getVotePort.getByMeetId(meet.getId()).orElse(null);
+    public VoteResult getVote(Meet meet) {
+        Vote vote = getVotePort.getByMeetId(meet.getId()).orElse(null);
+        return new VoteResult(vote);
     }
 
     @Override
-    public Vote getActiveVote(Meet meet) {
+    public VoteResult getActiveVote(Meet meet) {
         validateVoteIsActive(meet);
         return getVote(meet);
     }
