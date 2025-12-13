@@ -50,7 +50,7 @@ public class Member {
     @Builder.Default
     private List<PlaceVoteItem> placeVoteItemList = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "scheduleVoters")
+    @ManyToMany(mappedBy = "voters")
     private List<VoteItem> scheduleVoters = new ArrayList<>();
 
     @ManyToMany(mappedBy = "placeVoters")
