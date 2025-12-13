@@ -1,4 +1,4 @@
-package com.example.meet.vote.application.adapter.out.jpa;
+package com.example.meet.vote.adapter.out.jpa;
 
 import com.example.meet.vote.application.domain.entity.Vote;
 import java.util.Optional;

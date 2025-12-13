@@ -1,6 +1,6 @@
-package com.example.meet.vote.application.adapter.out;
+package com.example.meet.vote.adapter.out;
 
-import com.example.meet.vote.application.adapter.out.jpa.VoteItemJpaRepository;
+import com.example.meet.vote.adapter.out.jpa.VoteItemJpaRepository;
 import com.example.meet.vote.application.domain.entity.VoteItem;
 import com.example.meet.vote.application.port.out.VoteItemRepositoryPort;
 import java.util.Optional;

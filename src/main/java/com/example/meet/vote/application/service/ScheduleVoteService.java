@@ -9,19 +9,19 @@ import com.example.meet.infrastructure.repository.MeetRepository;
 import com.example.meet.infrastructure.repository.MemberRepository;
 import com.example.meet.infrastructure.utils.DateTimeUtils;
 import com.example.meet.meet.application.domain.entity.Meet;
-import com.example.meet.vote.application.adapter.in.dto.in.CreateVoteItemRequestDto;
-import com.example.meet.vote.application.adapter.in.dto.in.DeleteVoteItemRequestDto;
-import com.example.meet.vote.application.adapter.in.dto.in.FindVoteItemRequestDto;
-import com.example.meet.vote.application.adapter.in.dto.in.FindVoteRequestDto;
-import com.example.meet.vote.application.adapter.in.dto.in.UpdateVoteRequestDto;
-import com.example.meet.vote.application.adapter.in.dto.out.CreateVoteItemResponseDto;
-import com.example.meet.vote.application.adapter.in.dto.out.DeleteVoteItemResponseDto;
-import com.example.meet.vote.application.adapter.in.dto.out.FindVoteItemResponseDto;
-import com.example.meet.vote.application.adapter.in.dto.out.FindVoteResponseDto;
-import com.example.meet.vote.application.adapter.in.dto.out.UpdateVoteResponseDto;
+import com.example.meet.vote.adapter.in.dto.in.CreateVoteItemRequestDto;
+import com.example.meet.vote.adapter.in.dto.in.DeleteVoteItemRequestDto;
+import com.example.meet.vote.adapter.in.dto.in.FindVoteItemRequestDto;
+import com.example.meet.vote.adapter.in.dto.in.FindVoteRequestDto;
+import com.example.meet.vote.adapter.in.dto.in.UpdateVoteRequestDto;
+import com.example.meet.vote.adapter.in.dto.out.CreateVoteItemResponseDto;
+import com.example.meet.vote.adapter.in.dto.out.DeleteVoteItemResponseDto;
+import com.example.meet.vote.adapter.in.dto.out.FindVoteItemResponseDto;
+import com.example.meet.vote.adapter.in.dto.out.FindVoteResponseDto;
+import com.example.meet.vote.adapter.in.dto.out.UpdateVoteResponseDto;
 import com.example.meet.vote.application.domain.entity.Vote;
 import com.example.meet.vote.application.domain.entity.VoteItem;
-import com.example.meet.vote.application.port.in.VoteUseCase;
+import com.example.meet.vote.application.port.in.ScheduleVoteUseCase;
 import com.example.meet.vote.application.port.out.VoteItemRepositoryPort;
 import com.example.meet.vote.application.port.out.VoteRepositoryPort;
 import java.time.LocalDateTime;
@@ -33,15 +33,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
-public class VoteService implements VoteUseCase {
+public class ScheduleVoteService implements ScheduleVoteUseCase {
     private final MemberRepository memberRepository;
     private final MeetRepository meetRepository;
     private final VoteRepositoryPort voteRepositoryPort;
     private final VoteItemRepositoryPort voteItemRepositoryPort;
 
     @Override
-    public FindVoteResponseDto findVote(FindVoteRequestDto inDto) {
+    public FindVoteResponseDto get(FindVoteRequestDto inDto) {
         Member user = validateMember(inDto.getUserId());
         Meet meet = findMeet(inDto.getMeetId());
         Vote vote = getOrCreateVote(meet);
@@ -57,7 +56,7 @@ public class VoteService implements VoteUseCase {
     }
 
     @Override
-    public List<FindVoteItemResponseDto> findVoteItems(FindVoteItemRequestDto inDto) {
+    public List<FindVoteItemResponseDto> getItemList(FindVoteItemRequestDto inDto) {
         Member user = validateMember(inDto.getUserId());
         Meet meet = findMeet(inDto.getMeetId());
         Vote vote = getOrCreateVote(meet);
@@ -92,7 +91,7 @@ public class VoteService implements VoteUseCase {
 
     @Override
     @Transactional
-    public CreateVoteItemResponseDto createVoteItem(CreateVoteItemRequestDto inDto) {
+    public CreateVoteItemResponseDto createItem(CreateVoteItemRequestDto inDto) {
         Member user = validateMember(inDto.getUserId());
         Meet meet = findMeet(inDto.getMeetId());
         Vote vote = getOrCreateVote(meet);
@@ -135,7 +134,7 @@ public class VoteService implements VoteUseCase {
 
     @Override
     @Transactional
-    public DeleteVoteItemResponseDto deleteVoteItem(DeleteVoteItemRequestDto inDto) {
+    public DeleteVoteItemResponseDto deleteItem(DeleteVoteItemRequestDto inDto) {
         Member user = validateMember(inDto.getUserId());
         VoteItem voteItem = voteItemRepositoryPort.findById(inDto.getVoteItemId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.SCHEDULE_VOTE_ITEM_NOT_EXISTS));
@@ -156,7 +155,7 @@ public class VoteService implements VoteUseCase {
 
     @Override
     @Transactional
-    public UpdateVoteResponseDto updateVote(UpdateVoteRequestDto inDto) {
+    public UpdateVoteResponseDto update(UpdateVoteRequestDto inDto) {
         Member user = validateMember(inDto.getUserId());
         Meet meet = findMeet(inDto.getMeetId());
         Vote vote = getOrCreateVote(meet);

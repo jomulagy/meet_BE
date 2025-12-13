@@ -1,4 +1,4 @@
-package com.example.meet.vote.application.adapter.in.dto.in;
+package com.example.meet.vote.adapter.in.dto.out;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class DeleteVoteItemRequestDto {
-    private Long userId;
-    private Long voteItemId;
+public class DeleteVoteItemResponseDto {
+    private String deletedId;
 }

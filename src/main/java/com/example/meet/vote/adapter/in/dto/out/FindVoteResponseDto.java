@@ -1,4 +1,4 @@
-package com.example.meet.vote.application.adapter.in.dto.out;
+package com.example.meet.vote.adapter.in.dto.out;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UpdateVoteResponseDto {
-    private String status;
+public class FindVoteResponseDto {
+    private String meetTitle;
+    private String endDate;
+    private String isAuthor;
 }

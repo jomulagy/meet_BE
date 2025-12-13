@@ -1,6 +1,5 @@
-package com.example.meet.vote.application.adapter.in.dto.in;
+package com.example.meet.vote.adapter.in.dto.in;
 
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,8 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UpdateVoteRequestDto {
+public class DeleteVoteItemRequestDto {
     private Long userId;
-    private Long meetId;
-    private List<Long> voteItemIdList;
+    private Long voteItemId;
 }

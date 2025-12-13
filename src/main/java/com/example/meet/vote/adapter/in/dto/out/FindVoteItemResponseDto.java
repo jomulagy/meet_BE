@@ -1,4 +1,4 @@
-package com.example.meet.vote.application.adapter.in.dto.out;
+package com.example.meet.vote.adapter.in.dto.out;
 
 import com.example.meet.infrastructure.dto.response.member.SimpleMemberResponseDto;
 import java.util.List;
