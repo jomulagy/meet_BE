@@ -6,6 +6,7 @@ import com.example.meet.entity.Member;
 import com.example.meet.entity.ParticipateVote;
 import com.example.meet.entity.PlaceVote;
 import com.example.meet.entity.ScheduleVote;
+import com.example.meet.vote.application.domain.entity.Vote;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -59,7 +60,7 @@ public class Meet {
     private LocalDateTime endDate;
 
     @OneToOne(mappedBy = "meet", cascade = CascadeType.ALL, orphanRemoval = true)
-    private ScheduleVote scheduleVote;
+    private Vote scheduleVote;
 
     @OneToOne(mappedBy = "meet", cascade = CascadeType.ALL, orphanRemoval = true)
     private PlaceVote placeVote;
@@ -80,10 +81,6 @@ public class Meet {
     @Builder.Default
     private List<Member> participants = new ArrayList<>();
 
-    void setDate(){
-        this.date = this.scheduleVote.getDateResult();
-    }
-
     public void setPlace(){
         this.place = this.placeVote.getPlaceResult();
     }
@@ -97,10 +94,6 @@ public class Meet {
 
     public void setParticipants(List<Member> participants) {
         this.participants = participants;
-    }
-
-    public void setScheduleVote(ScheduleVote scheduleVote){
-        this.scheduleVote = scheduleVote;
     }
 
     public void setPlaceVote(PlaceVote placeVote) {

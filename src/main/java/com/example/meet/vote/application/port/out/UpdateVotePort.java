@@ -6,5 +6,5 @@ import com.example.meet.vote.adapter.in.dto.in.UpdateVoteItemRequestDto;
 import java.util.List;
 
 public interface UpdateVotePort {
-    void updateVoteItems(Long voteId, Member voter, List<UpdateVoteItemRequestDto> dtoList);
+    void updateVoters(Long voteId, Member voter, List<UpdateVoteItemRequestDto> dtoList);
 }

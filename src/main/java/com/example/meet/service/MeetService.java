@@ -105,13 +105,8 @@ public class MeetService {
             throw new BusinessException(ErrorCode.MEET_EDIT_PERMISSION_REQUIRED);
         }
 
-        //투표한 필드는 편집 불가(날짜)
-        if(meet.getDate() != null && meet.getScheduleVote() != null && meet.getScheduleVote().getDateResult() != null && !Objects.equals(inDto.getDate(), meet.getDate().toLocalDate())){
-            throw new BusinessException(ErrorCode.VOTE_REQUIRED);
-        }
-
-        //투표한 필드는 편집 불가(시간)
-        if(meet.getDate() != null && meet.getScheduleVote() != null && meet.getScheduleVote().getDateResult() != null && !Objects.equals(inDto.getTime(), meet.getDate().toLocalTime())){
+        //투표한 필드는 편집 불가
+        if(meet.getDate() != null && meet.getScheduleVote() != null){
             throw new BusinessException(ErrorCode.VOTE_REQUIRED);
         }
 

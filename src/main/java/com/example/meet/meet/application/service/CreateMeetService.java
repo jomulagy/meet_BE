@@ -1,96 +1,85 @@
 package com.example.meet.meet.application.service;
 
+import com.example.meet.auth.application.port.in.GetLogginedInfoUseCase;
 import com.example.meet.entity.Member;
 import com.example.meet.entity.ParticipateVote;
 import com.example.meet.entity.ParticipateVoteItem;
 import com.example.meet.entity.PlaceVote;
-import com.example.meet.entity.ScheduleVote;
-import com.example.meet.entity.ScheduleVoteItem;
 import com.example.meet.infrastructure.dto.TemplateArgs;
 import com.example.meet.infrastructure.enumulation.ErrorCode;
 import com.example.meet.infrastructure.enumulation.MemberPrevillege;
 import com.example.meet.infrastructure.enumulation.Message;
 import com.example.meet.infrastructure.exception.BusinessException;
 import com.example.meet.infrastructure.mapper.MeetMapper;
+import com.example.meet.infrastructure.repository.*;
 import com.example.meet.infrastructure.utils.MessageManager;
 import com.example.meet.infrastructure.utils.ScheduleManager;
 import com.example.meet.meet.adapter.in.dto.CreateMeetRequestDto;
 import com.example.meet.meet.adapter.in.dto.CreateMeetResponseDto;
 import com.example.meet.meet.application.domain.entity.Meet;
 import com.example.meet.meet.application.port.in.CreateMeetUseCase;
-import com.example.meet.infrastructure.repository.MeetRepository;
-import com.example.meet.infrastructure.repository.MemberRepository;
-import com.example.meet.infrastructure.repository.ParticipateVoteItemRepository;
-import com.example.meet.infrastructure.repository.ParticipateVoteRepository;
-import com.example.meet.infrastructure.repository.PlaceVoteRepository;
-import com.example.meet.infrastructure.repository.ScheduleVoteItemRepository;
-import com.example.meet.infrastructure.repository.ScheduleVoteRepository;
+import com.example.meet.vote.application.domain.entity.Vote;
+import com.example.meet.vote.application.domain.entity.VoteItem;
+import com.example.meet.vote.application.port.out.CreatVoteItemPort;
+import com.example.meet.vote.application.port.out.CreateVotePort;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class CreateMeetService implements CreateMeetUseCase {
     private final MeetMapper meetMapper = MeetMapper.INSTANCE;
-    private final MemberRepository memberRepository;
+    private final GetLogginedInfoUseCase getLogginedInfoUseCase;
     private final MeetRepository meetRepository;
-    private final ScheduleVoteRepository scheduleVoteRepository;
-    private final ScheduleVoteItemRepository scheduleVoteItemRepository;
     private final PlaceVoteRepository placeVoteRepository;
     private final ParticipateVoteRepository participateVoteRepository;
     private final ParticipateVoteItemRepository participateVoteItemRepository;
+    private final CreateVotePort createVotePort;
+    private final CreatVoteItemPort createVoteItemPort;
 
     private final MessageManager messageManager;
 
     @Transactional
+    @PreAuthorize("@memberPermissionEvaluator.hasAdminAccess(authentication)")
     public CreateMeetResponseDto create(CreateMeetRequestDto inDto) {
-        //로그인 한 유저 확인
-        Member user = memberRepository.findById(inDto.getUserId()).orElseThrow(
-                () -> new BusinessException(ErrorCode.MEMBER_NOT_EXISTS)
-        );
+        Member user = getLogginedInfoUseCase.get();
 
-        //로그인 한 유저의 권한 확인 (관리자, 멤버 여부)
-        if(user.getPrevillege().equals(MemberPrevillege.denied)){
-            throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
-        }
+        Meet meet = meetMapper.dtoToEntity(inDto, user);
 
-        Meet entity = meetMapper.dtoToEntity(inDto, user);
-
-        meetRepository.save(entity);
+        meetRepository.save(meet);
 
         //일정 투표 연결
-        if(entity.getScheduleVote() == null && entity.getDate() == null){
-            ScheduleVote scheduleVote = createScheduleVote(entity);
-            scheduleVoteRepository.save(scheduleVote);
+        if(meet.getScheduleVote() == null && meet.getDate() == null){
+            Vote scheduleVote = createScheduleVote(meet, inDto.getVoteDeadline());
             setScheduleVoteItems(scheduleVote);
-
-            entity.setScheduleVote(scheduleVote);
         }
 
         //장소 투표 연결
-        if(entity.getPlaceVote() == null && entity.getPlace() == null){
-            PlaceVote placeVote = createPlaceVote(entity);
+        if(meet.getPlaceVote() == null && meet.getPlace() == null){
+            PlaceVote placeVote = createPlaceVote(meet);
             placeVoteRepository.save(placeVote);
         }
 
         //참여 여부 투표 연결
-        ParticipateVote participateVote = createParticipateVote(entity, inDto.getParticipationDeadline());
+        ParticipateVote participateVote = createParticipateVote(meet, inDto.getParticipationDeadline());
         participateVoteRepository.save(participateVote);
 
         setParticiapteVoteItems(participateVote);
-        entity.setParticipateVote(participateVote);
+        meet.setParticipateVote(participateVote);
 
-        meetRepository.save(entity);
+        meetRepository.save(meet);
 
         TemplateArgs templateArgs = TemplateArgs.builder()
-                .title(entity.getTitle())
-                .but(entity.getId().toString())
+                .title(meet.getTitle())
+                .but(meet.getId().toString())
                 .scheduleType(null)
                 .build();
 
@@ -98,13 +87,21 @@ public class CreateMeetService implements CreateMeetUseCase {
         messageManager.sendAll(Message.SCHEDULE).block();
         messageManager.sendMe(Message.SCHEDULE).block();
 
-        return meetMapper.entityToCreateDto(entity);
+        return meetMapper.entityToCreateDto(meet);
     }
 
-    private ScheduleVote createScheduleVote(Meet meet) {
-        return ScheduleVote.builder()
+    private Vote createScheduleVote(Meet meet, String voteDeadline) {
+        LocalDateTime deadLine =
+                LocalDate.parse(voteDeadline)
+                        .atTime(23, 59, 59);
+
+        Vote vote =  Vote.builder()
                 .meet(meet)
+                .activeYn(true)
+                .endDate(deadLine)
                 .build();
+
+        return createVotePort.create(vote);
     }
 
     private PlaceVote createPlaceVote(Meet meet) {
@@ -124,10 +121,9 @@ public class CreateMeetService implements CreateMeetUseCase {
                 .build();
     }
 
-    private void setScheduleVoteItems(ScheduleVote scheduleVote) {
+    private void setScheduleVoteItems(Vote scheduleVote) {
         LocalDate today = LocalDate.now();
 
-        // 다음 분기의 첫 번째 달 계산
         // 다음 달 계산
         int nextMonth = today.getMonthValue() + 1;
         if (nextMonth > 12) {
@@ -144,12 +140,10 @@ public class CreateMeetService implements CreateMeetUseCase {
         List<LocalDateTime> fridaysAndSaturdays = ScheduleManager.getFridaysAndSaturdays(firstDayOfNextQuarterMonth, lastDayOfNextQuarterMonth);
 
         for(LocalDateTime date : fridaysAndSaturdays){
-            ScheduleVoteItem scheduleVoteItem = ScheduleVoteItem.builder().date(date).scheduleVote(scheduleVote).editable(false).build();
-            scheduleVoteItemRepository.save(scheduleVoteItem);
-            scheduleVote.getScheduleVoteItems().add(scheduleVoteItem);
+            VoteItem scheduleVoteItem = VoteItem.builder().dateTime(date).vote(scheduleVote).editable(false).build();
+            createVoteItemPort.create(scheduleVoteItem);
+            scheduleVote.getVoteItems().add(scheduleVoteItem);
         }
-        scheduleVoteRepository.save(scheduleVote);
-
     }
 
     private void setParticiapteVoteItems(ParticipateVote participateVote) {

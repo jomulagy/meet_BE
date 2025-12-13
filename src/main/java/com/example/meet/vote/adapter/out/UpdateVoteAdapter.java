@@ -2,7 +2,7 @@ package com.example.meet.vote.adapter.out;
 
 import com.example.meet.entity.Member;
 import com.example.meet.vote.adapter.in.dto.in.UpdateVoteItemRequestDto;
-import com.example.meet.vote.adapter.out.jpa.VoteItemJpaRepository;
+import com.example.meet.infrastructure.repository.VoteItemRepository;
 import com.example.meet.vote.application.domain.entity.VoteItem;
 import com.example.meet.vote.application.port.out.UpdateVotePort;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -20,10 +20,10 @@ import static com.example.meet.vote.application.domain.entity.QVoteItem.voteItem
 @RequiredArgsConstructor
 public class UpdateVoteAdapter implements UpdateVotePort {
     private final JPAQueryFactory queryFactory;
-    private final VoteItemJpaRepository voteItemJpaRepository;
+    private final VoteItemRepository voteItemRepository;
 
     @Override
-    public void updateVoteItems(Long voteId, Member voter, List<UpdateVoteItemRequestDto> dtoList) {
+    public void updateVoters(Long voteId, Member voter, List<UpdateVoteItemRequestDto> dtoList) {
         List<VoteItem> voteItems = queryFactory.selectFrom(voteItem)
                 .leftJoin(voteItem.voters).fetchJoin()
                 .where(voteItem.vote.id.eq(voteId))
@@ -48,6 +48,6 @@ public class UpdateVoteAdapter implements UpdateVotePort {
             }
         }
 
-        voteItemJpaRepository.saveAll(voteItems);
+        voteItemRepository.saveAll(voteItems);
     }
 }

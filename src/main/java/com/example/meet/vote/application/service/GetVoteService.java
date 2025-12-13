@@ -20,6 +20,8 @@ import com.example.meet.vote.application.port.out.GetVotePort;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -37,7 +39,11 @@ public class GetVoteService implements GetVoteUseCase {
     public FindVoteResponseDto get(FindVoteRequestDto inDto) {
         Member user = getLogginedInfoUseCase.get();
         Meet meet = getMeetUseCase.get(inDto.getMeetId());
-        Vote vote = getVote(meet).vote();
+        Vote vote = getVotePort.getByMeetId(meet.getId()).orElse(null);
+
+        if(vote == null) {
+            return null;
+        }
 
         String endDate = vote.getEndDate() != null ? DateTimeUtils.formatWithOffset(vote.getEndDate()) : null;
         boolean isAuthor = meet.getAuthor().equals(user);
@@ -47,41 +53,6 @@ public class GetVoteService implements GetVoteUseCase {
                 .endDate(endDate)
                 .isAuthor(Boolean.toString(isAuthor))
                 .build();
-    }
-
-    @Override
-    @PreAuthorize("@memberPermissionEvaluator.hasAccess(authentication)")
-    public List<FindVoteItemResponseDto> getItemList(FindVoteItemRequestDto inDto) {
-        Member user = getLogginedInfoUseCase.get();
-        Meet meet = getMeetUseCase.get(inDto.getMeetId());
-        Vote vote = getVote(meet).vote();
-
-        List<FindVoteItemResponseDto> responseList = new ArrayList<>();
-
-        for (VoteItem item : vote.getVoteItems()) {
-            String isVote = item.getVoters().contains(user) ? "true" : "false";
-            String editable = (item.getAuthor().equals(user) && Boolean.TRUE.equals(item.getEditable()) && item.getVoters().isEmpty())
-                    ? "true"
-                    : "false";
-
-            List<SimpleMemberResponseDto> memberList = new ArrayList<>();
-            item.getVoters().forEach(member -> memberList.add(
-                    SimpleMemberResponseDto.builder()
-                            .id(member.getId().toString())
-                            .name(member.getName())
-                            .build()
-            ));
-
-            responseList.add(FindVoteItemResponseDto.builder()
-                    .id(item.getId().toString())
-                    .content(item.getContent())
-                    .editable(editable)
-                    .isVote(isVote)
-                    .memberList(memberList)
-                    .build());
-        }
-
-        return responseList;
     }
 
     @Override

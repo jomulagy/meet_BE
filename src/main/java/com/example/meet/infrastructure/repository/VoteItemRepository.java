@@ -1,7 +1,7 @@
-package com.example.meet.vote.adapter.out.jpa;
+package com.example.meet.infrastructure.repository;
 
 import com.example.meet.vote.application.domain.entity.VoteItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface VoteItemJpaRepository extends JpaRepository<VoteItem, Long> {
+public interface VoteItemRepository extends JpaRepository<VoteItem, Long> {
 }

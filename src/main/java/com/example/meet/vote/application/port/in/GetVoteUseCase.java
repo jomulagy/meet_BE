@@ -11,8 +11,6 @@ import java.util.List;
 public interface GetVoteUseCase {
     FindVoteResponseDto get(FindVoteRequestDto inDto);
 
-    List<FindVoteItemResponseDto> getItemList(FindVoteItemRequestDto inDto);
-
     VoteResult getVote(Meet meet);
 
     VoteResult getActiveVote(Meet meet);

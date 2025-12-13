@@ -47,7 +47,7 @@ public class UpdateVoteService implements UpdateVoteUseCase {
                 .map(item -> new UpdateVoteItemRequestDto(item.getVoteItemId(), item.isVote()))
                 .toList();
 
-        updateVotePort.updateVoteItems(vote.getId(), user, voteItemList);
+        updateVotePort.updateVoters(vote.getId(), user, voteItemList);
 
         return UpdateVoteResponseDto.builder()
                 .status("success")

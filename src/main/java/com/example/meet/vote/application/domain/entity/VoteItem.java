@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +25,9 @@ public class VoteItem {
 
     @Column(name = "content")
     private String content;
+
+    @Column(name = "date")
+    private LocalDateTime dateTime;
 
     @Column(name = "editable", nullable = false)
     private Boolean editable;
