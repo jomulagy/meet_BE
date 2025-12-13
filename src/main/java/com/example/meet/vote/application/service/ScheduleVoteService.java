@@ -21,8 +21,9 @@ import com.example.meet.vote.adapter.in.dto.out.UpdateVoteResponseDto;
 import com.example.meet.vote.application.domain.entity.Vote;
 import com.example.meet.vote.application.domain.entity.VoteItem;
 import com.example.meet.vote.application.port.in.ScheduleVoteUseCase;
-import com.example.meet.vote.application.port.out.VoteItemRepositoryPort;
-import com.example.meet.vote.application.port.out.VoteRepositoryPort;
+import com.example.meet.vote.application.port.out.CreateVotePort;
+import com.example.meet.vote.application.port.out.GetVoteItemPort;
+import com.example.meet.vote.application.port.out.GetVotePort;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,22 +31,22 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.security.access.prepost.PreAuthorize;
 
 @Service
 @RequiredArgsConstructor
 public class ScheduleVoteService implements ScheduleVoteUseCase {
     private final GetLogginedInfoUseCase getLogginedInfoUseCase;
     private final GetMeetPort getMeetPort;
-    private final VoteRepositoryPort voteRepositoryPort;
-    private final VoteItemRepositoryPort voteItemRepositoryPort;
+    private final GetVotePort getVotePort;
+    private final CreateVotePort createVotePort;
+    private final GetVoteItemPort getVoteItemPort;
 
     @Override
     @PreAuthorize("@memberPermissionEvaluator.hasAccess(authentication)")
     public FindVoteResponseDto get(FindVoteRequestDto inDto) {
-        Member user = getLogginedInfoUseCase.getCurrentMember();
-        Meet meet = findMeet(inDto.getMeetId());
-        Vote vote = getOrCreateVote(meet);
+        Member user = getLogginedInfoUseCase.get();
+        Meet meet = getMeet(inDto.getMeetId());
+        Vote vote = getVote(meet);
 
         String endDate = vote.getEndDate() != null ? DateTimeUtils.formatWithOffset(vote.getEndDate()) : null;
         boolean isAuthor = meet.getAuthor().equals(user);
@@ -60,9 +61,9 @@ public class ScheduleVoteService implements ScheduleVoteUseCase {
     @Override
     @PreAuthorize("@memberPermissionEvaluator.hasAccess(authentication)")
     public List<FindVoteItemResponseDto> getItemList(FindVoteItemRequestDto inDto) {
-        Member user = getLogginedInfoUseCase.getCurrentMember();
-        Meet meet = findMeet(inDto.getMeetId());
-        Vote vote = getOrCreateVote(meet);
+        Member user = getLogginedInfoUseCase.get();
+        Meet meet = getMeet(inDto.getMeetId());
+        Vote vote = getVote(meet);
 
         List<FindVoteItemResponseDto> responseList = new ArrayList<>();
 
@@ -96,9 +97,9 @@ public class ScheduleVoteService implements ScheduleVoteUseCase {
     @Transactional
     @PreAuthorize("@memberPermissionEvaluator.hasAccess(authentication)")
     public CreateVoteItemResponseDto createItem(CreateVoteItemRequestDto inDto) {
-        Member user = getLogginedInfoUseCase.getCurrentMember();
-        Meet meet = findMeet(inDto.getMeetId());
-        Vote vote = getOrCreateVote(meet);
+        Member user = getLogginedInfoUseCase.get();
+        Meet meet = getMeet(inDto.getMeetId());
+        Vote vote = getVote(meet);
 
         validateVoteIsActive(meet);
 
@@ -115,9 +116,9 @@ public class ScheduleVoteService implements ScheduleVoteUseCase {
                 .build();
         voteItem.getVoters().add(user);
 
-        VoteItem saved = voteItemRepositoryPort.save(voteItem);
+        VoteItem saved = getVoteItemPort.save(voteItem);
         vote.getVoteItems().add(saved);
-        voteRepositoryPort.save(vote);
+        createVotePort.create(vote);
 
         List<SimpleMemberResponseDto> memberList = new ArrayList<>();
         saved.getVoters().forEach(member -> memberList.add(
@@ -140,8 +141,8 @@ public class ScheduleVoteService implements ScheduleVoteUseCase {
     @Transactional
     @PreAuthorize("@memberPermissionEvaluator.hasAccess(authentication)")
     public DeleteVoteItemResponseDto deleteItem(DeleteVoteItemRequestDto inDto) {
-        Member user = getLogginedInfoUseCase.getCurrentMember();
-        VoteItem voteItem = voteItemRepositoryPort.findById(inDto.getVoteItemId())
+        Member user = getLogginedInfoUseCase.get();
+        VoteItem voteItem = getVoteItemPort.get(inDto.getVoteItemId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.SCHEDULE_VOTE_ITEM_NOT_EXISTS));
 
         validateVoteIsActive(voteItem.getVote().getMeet());
@@ -151,7 +152,7 @@ public class ScheduleVoteService implements ScheduleVoteUseCase {
         }
 
         voteItem.getVote().getVoteItems().remove(voteItem);
-        voteItemRepositoryPort.delete(voteItem);
+        getVoteItemPort.delete(voteItem);
 
         return DeleteVoteItemResponseDto.builder()
                 .deletedId(voteItem.getId().toString())
@@ -162,14 +163,14 @@ public class ScheduleVoteService implements ScheduleVoteUseCase {
     @Transactional
     @PreAuthorize("@memberPermissionEvaluator.hasAccess(authentication)")
     public UpdateVoteResponseDto update(UpdateVoteRequestDto inDto) {
-        Member user = getLogginedInfoUseCase.getCurrentMember();
-        Meet meet = findMeet(inDto.getMeetId());
-        Vote vote = getOrCreateVote(meet);
+        Member user = getLogginedInfoUseCase.get();
+        Meet meet = getMeet(inDto.getMeetId());
+        Vote vote = getVote(meet);
 
         validateVoteIsActive(meet);
 
         for (Long id : inDto.getVoteItemIdList()) {
-            voteItemRepositoryPort.findById(id)
+            getVoteItemPort.get(id)
                     .orElseThrow(() -> new BusinessException(ErrorCode.SCHEDULE_VOTE_ITEM_NOT_EXISTS));
         }
 
@@ -184,7 +185,7 @@ public class ScheduleVoteService implements ScheduleVoteUseCase {
                 item.getVoters().add(user);
             }
 
-            voteItemRepositoryPort.save(item);
+            getVoteItemPort.save(item);
         }
 
         return UpdateVoteResponseDto.builder()
@@ -192,18 +193,13 @@ public class ScheduleVoteService implements ScheduleVoteUseCase {
                 .build();
     }
 
-    private Meet findMeet(Long meetId) {
+    private Meet getMeet(Long meetId) {
         return getMeetPort.getMeetById(meetId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.MEET_NOT_EXISTS));
     }
 
-    private Vote getOrCreateVote(Meet meet) {
-        return voteRepositoryPort.findByMeetId(meet.getId())
-                .orElseGet(() -> voteRepositoryPort.save(Vote.builder()
-                        .meet(meet)
-                        .endDate(meet.getEndDate())
-                        .activeYn(Boolean.TRUE)
-                        .build()));
+    private Vote getVote(Meet meet) {
+        return getVotePort.getByMeetId(meet.getId()).orElse(null);
     }
 
     private void validateVoteIsActive(Meet meet) {

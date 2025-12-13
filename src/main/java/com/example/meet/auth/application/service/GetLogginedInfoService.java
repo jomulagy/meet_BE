@@ -16,7 +16,7 @@ public class GetLogginedInfoService implements GetLogginedInfoUseCase {
     private final GetMemberPort getMemberPort;
 
     @Override
-    public Member getCurrentMember() {
+    public Member get() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) {
             throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
