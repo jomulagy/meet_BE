@@ -1,18 +1,17 @@
-package com.example.meet.infrastructure.dto.response;
+package com.example.meet.vote.adapter.in.dto.out;
 
 import com.example.meet.infrastructure.dto.response.member.SimpleMemberResponseDto;
-import lombok.AccessLevel;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import java.util.List;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
-public class FindScheduleVoteItemResponseDto {
+public class GetVoteItemResponseDto {
     private String id;
     private String date;
     private String time;

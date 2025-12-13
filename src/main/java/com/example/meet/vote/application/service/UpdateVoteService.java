@@ -38,16 +38,12 @@ public class UpdateVoteService implements UpdateVoteUseCase {
         Meet meet = getMeetUseCase.get(inDto.getMeetId());
         Vote vote = getVoteUseCase.getActiveVote(meet).vote();
 
-        for (UpdateVoteItemRequestDto voteItem : inDto.getVoteItems()) {
-            getVoteItemPort.get(voteItem.getVoteItemId())
+        for (Long voteItemId : inDto.getVotedItemIdList()) {
+            getVoteItemPort.get(voteItemId)
                     .orElseThrow(() -> new BusinessException(ErrorCode.SCHEDULE_VOTE_ITEM_NOT_EXISTS));
         }
 
-        List<UpdateVoteItemRequestDto> voteItemList = inDto.getVoteItems().stream()
-                .map(item -> new UpdateVoteItemRequestDto(item.getVoteItemId(), item.isVote()))
-                .toList();
-
-        updateVotePort.updateVoters(vote.getId(), user, voteItemList);
+        updateVotePort.updateVoters(vote.getId(), user, inDto.getVotedItemIdList());
 
         return UpdateVoteResponseDto.builder()
                 .status("success")

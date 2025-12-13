@@ -28,7 +28,7 @@ public class DeleteVoteItemService implements DeleteVoteItemUseCase {
     @PreAuthorize("@memberPermissionEvaluator.hasAccess(authentication)")
     public DeleteVoteItemResponseDto deleteItem(DeleteVoteItemRequestDto inDto) {
         Member user = getLogginedInfoUseCase.get();
-        VoteItem voteItem = getVoteItemPort.get(inDto.getVoteItemId())
+        VoteItem voteItem = getVoteItemPort.get(inDto.getScheduleVoteItemId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.SCHEDULE_VOTE_ITEM_NOT_EXISTS));
 
         getVoteUseCase.getActiveVote(voteItem.getVote().getMeet());

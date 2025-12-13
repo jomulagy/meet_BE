@@ -1,4 +1,4 @@
-package com.example.meet.place.adapter.out.dto.request;
+package com.example.meet.place.adapter.in.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

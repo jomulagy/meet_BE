@@ -13,8 +13,14 @@ import com.example.meet.vote.application.domain.entity.Vote;
 import com.example.meet.vote.application.domain.entity.VoteItem;
 import com.example.meet.vote.application.port.in.CreateVoteItemUseCase;
 import com.example.meet.vote.application.port.in.GetVoteUseCase;
+import com.example.meet.vote.application.port.out.CreateVoteItemPort;
 import com.example.meet.vote.application.port.out.CreateVotePort;
 import com.example.meet.vote.application.port.out.GetVoteItemPort;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +37,7 @@ public class CreateVoteItemService implements CreateVoteItemUseCase {
     private final GetVoteUseCase getVoteUseCase;
     private final CreateVotePort createVotePort;
     private final GetVoteItemPort getVoteItemPort;
+    private final CreateVoteItemPort createVoteItemPort;
 
     @Override
     @Transactional
@@ -40,24 +47,39 @@ public class CreateVoteItemService implements CreateVoteItemUseCase {
         Meet meet = getMeetUseCase.get(inDto.getMeetId());
         Vote vote = getVoteUseCase.getActiveVote(meet).vote();
 
-        vote.getVoteItems().stream()
-                .filter(item -> item.getContent().equals(inDto.getContent()))
-                .findAny()
-                .ifPresent(item -> {
-                    throw new BusinessException(ErrorCode.SCHEDULE_VOTE_ITEM_DUPLICATED);
-                });
+        // request를 dateTime으로 변환
+        DateTimeFormatter DATE_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter TIME_FMT = DateTimeFormatter.ofPattern("HH:mm");
+
+        LocalDateTime targetDateTime;
+
+        if (inDto.getDate() == null) {
+            targetDateTime = null;
+        } else {
+            LocalDate date = LocalDate.parse(inDto.getDate(), DATE_FMT);
+            LocalTime time = (inDto.getTime() != null)
+                    ? LocalTime.parse(inDto.getTime(), TIME_FMT)
+                    : LocalTime.MIDNIGHT;
+
+            targetDateTime = LocalDateTime.of(date, time);
+        }
+
+        if (targetDateTime != null) {
+            vote.getVoteItems().stream()
+                    .filter(item -> targetDateTime.equals(item.getDateTime()))
+                    .findAny()
+                    .ifPresent(item -> {
+                        throw new BusinessException(ErrorCode.SCHEDULE_VOTE_ITEM_DUPLICATED);
+                    });
+        }
 
         VoteItem voteItem = VoteItem.builder()
-                .content(inDto.getContent())
+                .dateTime(targetDateTime)
                 .editable(Boolean.TRUE)
-                .author(user)
                 .vote(vote)
                 .build();
-        voteItem.getVoters().add(user);
 
-        VoteItem saved = getVoteItemPort.save(voteItem);
-        vote.getVoteItems().add(saved);
-        createVotePort.create(vote);
+        VoteItem saved = createVoteItemPort.create(voteItem);
 
         List<SimpleMemberResponseDto> memberList = new ArrayList<>();
         saved.getVoters().forEach(member -> memberList.add(
@@ -69,7 +91,8 @@ public class CreateVoteItemService implements CreateVoteItemUseCase {
 
         return CreateVoteItemResponseDto.builder()
                 .id(saved.getId().toString())
-                .content(saved.getContent())
+                .date(saved.getDateTime().toLocalDate().toString())
+                .time(saved.getDateTime().toLocalTime().toString())
                 .editable("true")
                 .isVote("true")
                 .memberList(memberList)

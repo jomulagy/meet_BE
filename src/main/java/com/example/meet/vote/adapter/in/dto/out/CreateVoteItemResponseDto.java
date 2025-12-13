@@ -13,7 +13,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class CreateVoteItemResponseDto {
     private String id;
-    private String content;
+    private String date;
+    private String time;
     private String editable;
     private String isVote;
     private List<SimpleMemberResponseDto> memberList;

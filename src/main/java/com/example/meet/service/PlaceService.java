@@ -1,21 +1,19 @@
 package com.example.meet.service;
 
 
+import com.example.meet.auth.application.port.in.GetLogginedInfoUseCase;
 import com.example.meet.infrastructure.dto.request.place.CreatePlaceVoteItemRequestDto;
 import com.example.meet.infrastructure.dto.request.place.DeletePlaceVoteItemRequestDto;
 import com.example.meet.infrastructure.dto.request.place.FindPlaceVoteItemRequestDto;
-import com.example.meet.place.adapter.out.dto.request.FindPlaceVoteRequestDto;
 import com.example.meet.infrastructure.dto.request.place.UpdatePlaceVoteRequestDto;
 import com.example.meet.infrastructure.dto.response.member.SimpleMemberResponseDto;
 import com.example.meet.infrastructure.dto.response.place.CreatePlaceVoteItemResponseDto;
 import com.example.meet.infrastructure.dto.response.place.DeletePlaceVoteItemResponseDto;
 import com.example.meet.infrastructure.dto.response.place.FindPlaceVoteItemResponseDto;
-import com.example.meet.place.adapter.out.dto.response.FindPlaceVoteResponseDto;
 import com.example.meet.infrastructure.dto.response.place.UpdatePlaceVoteResponseDto;
 import com.example.meet.infrastructure.enumulation.ErrorCode;
 import com.example.meet.infrastructure.enumulation.MemberPrevillege;
 import com.example.meet.infrastructure.exception.BusinessException;
-import com.example.meet.infrastructure.utils.DateTimeUtils;
 import com.example.meet.meet.application.domain.entity.Meet;
 import com.example.meet.entity.Member;
 
@@ -30,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class PlaceService {
+    private final GetLogginedInfoUseCase getLogginedInfoUseCase;
     private final MemberRepository memberRepository;
     private final MeetRepository meetRepository;
     private final PlaceVoteRepository placeVoteRepository;
@@ -99,16 +99,10 @@ public class PlaceService {
         return outDtoList;
     }
 
+    @PreAuthorize("@memberPermissionEvaluator.hasAccess(authentication)")
     public CreatePlaceVoteItemResponseDto createPlaceVoteItem(CreatePlaceVoteItemRequestDto inDto) {
         //로그인 한 유저 확인
-        Member user = memberRepository.findById(inDto.getUserId()).orElseThrow(
-                () -> new BusinessException(ErrorCode.MEMBER_NOT_EXISTS)
-        );
-
-        //로그인 한 유저의 권한 확인
-        if(user.getPrevillege().equals(MemberPrevillege.denied)){
-            throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
-        }
+        Member user = getLogginedInfoUseCase.get();
 
         if(inDto.getPlace() == null || inDto.getPlace().isEmpty()){
             throw new BusinessException(ErrorCode.PLACE_VALUE_REQUIRED);

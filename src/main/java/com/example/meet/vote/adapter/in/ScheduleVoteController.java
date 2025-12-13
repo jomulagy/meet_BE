@@ -32,7 +32,7 @@ public class ScheduleVoteController {
     }
 
     @GetMapping("/item/list")
-    public CommonResponse<List<FindVoteItemResponseDto>> findVoteItemList(@RequestParam(name = "meetId") String meetId) {
+    public CommonResponse<List<GetVoteItemResponseDto>> findVoteItemList(@RequestParam(name = "meetId") String meetId) {
         FindVoteItemRequestDto inDto = FindVoteItemRequestDto.builder()
                 .meetId(parseLong(meetId))
                 .build();
@@ -44,16 +44,17 @@ public class ScheduleVoteController {
     public CommonResponse<CreateVoteItemResponseDto> createVoteItem(@RequestBody CreateVoteItemRequestDto request) {
         CreateVoteItemRequestDto inDto = CreateVoteItemRequestDto.builder()
                 .meetId(request.getMeetId())
-                .content(request.getContent())
+                .date(request.getDate())
+                .time(request.getTime())
                 .build();
 
         return CommonResponse.success(createVoteItemUseCase.createItem(inDto));
     }
 
     @DeleteMapping("/item")
-    public CommonResponse<DeleteVoteItemResponseDto> deleteVoteItem(@RequestParam String voteItemId) {
+    public CommonResponse<DeleteVoteItemResponseDto> deleteVoteItem(@RequestParam String scheduleVoteItemId) {
         DeleteVoteItemRequestDto inDto = DeleteVoteItemRequestDto.builder()
-                .voteItemId(parseLong(voteItemId))
+                .scheduleVoteItemId(parseLong(scheduleVoteItemId))
                 .build();
 
         return CommonResponse.success(deleteVoteItemUseCase.deleteItem(inDto));
@@ -63,7 +64,7 @@ public class ScheduleVoteController {
     public CommonResponse<UpdateVoteResponseDto> vote(@RequestBody UpdateVoteRequestDto requestDto) {
         UpdateVoteRequestDto inDto = UpdateVoteRequestDto.builder()
                 .meetId(requestDto.getMeetId())
-                .voteItems(requestDto.getVoteItems())
+                .votedItemIdList(requestDto.getVotedItemIdList())
                 .build();
 
         return CommonResponse.success(updateVoteUseCase.vote(inDto));

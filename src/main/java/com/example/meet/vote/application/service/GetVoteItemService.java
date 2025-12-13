@@ -6,12 +6,11 @@ import com.example.meet.infrastructure.dto.response.member.SimpleMemberResponseD
 import com.example.meet.meet.application.domain.entity.Meet;
 import com.example.meet.meet.application.port.in.GetMeetUseCase;
 import com.example.meet.vote.adapter.in.dto.in.FindVoteItemRequestDto;
-import com.example.meet.vote.adapter.in.dto.out.FindVoteItemResponseDto;
+import com.example.meet.vote.adapter.in.dto.out.GetVoteItemResponseDto;
 import com.example.meet.vote.application.domain.entity.Vote;
 import com.example.meet.vote.application.domain.entity.VoteItem;
 import com.example.meet.vote.application.port.in.GetVoteItemUseCase;
 import com.example.meet.vote.application.port.in.GetVoteUseCase;
-import com.example.meet.vote.application.port.out.GetVotePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -28,12 +27,12 @@ public class GetVoteItemService implements GetVoteItemUseCase {
 
     @Override
     @PreAuthorize("@memberPermissionEvaluator.hasAccess(authentication)")
-    public List<FindVoteItemResponseDto> getItemList(FindVoteItemRequestDto inDto) {
+    public List<GetVoteItemResponseDto> getItemList(FindVoteItemRequestDto inDto) {
         Member user = getLogginedInfoUseCase.get();
         Meet meet = getMeetUseCase.get(inDto.getMeetId());
         Vote vote = getVoteUseCase.getVote(meet).vote();
 
-        List<FindVoteItemResponseDto> responseList = new ArrayList<>();
+        List<GetVoteItemResponseDto> responseList = new ArrayList<>();
 
         for (VoteItem item : vote.getVoteItems()) {
             String isVote = item.getVoters().contains(user) ? "true" : "false";
@@ -49,9 +48,10 @@ public class GetVoteItemService implements GetVoteItemUseCase {
                             .build()
             ));
 
-            responseList.add(FindVoteItemResponseDto.builder()
+            responseList.add(GetVoteItemResponseDto.builder()
                     .id(item.getId().toString())
-                    .content(item.getContent())
+                    .date(item.getDateTime().toLocalDate().toString())
+                    .time(item.getDateTime().toLocalTime().toString())
                     .editable(editable)
                     .isVote(isVote)
                     .memberList(memberList)

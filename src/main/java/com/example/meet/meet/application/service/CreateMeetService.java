@@ -6,10 +6,7 @@ import com.example.meet.entity.ParticipateVote;
 import com.example.meet.entity.ParticipateVoteItem;
 import com.example.meet.entity.PlaceVote;
 import com.example.meet.infrastructure.dto.TemplateArgs;
-import com.example.meet.infrastructure.enumulation.ErrorCode;
-import com.example.meet.infrastructure.enumulation.MemberPrevillege;
 import com.example.meet.infrastructure.enumulation.Message;
-import com.example.meet.infrastructure.exception.BusinessException;
 import com.example.meet.infrastructure.mapper.MeetMapper;
 import com.example.meet.infrastructure.repository.*;
 import com.example.meet.infrastructure.utils.MessageManager;
@@ -20,7 +17,7 @@ import com.example.meet.meet.application.domain.entity.Meet;
 import com.example.meet.meet.application.port.in.CreateMeetUseCase;
 import com.example.meet.vote.application.domain.entity.Vote;
 import com.example.meet.vote.application.domain.entity.VoteItem;
-import com.example.meet.vote.application.port.out.CreatVoteItemPort;
+import com.example.meet.vote.application.port.out.CreateVoteItemPort;
 import com.example.meet.vote.application.port.out.CreateVotePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -43,7 +40,7 @@ public class CreateMeetService implements CreateMeetUseCase {
     private final ParticipateVoteRepository participateVoteRepository;
     private final ParticipateVoteItemRepository participateVoteItemRepository;
     private final CreateVotePort createVotePort;
-    private final CreatVoteItemPort createVoteItemPort;
+    private final CreateVoteItemPort createVoteItemPort;
 
     private final MessageManager messageManager;
 
