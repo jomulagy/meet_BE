@@ -5,26 +5,18 @@ import com.example.meet.entity.Member;
 import com.example.meet.infrastructure.dto.response.member.SimpleMemberResponseDto;
 import com.example.meet.infrastructure.enumulation.ErrorCode;
 import com.example.meet.infrastructure.exception.BusinessException;
-import com.example.meet.infrastructure.utils.DateTimeUtils;
 import com.example.meet.meet.application.domain.entity.Meet;
-import com.example.meet.meet.application.port.out.GetMeetPort;
 import com.example.meet.vote.adapter.in.dto.in.CreateVoteItemRequestDto;
 import com.example.meet.vote.adapter.in.dto.in.DeleteVoteItemRequestDto;
 import com.example.meet.vote.adapter.in.dto.in.FindVoteItemRequestDto;
-import com.example.meet.vote.adapter.in.dto.in.FindVoteRequestDto;
-import com.example.meet.vote.adapter.in.dto.in.UpdateVoteRequestDto;
 import com.example.meet.vote.adapter.in.dto.out.CreateVoteItemResponseDto;
 import com.example.meet.vote.adapter.in.dto.out.DeleteVoteItemResponseDto;
 import com.example.meet.vote.adapter.in.dto.out.FindVoteItemResponseDto;
-import com.example.meet.vote.adapter.in.dto.out.FindVoteResponseDto;
-import com.example.meet.vote.adapter.in.dto.out.UpdateVoteResponseDto;
 import com.example.meet.vote.application.domain.entity.Vote;
 import com.example.meet.vote.application.domain.entity.VoteItem;
-import com.example.meet.vote.application.port.in.ScheduleVoteUseCase;
+import com.example.meet.vote.application.port.in.VoteItemUseCase;
 import com.example.meet.vote.application.port.out.CreateVotePort;
 import com.example.meet.vote.application.port.out.GetVoteItemPort;
-import com.example.meet.vote.application.port.out.GetVotePort;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -34,36 +26,18 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class ScheduleVoteService implements ScheduleVoteUseCase {
+public class VoteItemService implements VoteItemUseCase {
     private final GetLogginedInfoUseCase getLogginedInfoUseCase;
-    private final GetMeetPort getMeetPort;
-    private final GetVotePort getVotePort;
+    private final ScheduleVoteHelper scheduleVoteHelper;
     private final CreateVotePort createVotePort;
     private final GetVoteItemPort getVoteItemPort;
 
     @Override
     @PreAuthorize("@memberPermissionEvaluator.hasAccess(authentication)")
-    public FindVoteResponseDto get(FindVoteRequestDto inDto) {
-        Member user = getLogginedInfoUseCase.get();
-        Meet meet = getMeet(inDto.getMeetId());
-        Vote vote = getVote(meet);
-
-        String endDate = vote.getEndDate() != null ? DateTimeUtils.formatWithOffset(vote.getEndDate()) : null;
-        boolean isAuthor = meet.getAuthor().equals(user);
-
-        return FindVoteResponseDto.builder()
-                .meetTitle(meet.getTitle())
-                .endDate(endDate)
-                .isAuthor(Boolean.toString(isAuthor))
-                .build();
-    }
-
-    @Override
-    @PreAuthorize("@memberPermissionEvaluator.hasAccess(authentication)")
     public List<FindVoteItemResponseDto> getItemList(FindVoteItemRequestDto inDto) {
         Member user = getLogginedInfoUseCase.get();
-        Meet meet = getMeet(inDto.getMeetId());
-        Vote vote = getVote(meet);
+        Meet meet = scheduleVoteHelper.getMeet(inDto.getMeetId());
+        Vote vote = scheduleVoteHelper.getVote(meet);
 
         List<FindVoteItemResponseDto> responseList = new ArrayList<>();
 
@@ -98,10 +72,10 @@ public class ScheduleVoteService implements ScheduleVoteUseCase {
     @PreAuthorize("@memberPermissionEvaluator.hasAccess(authentication)")
     public CreateVoteItemResponseDto createItem(CreateVoteItemRequestDto inDto) {
         Member user = getLogginedInfoUseCase.get();
-        Meet meet = getMeet(inDto.getMeetId());
-        Vote vote = getVote(meet);
+        Meet meet = scheduleVoteHelper.getMeet(inDto.getMeetId());
+        Vote vote = scheduleVoteHelper.getVote(meet);
 
-        validateVoteIsActive(meet);
+        scheduleVoteHelper.validateVoteIsActive(meet);
 
         vote.getVoteItems().stream()
                 .filter(item -> item.getContent().equals(inDto.getContent()))
@@ -145,7 +119,7 @@ public class ScheduleVoteService implements ScheduleVoteUseCase {
         VoteItem voteItem = getVoteItemPort.get(inDto.getVoteItemId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.SCHEDULE_VOTE_ITEM_NOT_EXISTS));
 
-        validateVoteIsActive(voteItem.getVote().getMeet());
+        scheduleVoteHelper.validateVoteIsActive(voteItem.getVote().getMeet());
 
         if (!voteItem.getAuthor().equals(user) || !Boolean.TRUE.equals(voteItem.getEditable()) || !voteItem.getVoters().isEmpty()) {
             throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
@@ -157,55 +131,5 @@ public class ScheduleVoteService implements ScheduleVoteUseCase {
         return DeleteVoteItemResponseDto.builder()
                 .deletedId(voteItem.getId().toString())
                 .build();
-    }
-
-    @Override
-    @Transactional
-    @PreAuthorize("@memberPermissionEvaluator.hasAccess(authentication)")
-    public UpdateVoteResponseDto update(UpdateVoteRequestDto inDto) {
-        Member user = getLogginedInfoUseCase.get();
-        Meet meet = getMeet(inDto.getMeetId());
-        Vote vote = getVote(meet);
-
-        validateVoteIsActive(meet);
-
-        for (Long id : inDto.getVoteItemIdList()) {
-            getVoteItemPort.get(id)
-                    .orElseThrow(() -> new BusinessException(ErrorCode.SCHEDULE_VOTE_ITEM_NOT_EXISTS));
-        }
-
-        for (VoteItem item : vote.getVoteItems()) {
-            List<Long> memberIds = item.getVoters().stream().map(Member::getId).toList();
-            boolean containsUser = memberIds.contains(user.getId());
-            boolean shouldContain = inDto.getVoteItemIdList().contains(item.getId());
-
-            if (containsUser && !shouldContain) {
-                item.getVoters().removeIf(member -> member.equals(user));
-            } else if (!containsUser && shouldContain) {
-                item.getVoters().add(user);
-            }
-
-            getVoteItemPort.save(item);
-        }
-
-        return UpdateVoteResponseDto.builder()
-                .status("success")
-                .build();
-    }
-
-    private Meet getMeet(Long meetId) {
-        return getMeetPort.getMeetById(meetId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.MEET_NOT_EXISTS));
-    }
-
-    private Vote getVote(Meet meet) {
-        return getVotePort.getByMeetId(meet.getId()).orElse(null);
-    }
-
-    private void validateVoteIsActive(Meet meet) {
-        LocalDateTime endDate = meet.getEndDate();
-        if (endDate != null && endDate.isBefore(LocalDateTime.now())) {
-            throw new BusinessException(ErrorCode.SCHEDULE_VOTE_END);
-        }
     }
 }

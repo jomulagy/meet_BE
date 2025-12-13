@@ -3,7 +3,8 @@ package com.example.meet.vote.adapter.in;
 import com.example.meet.infrastructure.CommonResponse;
 import com.example.meet.vote.adapter.in.dto.in.*;
 import com.example.meet.vote.adapter.in.dto.out.*;
-import com.example.meet.vote.application.port.in.ScheduleVoteUseCase;
+import com.example.meet.vote.application.port.in.VoteItemUseCase;
+import com.example.meet.vote.application.port.in.VoteUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +17,8 @@ import static java.lang.Long.parseLong;
 @RequestMapping("/schedule")
 public class ScheduleVoteController {
 
-    private final ScheduleVoteUseCase scheduleVoteUseCase;
+    private final VoteUseCase voteUseCase;
+    private final VoteItemUseCase voteItemUseCase;
 
     @GetMapping("")
     public CommonResponse<FindVoteResponseDto> findVote(@RequestParam(name = "meetId") String meetId) {
@@ -24,7 +26,7 @@ public class ScheduleVoteController {
                 .meetId(parseLong(meetId))
                 .build();
 
-        return CommonResponse.success(scheduleVoteUseCase.get(inDto));
+        return CommonResponse.success(voteUseCase.get(inDto));
     }
 
     @GetMapping("/item/list")
@@ -33,7 +35,7 @@ public class ScheduleVoteController {
                 .meetId(parseLong(meetId))
                 .build();
 
-        return CommonResponse.success(scheduleVoteUseCase.getItemList(inDto));
+        return CommonResponse.success(voteItemUseCase.getItemList(inDto));
     }
 
     @PostMapping("/item")
@@ -43,7 +45,7 @@ public class ScheduleVoteController {
                 .content(request.getContent())
                 .build();
 
-        return CommonResponse.success(scheduleVoteUseCase.createItem(inDto));
+        return CommonResponse.success(voteItemUseCase.createItem(inDto));
     }
 
     @DeleteMapping("/item")
@@ -52,16 +54,16 @@ public class ScheduleVoteController {
                 .voteItemId(parseLong(voteItemId))
                 .build();
 
-        return CommonResponse.success(scheduleVoteUseCase.deleteItem(inDto));
+        return CommonResponse.success(voteItemUseCase.deleteItem(inDto));
     }
 
     @PutMapping("")
-    public CommonResponse<UpdateVoteResponseDto> updateVote(@RequestBody UpdateVoteRequestDto requestDto) {
+    public CommonResponse<UpdateVoteResponseDto> vote(@RequestBody UpdateVoteRequestDto requestDto) {
         UpdateVoteRequestDto inDto = UpdateVoteRequestDto.builder()
                 .meetId(requestDto.getMeetId())
-                .voteItemIdList(requestDto.getVoteItemIdList())
+                .voteItems(requestDto.getVoteItems())
                 .build();
 
-        return CommonResponse.success(scheduleVoteUseCase.update(inDto));
+        return CommonResponse.success(voteUseCase.vote(inDto));
     }
 }
