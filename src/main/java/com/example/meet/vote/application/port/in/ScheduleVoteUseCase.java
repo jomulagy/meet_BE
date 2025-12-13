@@ -14,5 +14,5 @@ public interface ScheduleVoteUseCase {
 
     DeleteVoteItemResponseDto deleteItem(DeleteVoteItemRequestDto inDto);
 
-    UpdateVoteResponseDto update(UpdateVoteRequestDto inDto);
+    UpdateVoteResponseDto vote(UpdateVoteRequestDto inDto);
 }
