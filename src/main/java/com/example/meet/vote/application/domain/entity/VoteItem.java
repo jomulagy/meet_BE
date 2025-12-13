@@ -2,6 +2,8 @@ package com.example.meet.vote.application.domain.entity;
 
 import com.example.meet.entity.Member;
 import jakarta.persistence.*;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,6 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EntityListeners(AuditingEntityListener.class)
 public class VoteItem {
     @Id
     @Column(name = "id")
@@ -34,6 +37,7 @@ public class VoteItem {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author")
+    @CreatedBy
     private Member author;
 
     @ManyToOne(fetch = FetchType.LAZY)
