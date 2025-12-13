@@ -10,6 +10,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class DeleteVoteItemRequestDto {
-    private Long userId;
     private Long voteItemId;
 }
