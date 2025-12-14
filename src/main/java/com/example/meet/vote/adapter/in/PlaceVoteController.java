@@ -1,4 +1,4 @@
-package com.example.meet.place.adapter.in;
+package com.example.meet.vote.adapter.in;
 
 import static java.lang.Long.parseLong;
 
@@ -13,15 +13,8 @@ import com.example.meet.infrastructure.dto.response.place.FindPlaceVoteItemRespo
 import com.example.meet.place.adapter.in.dto.request.FindPlaceVoteRequestDto;
 import com.example.meet.place.adapter.in.dto.response.FindPlaceVoteResponseDto;
 import com.example.meet.infrastructure.dto.response.place.UpdatePlaceVoteResponseDto;
-import com.example.meet.place.application.port.in.GetPlaceVoteUseCase;
 import com.example.meet.service.PlaceService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.tags.Tag;
+
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -39,7 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/meet/place")
-public class PlaceController {
+public class PlaceVoteController {
     private final PlaceService placeService;
     private final GetPlaceVoteUseCase getPlaceVoteUseCase;
 
@@ -84,31 +77,6 @@ public class PlaceController {
     }
 
     @DeleteMapping("/item")
-    @Tag(name = "place vote", description = "모임 장소 투표")
-    @Operation(summary = "투표항목 삭제",
-            description = "Authorization header require<br>type - Routine",
-            responses = {
-                    @ApiResponse(responseCode = "200",
-                            description = "성공",
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = DeletePlaceVoteItemResponseDto.class)
-                            )
-                    ),
-                    @ApiResponse(responseCode = "404",
-                            description = "존재하지 않는 멤버, 존재하지 않는 모임",
-                            content = @Content(
-                                    mediaType = "application/json"
-                            )
-                    ),
-                    @ApiResponse(responseCode = "403",
-                            description = "멤버 권한이 없음",
-                            content = @Content(
-                                    mediaType = "application/json"
-                            )
-                    )
-            })
-    @Parameter(name = "placeVoteItemId", description = "투표항목 id", example = "1")
     public CommonResponse<DeletePlaceVoteItemResponseDto> deletePlaceVoteItem(@RequestParam String placeVoteItemId){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -122,30 +90,6 @@ public class PlaceController {
     }
 
     @PutMapping("")
-    @Tag(name = "place vote", description = "모임 장소 투표")
-    @Operation(summary = "장소 투표 저장",
-            description = "Authorization header require<br>type - Routine",
-            responses = {
-                    @ApiResponse(responseCode = "200",
-                            description = "성공",
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = UpdatePlaceVoteResponseDto.class)
-                            )
-                    ),
-                    @ApiResponse(responseCode = "404",
-                            description = "존재하지 않는 멤버, 존재하지 않는 모임",
-                            content = @Content(
-                                    mediaType = "application/json"
-                            )
-                    ),
-                    @ApiResponse(responseCode = "403",
-                            description = "멤버 권한이 없음",
-                            content = @Content(
-                                    mediaType = "application/json"
-                            )
-                    )
-            })
     public CommonResponse<UpdatePlaceVoteResponseDto> updatePlaceVote(@RequestBody UpdatePlaceVoteRequestDto requestDto){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
