@@ -11,6 +11,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.meet.vote.application.domain.entity.VoteType.DATE;
+
 @Entity
 @Table(name = "vote")
 @Getter
@@ -28,6 +30,17 @@ public class Vote {
 
     @Column(name = "active_yn")
     private Boolean activeYn;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type", nullable = false)
+    @Builder.Default
+    private VoteType type = DATE;
+
+    @Column(name = "result")
+    private String result;
+
+    @Column(name = "display_order")
+    private Integer displayOrder;
 
     @OneToOne
     @JoinColumn(name = "meet_id", referencedColumnName = "id")
