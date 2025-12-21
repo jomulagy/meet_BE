@@ -31,7 +31,7 @@ public class DeleteVoteItemService implements DeleteVoteItemUseCase {
         VoteItem voteItem = getVoteItemPort.get(inDto.getScheduleVoteItemId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.SCHEDULE_VOTE_ITEM_NOT_EXISTS));
 
-        getVoteUseCase.getActiveVote(voteItem.getVote().getMeet());
+        getVoteUseCase.getVote(voteItem.getVote().getId());
 
         if (!voteItem.getAuthor().equals(user) || !Boolean.TRUE.equals(voteItem.getEditable()) || !voteItem.getVoters().isEmpty()) {
             throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);

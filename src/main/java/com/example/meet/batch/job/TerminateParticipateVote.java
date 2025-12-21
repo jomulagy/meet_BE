@@ -1,7 +1,7 @@
 package com.example.meet.batch.job;
 
 import com.example.meet.batch.CommonJob;
-import com.example.meet.meet.application.domain.entity.Meet;
+import com.example.meet.post.application.domain.entity.Post;
 import com.example.meet.entity.Member;
 import com.example.meet.entity.ParticipateVote;
 import com.example.meet.entity.ParticipateVoteItem;
@@ -10,6 +10,7 @@ import com.example.meet.infrastructure.repository.MeetRepository;
 import com.example.meet.infrastructure.repository.ParticipateVoteRepository;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.quartz.JobExecutionContext;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -34,9 +35,9 @@ public class TerminateParticipateVote extends CommonJob {
 
         for(ParticipateVote participateVote : participateVoteList){
             participateVote.setTotalNum();
-            Meet meet = participateVote.getMeet();
+            Post post = participateVote.getPost();
 
-            meet.setParticipantsNum(participateVote.getTotalNum());
+            post.setParticipantsNum(participateVote.getTotalNum());
 
             ParticipateVoteItem item = participateVote.getParticipateVoteItems().stream()
                     .filter(ParticipateVoteItem::getIsParticipate)
@@ -46,13 +47,13 @@ public class TerminateParticipateVote extends CommonJob {
             if(item != null){
                 // 방어적 복사
                 List<Member> participateVoters = new ArrayList<>(item.getParticipateVoters());
-                meet.setParticipants(participateVoters);
+                post.setParticipants(participateVoters);
             }
 
             participateVoteRepository.save(participateVote);
-            meetRepository.save(meet);
+            meetRepository.save(post);
 
-            log.append(participateVote.getMeet().getId());
+            log.append(participateVote.getPost().getId());
             log.append(", ");
         }
 

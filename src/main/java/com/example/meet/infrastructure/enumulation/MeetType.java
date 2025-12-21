@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum MeetType {
-    Routine, // 정기
+    MEET, // 회식
     CUSTOM
     ;
 }

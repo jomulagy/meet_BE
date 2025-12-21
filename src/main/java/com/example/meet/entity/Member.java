@@ -1,7 +1,7 @@
 package com.example.meet.entity;
 
 import com.example.meet.infrastructure.enumulation.MemberPrevillege;
-import com.example.meet.meet.application.domain.entity.Meet;
+import com.example.meet.post.application.domain.entity.Post;
 import com.example.meet.vote.application.domain.entity.VoteItem;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -60,7 +60,7 @@ public class Member {
     private List<ParticipateVoteItem> participateVoters = new ArrayList<>();
 
     @ManyToMany(mappedBy = "participants")
-    private List<Meet> meets = new ArrayList<>();
+    private List<Post> posts = new ArrayList<>();
 
     public void updatePrevillege(MemberPrevillege previllege){
         this.previllege = previllege;

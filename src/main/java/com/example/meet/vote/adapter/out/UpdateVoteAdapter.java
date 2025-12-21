@@ -1,7 +1,6 @@
 package com.example.meet.vote.adapter.out;
 
 import com.example.meet.entity.Member;
-import com.example.meet.vote.adapter.in.dto.in.UpdateVoteItemRequestDto;
 import com.example.meet.infrastructure.repository.VoteItemRepository;
 import com.example.meet.vote.application.domain.entity.VoteItem;
 import com.example.meet.vote.application.port.out.UpdateVotePort;
@@ -10,10 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
+import static com.example.meet.vote.application.domain.entity.QVote.vote;
 import static com.example.meet.vote.application.domain.entity.QVoteItem.voteItem;
 
 @Repository
@@ -41,5 +38,14 @@ public class UpdateVoteAdapter implements UpdateVotePort {
         }
 
         voteItemRepository.saveAll(voteItems);
+    }
+
+    @Override
+    public void updateResult(Long id, String contentResult) {
+        queryFactory
+                .update(vote)
+                .set(vote.result, contentResult)
+                .where(vote.id.eq(id))
+                .execute();
     }
 }

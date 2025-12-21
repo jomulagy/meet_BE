@@ -1,6 +1,6 @@
 package com.example.meet.entity;
 
-import com.example.meet.meet.application.domain.entity.Meet;
+import com.example.meet.post.application.domain.entity.Post;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -39,8 +39,8 @@ public class ParticipateVote {
     private LocalDateTime endDate;
 
     @OneToOne
-    @JoinColumn(name = "meet_id", referencedColumnName = "id")
-    private Meet meet;
+    @JoinColumn(name = "post_id", referencedColumnName = "id")
+    private Post post;
 
     @OneToMany(mappedBy = "participateVote", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @Builder.Default

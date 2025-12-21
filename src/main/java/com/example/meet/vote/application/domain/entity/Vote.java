@@ -1,6 +1,7 @@
 package com.example.meet.vote.application.domain.entity;
 
-import com.example.meet.meet.application.domain.entity.Meet;
+import com.example.meet.infrastructure.enumulation.VoteType;
+import com.example.meet.post.application.domain.entity.Post;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.meet.vote.application.domain.entity.VoteType.DATE;
+import static com.example.meet.infrastructure.enumulation.VoteType.TEXT;
 
 @Entity
 @Table(name = "vote")
@@ -25,6 +26,9 @@ public class Vote {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "title")
+    private String title;
+
     @Column(name = "end_date")
     private LocalDateTime endDate;
 
@@ -34,7 +38,7 @@ public class Vote {
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
     @Builder.Default
-    private VoteType type = DATE;
+    private VoteType type = TEXT;
 
     @Column(name = "result")
     private String result;
@@ -42,9 +46,9 @@ public class Vote {
     @Column(name = "display_order")
     private Integer displayOrder;
 
-    @OneToOne
-    @JoinColumn(name = "meet_id", referencedColumnName = "id")
-    private Meet meet;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "post_id")
+    private Post post;
 
     @OneToMany(mappedBy = "vote", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @Builder.Default

@@ -11,7 +11,7 @@ import com.example.meet.infrastructure.enumulation.MemberPrevillege;
 import com.example.meet.infrastructure.exception.BusinessException;
 import com.example.meet.infrastructure.dto.request.participate.UpdateParticipateVoteRequestDto;
 import com.example.meet.infrastructure.utils.DateTimeUtils;
-import com.example.meet.meet.application.domain.entity.Meet;
+import com.example.meet.post.application.domain.entity.Post;
 import com.example.meet.entity.Member;
 import com.example.meet.entity.ParticipateVoteItem;
 import com.example.meet.infrastructure.repository.MeetRepository;
@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -48,26 +49,26 @@ public class ParticipateService {
             throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
         }
 
-        Meet meet = meetRepository.findById(inDto.getMeetId()).orElseThrow(
+        Post post = meetRepository.findById(inDto.getMeetId()).orElseThrow(
                 () -> new BusinessException(ErrorCode.MEET_NOT_EXISTS)
         );
 
-        if( meet.getParticipateVote().getEndDate() != null){
-            endDate = DateTimeUtils.formatWithOffset(meet.getParticipateVote().getEndDate());
+        if( post.getParticipateVote().getEndDate() != null){
+            endDate = DateTimeUtils.formatWithOffset(post.getParticipateVote().getEndDate());
         }
 
-        if( meet.getDate() != null){
-            date = meet.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            time = meet.getDate().format(DateTimeFormatter.ofPattern("HH시 mm분"));
+        if( post.getDate() != null){
+            date = post.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            time = post.getDate().format(DateTimeFormatter.ofPattern("HH시 mm분"));
         }
 
-        Boolean isAuthor = meet.getAuthor().equals(user);
+        Boolean isAuthor = post.getAuthor().equals(user);
 
         return FindParticipateVoteResponseDto.builder()
-                .meetTitle(meet.getTitle())
+                .meetTitle(post.getTitle())
                 .date(date)
                 .time(time)
-                .place(meet.getPlace())
+                .place(post.getPlace())
                 .endDate(endDate)
                 .isAuthor(isAuthor.toString())
                 .build();
@@ -84,11 +85,11 @@ public class ParticipateService {
             throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
         }
 
-        Meet meet = meetRepository.findById(inDto.getMeetId()).orElseThrow(
+        Post post = meetRepository.findById(inDto.getMeetId()).orElseThrow(
                 () -> new BusinessException(ErrorCode.MEET_NOT_EXISTS)
         );
 
-        List<ParticipateVoteItem> participateVoteList = meet.getParticipateVote().getParticipateVoteItems();
+        List<ParticipateVoteItem> participateVoteList = post.getParticipateVote().getParticipateVoteItems();
 
         List<FindParticipateVoteItemResponseDto> outDtoList = new ArrayList<>();
         for(ParticipateVoteItem item : participateVoteList){
@@ -131,15 +132,15 @@ public class ParticipateService {
             throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
         }
 
-        Meet meet = meetRepository.findById(inDto.getMeetId()).orElseThrow(
+        Post post = meetRepository.findById(inDto.getMeetId()).orElseThrow(
                 () -> new BusinessException(ErrorCode.MEET_NOT_EXISTS)
         );
 
-        if(meet.getParticipateVote().getEndDate().isBefore(LocalDateTime.now())){
+        if(post.getParticipateVote().getEndDate().isBefore(LocalDateTime.now())){
             throw new BusinessException(ErrorCode.PARTICIPATE_VOTE_END);
         }
 
-        List<ParticipateVoteItem> participateVoteItemList = meet.getParticipateVote().getParticipateVoteItems();
+        List<ParticipateVoteItem> participateVoteItemList = post.getParticipateVote().getParticipateVoteItems();
 
         for(Long id : inDto.getParticipateVoteItemIdList()){
             ParticipateVoteItem participateVoteItem = participateVoteItemRepository.findById(id).orElseThrow(

@@ -3,8 +3,7 @@ package com.example.meet.vote.application.service;
 import com.example.meet.auth.application.port.in.GetLogginedInfoUseCase;
 import com.example.meet.entity.Member;
 import com.example.meet.infrastructure.dto.response.member.SimpleMemberResponseDto;
-import com.example.meet.meet.application.domain.entity.Meet;
-import com.example.meet.meet.application.port.in.GetMeetUseCase;
+import com.example.meet.post.application.port.in.GetPostUseCase;
 import com.example.meet.vote.adapter.in.dto.in.FindVoteItemRequestDto;
 import com.example.meet.vote.adapter.in.dto.out.GetVoteItemResponseDto;
 import com.example.meet.vote.application.domain.entity.Vote;
@@ -22,15 +21,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GetVoteItemService implements GetVoteItemUseCase {
     private final GetLogginedInfoUseCase getLogginedInfoUseCase;
-    private final GetMeetUseCase getMeetUseCase;
+    private final GetPostUseCase getPostUseCase;
     private final GetVoteUseCase getVoteUseCase;
 
     @Override
     @PreAuthorize("@memberPermissionEvaluator.hasAccess(authentication)")
     public List<GetVoteItemResponseDto> getItemList(FindVoteItemRequestDto inDto) {
         Member user = getLogginedInfoUseCase.get();
-        Meet meet = getMeetUseCase.get(inDto.getMeetId());
-        Vote vote = getVoteUseCase.getVote(meet).vote();
+        Vote vote = getVoteUseCase.getVote(inDto.getVoteId());
 
         List<GetVoteItemResponseDto> responseList = new ArrayList<>();
 

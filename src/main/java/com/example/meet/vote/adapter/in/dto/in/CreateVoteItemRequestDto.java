@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class CreateVoteItemRequestDto {
-    private Long meetId;
+    private Long voteId;
     private String date;
     private String time;
 }

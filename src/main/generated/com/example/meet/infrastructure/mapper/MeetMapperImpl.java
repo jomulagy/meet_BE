@@ -1,21 +1,18 @@
 package com.example.meet.infrastructure.mapper;
 
-import com.example.meet.infrastructure.dto.response.meet.FindMeetSimpleResponseDto;
-import com.example.meet.meet.adapter.in.dto.CreateMeetResponseDto;
-import com.example.meet.meet.application.domain.entity.Meet;
-import java.util.ArrayList;
-import java.util.List;
+import com.example.meet.post.adapter.in.dto.CreateMeetResponseDto;
+import com.example.meet.post.application.domain.entity.Post;
 import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-12-13T19:13:49+0900",
+    date = "2025-12-21T23:19:09+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.10 (Oracle Corporation)"
 )
 public class MeetMapperImpl implements MeetMapper {
 
     @Override
-    public CreateMeetResponseDto entityToCreateDto(Meet entity) {
+    public CreateMeetResponseDto entityToCreateDto(Post entity) {
         if ( entity == null ) {
             return null;
         }
@@ -25,19 +22,5 @@ public class MeetMapperImpl implements MeetMapper {
         createMeetResponseDto.id( entity.getId() );
 
         return createMeetResponseDto.build();
-    }
-
-    @Override
-    public ArrayList<FindMeetSimpleResponseDto> EntityListToDtoList(List<Meet> meetList) {
-        if ( meetList == null ) {
-            return null;
-        }
-
-        ArrayList<FindMeetSimpleResponseDto> arrayList = new ArrayList<FindMeetSimpleResponseDto>();
-        for ( Meet meet : meetList ) {
-            arrayList.add( EntityToDtoSimple( meet ) );
-        }
-
-        return arrayList;
     }
 }

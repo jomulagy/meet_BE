@@ -4,7 +4,7 @@ import com.example.meet.batch.CommonJob;
 import com.example.meet.infrastructure.dto.TemplateArgs;
 import com.example.meet.infrastructure.enumulation.Message;
 import com.example.meet.infrastructure.utils.MessageManager;
-import com.example.meet.meet.application.domain.entity.Meet;
+import com.example.meet.post.application.domain.entity.Post;
 import com.example.meet.entity.Member;
 import com.example.meet.infrastructure.repository.BatchLogRepository;
 import com.example.meet.infrastructure.repository.MeetRepository;
@@ -35,19 +35,19 @@ public class NotifyMeet extends CommonJob {
         //오늘 날짜인 entity 조회
         LocalDateTime startOfDay = LocalDateTime.now().with(LocalTime.MIN).plusWeeks(1);
         LocalDateTime endOfDay = LocalDateTime.now().with(LocalTime.MAX).plusWeeks(1);
-        List<Meet> meetList = meetRepository.findByDateBetween(startOfDay, endOfDay);
+        List<Post> postList = meetRepository.findByDateBetween(startOfDay, endOfDay);
 
         log.append("[");
 
         //알림 전송
-        for (Meet meet : meetList) {
+        for (Post post : postList) {
             // 참여자 리스트 조회
-            List<Member> participantList = meet.getParticipants();
+            List<Member> participantList = post.getParticipants();
 
             // 메세지 템플릿 설정
             TemplateArgs templateArgs = TemplateArgs.builder()
-                    .title(meet.getTitle())
-                    .but(meet.getId().toString())
+                    .title(post.getTitle())
+                    .but(post.getId().toString())
                     .scheduleType(null)
                     .build();
             Message.MEET_NOTIFICATION.setTemplateArgs(templateArgs);
@@ -61,7 +61,7 @@ public class NotifyMeet extends CommonJob {
                 }
             }
 
-            log.append(meet.getId());
+            log.append(post.getId());
             log.append(", ");
         }
 

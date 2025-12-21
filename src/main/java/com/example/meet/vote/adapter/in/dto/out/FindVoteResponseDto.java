@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class FindVoteResponseDto {
-    private String meetTitle;
+    private String title;
+    private String result;
     private String endDate;
-    private String isAuthor;
 }

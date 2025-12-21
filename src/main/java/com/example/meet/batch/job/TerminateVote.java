@@ -4,38 +4,36 @@ import com.example.meet.batch.CommonJob;
 import com.example.meet.entity.PlaceVote;
 import com.example.meet.infrastructure.dto.TemplateArgs;
 import com.example.meet.infrastructure.enumulation.Message;
+import com.example.meet.infrastructure.enumulation.VoteType;
 import com.example.meet.infrastructure.repository.BatchLogRepository;
 import com.example.meet.infrastructure.repository.MeetRepository;
 import com.example.meet.infrastructure.repository.PlaceVoteRepository;
 import com.example.meet.infrastructure.utils.MessageManager;
-import com.example.meet.meet.application.domain.entity.Meet;
-import com.example.meet.meet.application.port.out.GetMeetPort;
-import com.example.meet.meet.application.port.out.UpdateMeetPort;
+import com.example.meet.post.application.port.out.GetPostPort;
+import com.example.meet.post.application.port.out.UpdatePostPort;
 import com.example.meet.vote.application.domain.entity.Vote;
 import com.example.meet.vote.application.domain.entity.VoteItem;
+import com.example.meet.vote.application.port.out.GetVotePort;
+import com.example.meet.vote.application.port.out.UpdateVotePort;
 import org.quartz.JobExecutionContext;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Comparator;
 import java.util.List;
 
 public class TerminateVote extends CommonJob {
-    private final PlaceVoteRepository placeVoteRepository;
-    private final MeetRepository meetRepository;
-    private final GetMeetPort getMeetPort;
-    private final UpdateMeetPort updateMeetPort;
+    private final GetVotePort getVotePort;
+    private final UpdatePostPort updatePostPort;
+    private final UpdateVotePort updateVotePort;
     private final MessageManager messageManager;
 
     public TerminateVote(BatchLogRepository batchLogRepository,
-                         PlaceVoteRepository placeVoteRepository, MeetRepository meetRepository,
-                         GetMeetPort getMeetPort, UpdateMeetPort updateMeetPort, MessageManager messageManager) {
-        super(batchLogRepository);
-        this.placeVoteRepository = placeVoteRepository;
-        this.meetRepository = meetRepository;
-        this.getMeetPort = getMeetPort;
-        this.updateMeetPort = updateMeetPort;
+                         GetVotePort getVotePort, UpdatePostPort updatePostPort, UpdateVotePort updateVotePort, MessageManager messageManager) {
+        super(batchLogRepository);;
+        this.getVotePort = getVotePort;
+        this.updatePostPort = updatePostPort;
+        this.updateVotePort = updateVotePort;
         this.messageManager = messageManager;
     }
 
@@ -43,14 +41,14 @@ public class TerminateVote extends CommonJob {
     @Transactional
     protected String performJob(JobExecutionContext context) {
         LocalDateTime currentDate = LocalDateTime.now();
-        List<Meet> meetList = getMeetPort.getMeetEndDateBeforePort(currentDate);
+        List<Vote> voteList = getVotePort.getListByEndDate(currentDate);
         StringBuilder log = new StringBuilder();
 
         log.append("[");
 
-        for(Meet meet : meetList){
+        for(Vote vote : voteList){
             try {
-                process(meet, log);
+                process(vote, log);
             } catch (Exception e) {
                 continue;
             }
@@ -69,64 +67,59 @@ public class TerminateVote extends CommonJob {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    private void process(Meet meet, StringBuilder log) {
+    private void process(Vote vote, StringBuilder log) {
         try {
+            VoteItem result;
+            String contentResult;
+            List<VoteItem> voteItemList = vote.getVoteItems();
 
-            Vote scheduleVote = meet.getScheduleVote();
-            List<VoteItem> scheduleVoteItemList = scheduleVote.getVoteItems();
-
-            if(scheduleVoteItemList.isEmpty()){
+            if(voteItemList.isEmpty()){
                 return;
             }
 
             int max = -1;
-            LocalDateTime result = scheduleVoteItemList.get(0).getDateTime();
-            scheduleVoteItemList.sort(Comparator.comparing(VoteItem::getDateTime));
+            result = null;
 
-            for(VoteItem item : scheduleVoteItemList){
+            for(VoteItem item : voteItemList){
                 if(item.getVoters().size() > max){
                     max = item.getVoters().size();
-                    result = item.getDateTime();
+
+                    result = item;
                 }
             }
 
-            updateMeetPort.updateDate(meet.getId(), result);
+            if(VoteType.DATE.equals(vote.getType())) {
+                contentResult = result.getDateTime().toString();
+                updatePostPort.updateDate(vote.getPost().getId(), result.getDateTime());
+            } else if(VoteType.PLACE.equals(vote.getType())) {
+                contentResult = result.getContent();
+                updatePostPort.updatePlace(vote.getPost().getId(), result.getContent());
+            } else {
+                contentResult = result.getContent();
+            }
+
+            updateVotePort.updateResult(vote.getId(), contentResult);
 
         } catch (Exception e) {
-            super.insertBatch("Fail to terminate ScheduleVote :: " + meet.getId(), "FAILURE", e.getMessage());
-            throw e;
-        }
-
-        try {
-            PlaceVote placeVote = meet.getPlaceVote();
-
-            placeVote.setPlaceResult();
-            placeVoteRepository.save(placeVote);
-
-            meet.setPlace();
-
-        } catch (Exception e) {
-            super.insertBatch("Fail to terminate PlaceVote :: " + meet.getId(), "FAILURE", e.getMessage());
+            super.insertBatch("Fail to terminate ScheduleVote :: " + vote.getId(), "FAILURE", e.getMessage());
             throw e;
         }
 
         try {
             TemplateArgs templateArgs = TemplateArgs.builder()
-                    .title(meet.getTitle())
+                    .title(vote.getTitle())
                     .scheduleType(null)
-                    .but(meet.getId().toString())
+                    .but(vote.getId().toString())
                     .build();
             Message.VOTE.setTemplateArgs(templateArgs);
             messageManager.sendAll(Message.VOTE).block();
             messageManager.sendMe(Message.VOTE).block();
         } catch (Exception e) {
-            super.insertBatch("Fail to send participate vote message :: " + meet.getId(), "FAILURE", e.getMessage());
+            super.insertBatch("Fail to send participate vote message :: " + vote.getId(), "FAILURE", e.getMessage());
             throw e;
         }
 
-        meetRepository.save(meet);
-
-        log.append(meet.getTitle());
+        log.append(vote.getTitle());
         log.append(", ");
     }
 }
