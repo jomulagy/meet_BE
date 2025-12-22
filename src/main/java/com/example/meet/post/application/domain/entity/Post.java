@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Entity
-@Table(name = "meet")
+@Table(name = "post")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -46,8 +46,8 @@ public class Post {
     @Column(name = "participantsNum")
     private Long participantsNum;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Vote> voteList = new ArrayList<>();
 
     @OneToOne(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -60,42 +60,29 @@ public class Post {
     @ManyToMany
     @JoinTable(
             name = "participants",
-            joinColumns = @JoinColumn(name = "meet_id"),
+            joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "member_id")
     )
     @Builder.Default
     private List<Member> participants = new ArrayList<>();
 
-
-    void setPlace(UpdatePostRequestDto inDto){
-        this.place = inDto.getPlace();
-    }
-
     public void setParticipants(List<Member> participants) {
         this.participants = participants;
     }
 
-
     public void setParticipateVote(ParticipateVote participateVote) {
         this.participateVote = participateVote;
-    }
-
-    public void update(UpdatePostRequestDto inDto) {
-        this.title = inDto.getTitle();
-        this.content = inDto.getContent();
-        if (inDto.getDate() == null) {
-            this.date = null;
-        } else {
-            LocalTime time = (inDto.getTime() != null) ? inDto.getTime() : LocalTime.of(0, 0);
-            this.date = LocalDateTime.of(inDto.getDate(), time);
-        }
-
-        if(inDto.getPlace() != null){
-            this.setPlace(inDto);
+        if (participateVote != null) {
+            participateVote.setPost(this);
         }
     }
 
     public void setParticipantsNum(long totalNum) {
         this.participantsNum = totalNum;
+    }
+
+    public void addVote(Vote vote) {
+        this.voteList.add(vote);
+        vote.setPost(this);
     }
 }

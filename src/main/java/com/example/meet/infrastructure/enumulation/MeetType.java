@@ -4,7 +4,13 @@ import lombok.Getter;
 
 @Getter
 public enum MeetType {
-    MEET, // 회식
-    CUSTOM
+    MEET("회식"),
+    TRAVEL("여행")
     ;
+
+    private final String name;
+
+    MeetType(String name) {
+        this.name = name;
+    }
 }

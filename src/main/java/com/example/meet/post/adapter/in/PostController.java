@@ -63,7 +63,7 @@ public class PostController {
     }
 
     @GetMapping("/list")
-    public CommonResponse<List<GetPostResponseDto>> findMeetList(){
+    public CommonResponse<List<GetPostResponseDto>> findPostList(){
         return CommonResponse.success(getPostUseCase.findPostList());
     }
 

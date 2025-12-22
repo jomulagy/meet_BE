@@ -20,7 +20,7 @@ public class GetPostResponseDto {
     @Schema(description = "모임 내용", example = "정기 모임 입니다.")
     private String content;
     @Schema(description = "모임 종류", example = "Routine")
-    private MeetType type;
+    private String type;
     @Schema(description = "모임 날짜")
     private GetDateResponseDto date;
     @Schema(description = "모임장소")

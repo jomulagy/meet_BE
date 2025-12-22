@@ -1,15 +1,11 @@
 package com.example.meet.batch.job;
 
 import com.example.meet.batch.CommonJob;
-import com.example.meet.entity.PlaceVote;
 import com.example.meet.infrastructure.dto.TemplateArgs;
 import com.example.meet.infrastructure.enumulation.Message;
 import com.example.meet.infrastructure.enumulation.VoteType;
 import com.example.meet.infrastructure.repository.BatchLogRepository;
-import com.example.meet.infrastructure.repository.MeetRepository;
-import com.example.meet.infrastructure.repository.PlaceVoteRepository;
 import com.example.meet.infrastructure.utils.MessageManager;
-import com.example.meet.post.application.port.out.GetPostPort;
 import com.example.meet.post.application.port.out.UpdatePostPort;
 import com.example.meet.vote.application.domain.entity.Vote;
 import com.example.meet.vote.application.domain.entity.VoteItem;

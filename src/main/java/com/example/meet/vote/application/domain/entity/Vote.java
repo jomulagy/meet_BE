@@ -3,10 +3,7 @@ package com.example.meet.vote.application.domain.entity;
 import com.example.meet.infrastructure.enumulation.VoteType;
 import com.example.meet.post.application.domain.entity.Post;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -46,6 +43,7 @@ public class Vote {
     @Column(name = "display_order")
     private Integer displayOrder;
 
+    @Setter
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "post_id")
     private Post post;

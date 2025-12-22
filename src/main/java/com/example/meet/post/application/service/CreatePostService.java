@@ -5,9 +5,8 @@ import com.example.meet.entity.Member;
 import com.example.meet.entity.ParticipateVote;
 import com.example.meet.entity.ParticipateVoteItem;
 import com.example.meet.infrastructure.dto.TemplateArgs;
+import com.example.meet.infrastructure.enumulation.MeetType;
 import com.example.meet.infrastructure.enumulation.Message;
-import com.example.meet.infrastructure.mapper.MeetMapper;
-import com.example.meet.infrastructure.repository.*;
 import com.example.meet.infrastructure.utils.MessageManager;
 import com.example.meet.infrastructure.utils.ScheduleManager;
 import com.example.meet.post.adapter.in.dto.CreateMeetRequestDto;
@@ -17,8 +16,6 @@ import com.example.meet.post.application.port.in.CreatePostUseCase;
 import com.example.meet.post.application.port.out.CreatePostPort;
 import com.example.meet.vote.application.domain.entity.Vote;
 import com.example.meet.vote.application.domain.entity.VoteItem;
-import com.example.meet.vote.application.port.out.CreateVoteItemPort;
-import com.example.meet.vote.application.port.out.CreateVotePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -35,13 +32,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class CreatePostService implements CreatePostUseCase {
-    private final MeetMapper meetMapper = MeetMapper.INSTANCE;
     private final GetLogginedInfoUseCase getLogginedInfoUseCase;
-    private final ParticipateVoteRepository participateVoteRepository;
-    private final ParticipateVoteItemRepository participateVoteItemRepository;
     private final CreatePostPort createPostPort;
-    private final CreateVotePort createVotePort;
-    private final CreateVoteItemPort createVoteItemPort;
 
     private final MessageManager messageManager;
 
@@ -56,8 +48,6 @@ public class CreatePostService implements CreatePostUseCase {
         LocalDate date = null;
         LocalTime time = null;
 
-        List<Vote> voteList = new ArrayList<>();
-
         if(inDto.getDate() != null){
             date = LocalDate.parse(inDto.getDate(), DATE_FORMATTER);
         }
@@ -70,32 +60,32 @@ public class CreatePostService implements CreatePostUseCase {
             dateTime = date.atTime(time);
         }
 
-        //일정 투표 연결
-        if(dateTime == null){
-            Vote scheduleVote = createScheduleVote(inDto.getVoteDeadline());
-            setScheduleVoteItems(scheduleVote);
-            voteList.add(scheduleVote);
-        }
-
-        //장소 투표 연결
-        if(inDto.getPlace() == null){
-            Vote placeVote = createPlaceVote();
-            voteList.add(placeVote);
-        }
-
-        //참여 여부 투표 연결
-        ParticipateVote participateVote = createParticipateVote(inDto.getParticipationDeadline());
-        setParticiapteVoteItems(participateVote);
-
         Post post = Post.builder()
                 .title(inDto.getTitle())
                 .date(dateTime)
                 .place(inDto.getPlace())
                 .content(inDto.getContent())
                 .author(user)
-                .voteList(voteList)
-                .participateVote(participateVote)
+                .type(MeetType.MEET)
                 .build();
+
+        //일정 투표 연결
+        if(dateTime == null){
+            Vote scheduleVote = createScheduleVote(inDto.getVoteDeadline());
+            setScheduleVoteItems(scheduleVote);
+            post.addVote(scheduleVote);
+        }
+
+        //장소 투표 연결
+        if(inDto.getPlace() == null){
+            Vote placeVote = createPlaceVote(inDto.getVoteDeadline());
+            post.addVote(placeVote);
+        }
+
+        //참여 여부 투표 연결
+        ParticipateVote participateVote = createParticipateVote(inDto.getParticipationDeadline());
+        setParticiapteVoteItems(participateVote);
+        post.setParticipateVote(participateVote);
 
         createPostPort.create(post);
 
@@ -109,7 +99,10 @@ public class CreatePostService implements CreatePostUseCase {
         messageManager.sendAll(Message.SCHEDULE).block();
         messageManager.sendMe(Message.SCHEDULE).block();
 
-        return meetMapper.entityToCreateDto(post);
+        return CreateMeetResponseDto
+                .builder()
+                .id(post.getId())
+                .build();
     }
 
     private Vote createScheduleVote(String voteDeadline) {
@@ -118,13 +111,21 @@ public class CreatePostService implements CreatePostUseCase {
                         .atTime(23, 59, 59);
 
         return Vote.builder()
+                .title("날짜 투표")
                 .activeYn(true)
                 .endDate(deadLine)
                 .build();
     }
 
-    private Vote createPlaceVote() {
+    private Vote createPlaceVote(String voteDeadline) {
+        LocalDateTime deadLine =
+                LocalDate.parse(voteDeadline)
+                        .atTime(23, 59, 59);
+
         return Vote.builder()
+                .title("장소 투표")
+                .activeYn(true)
+                .endDate(deadLine)
                 .build();
     }
 

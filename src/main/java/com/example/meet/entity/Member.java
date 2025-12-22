@@ -46,15 +46,8 @@ public class Member {
     @Builder.Default
     private List<VoteItem> scheduleVoteItemList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
-    private List<PlaceVoteItem> placeVoteItemList = new ArrayList<>();
-
     @ManyToMany(mappedBy = "voters")
     private List<VoteItem> scheduleVoters = new ArrayList<>();
-
-    @ManyToMany(mappedBy = "placeVoters")
-    private List<PlaceVoteItem> placeVoteItems = new ArrayList<>();
 
     @ManyToMany(mappedBy = "participateVoters")
     private List<ParticipateVoteItem> participateVoters = new ArrayList<>();

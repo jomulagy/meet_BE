@@ -119,14 +119,14 @@ public class GetPostService implements GetPostUseCase {
 
             responseDtoList.add(
                     GetPostResponseDto.builder()
-                    .id(post.getId())
-                    .title(post.getTitle())
-                    .date(dateResponseDto)
-                    .place(placeResponseDto)
-                    .build()
+                            .id(post.getId())
+                            .title(post.getTitle())
+                            .type(post.getType().getName())
+                            .date(dateResponseDto)
+                            .place(placeResponseDto)
+                            .build()
             );
         }
-
 
         return responseDtoList;
     }

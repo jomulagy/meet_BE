@@ -14,9 +14,6 @@ import lombok.ToString;
 @ToString(exclude = {"userId", "title", "date", "time", "voteDeadline", "participationDeadline"})
 @Builder
 public class CreateMeetRequestDto {
-    @Schema(hidden = true)
-    private Long userId;
-
     @Schema(description = "제목", example = "3분기 정기 일정")
     private String title;
 
