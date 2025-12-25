@@ -84,11 +84,7 @@ public class GetPostService implements GetPostUseCase {
                 .id(post.getId())
                 .title(post.getTitle())
                 .content(post.getContent())
-                .date(dateResponseDto)
-                .place(placeResponseDto)
-                .participantsNum(String.valueOf(participantsNum))
-                .participants(participants)
-                .isAuthor(String.valueOf(post.getAuthor().equals(user)))
+                .isAuthor(post.getAuthor().equals(user))
                 .build();
     }
 
@@ -121,9 +117,6 @@ public class GetPostService implements GetPostUseCase {
                     GetPostResponseDto.builder()
                             .id(post.getId())
                             .title(post.getTitle())
-                            .type(post.getType().getName())
-                            .date(dateResponseDto)
-                            .place(placeResponseDto)
                             .build()
             );
         }

@@ -1,12 +1,10 @@
 package com.example.meet.post.adapter.in.dto.out;
 
-import com.example.meet.infrastructure.enumulation.MeetType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -19,16 +17,6 @@ public class GetPostResponseDto {
     private String title;
     @Schema(description = "모임 내용", example = "정기 모임 입니다.")
     private String content;
-    @Schema(description = "모임 종류", example = "Routine")
-    private String type;
-    @Schema(description = "모임 날짜")
-    private GetDateResponseDto date;
-    @Schema(description = "모임장소")
-    private GetPlaceResponseDto place;
     @Schema(description = "작성자 여부", example = "true")
-    private String isAuthor;
-    @Schema(description = "참여자 수", example = "2")
-    private String participantsNum;
-    @Schema(description = "참여자 이름 리스트", example = "['김지훈','장지연']")
-    private List<String> participants;
+    private boolean isAuthor;
 }

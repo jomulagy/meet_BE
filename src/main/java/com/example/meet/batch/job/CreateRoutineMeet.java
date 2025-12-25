@@ -34,7 +34,6 @@ public class CreateRoutineMeet extends CommonJob {
         String title = String.format("%d년도 %d 분기 정기 회식", year, quarter);
 
         CreateMeetRequestDto inDto = CreateMeetRequestDto.builder()
-                .userId(parseLong("2927398983"))
                 .title(title)
                 .build();
 

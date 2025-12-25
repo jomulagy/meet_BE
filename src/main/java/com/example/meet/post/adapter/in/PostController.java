@@ -49,7 +49,6 @@ public class PostController {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         CreateMeetRequestDto inDto = CreateMeetRequestDto.builder()
-                .userId(parseLong(userDetails.getUsername()))
                 .title(requestDto.getTitle())
                 .date(requestDto.getDate())
                 .time(requestDto.getTime())
