@@ -57,9 +57,9 @@ public class MessageManager {
             String receiverUuidsJson = convertListToJson(messageRequestDto.getReceiverUuids());
             String templateArgsJson = objectMapper.writeValueAsString(messageRequestDto.getTemplateArgs());
 
-            log.debug("receiver_uuids : {}", receiverUuidsJson);
-            log.debug("template_id : {}", messageRequestDto.getTemplateId());
-            log.debug("template_args : {}", templateArgsJson);
+            log.info("receiver_uuids : {}", receiverUuidsJson);
+            log.info("template_id : {}", messageRequestDto.getTemplateId());
+            log.info("template_args : {}", templateArgsJson);
 
             Mono<String> response = webClient.post()
                     .uri(url)
