@@ -28,8 +28,13 @@ public class GetParticipateService implements GetParticipateUseCase {
     @Override
     @PreAuthorize("@memberPermissionEvaluator.hasAccess(authentication)")
     public FindParticipateVoteResponseDto get(FindParticipateVoteRequestDto inDto) {
-        Member user = getLogginedInfoUseCase.get();
         Post post = getPostUseCase.getEntity(inDto.getPostId());
+
+        if(post.getParticipateVote() == null) {
+            return null;
+        }
+
+        Member user = getLogginedInfoUseCase.get();
         ParticipateVote vote = post.getParticipateVote();
 
         String endDate = null;
