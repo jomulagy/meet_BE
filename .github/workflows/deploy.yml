@@ -108,9 +108,9 @@ jobs:
             docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             docker stop meetService || true
             docker rm meetService || true
-            docker rmi $(docker images -q --filter "reference=*:*deploy") || true
-            docker rm $(docker ps -a -q -f status=exited) || true
-            docker rm $(docker ps -a -q -f status=created) || true            
-            docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:deploy
+            docker stop $(docker ps -aq) || true
+            docker rm $(docker ps -aq) || true
+            docker image prune -a -f        
+            docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:${{ github.sha }}
             docker run -d --restart on-failure:5 -p 8080:8080 -v /home/ubuntu/data:/data -v /etc/localtime:/etc/localtime:ro -v /etc/timezone:/etc/timezone:ro --name meetService -e SPRING_PROFILES_ACTIVE=dev,deploy ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:deploy
 
