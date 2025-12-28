@@ -14,11 +14,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 public class FindParticipateVoteItemResponseDto {
-    private String id;
+    private Long id;
     @Schema(description = "투표 항목 이름")
     private String name;
     @Schema(description = "투표 여부")
-    private String isVote;
+    private boolean isVote;
     @Schema(description = "투표자 목록")
-    private List<SimpleMemberResponseDto> memberList;
+    private List<String> memberList;
 }

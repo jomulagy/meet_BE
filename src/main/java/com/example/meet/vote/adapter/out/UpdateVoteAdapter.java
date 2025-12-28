@@ -5,6 +5,7 @@ import com.example.meet.infrastructure.repository.VoteItemRepository;
 import com.example.meet.vote.application.domain.entity.VoteItem;
 import com.example.meet.vote.application.port.out.UpdateVotePort;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -41,10 +42,12 @@ public class UpdateVoteAdapter implements UpdateVotePort {
     }
 
     @Override
+    @Transactional
     public void updateResult(Long id, String contentResult) {
         queryFactory
                 .update(vote)
                 .set(vote.result, contentResult)
+                .set(vote.activeYn, false)
                 .where(vote.id.eq(id))
                 .execute();
     }

@@ -1,11 +1,6 @@
 package com.example.meet.batch;
 
-import com.example.meet.batch.job.DeleteMemberPrevillege;
-import com.example.meet.batch.job.NotifyMeet;
 import com.example.meet.batch.job.RefreshAdminKakaoAcessToken;
-import com.example.meet.batch.job.RerunFailedJobs;
-import com.example.meet.batch.job.SendDepositMessage;
-import com.example.meet.batch.job.SendDepositWarningMessage;
 import com.example.meet.batch.job.TerminateParticipateVote;
 import com.example.meet.batch.job.TerminateVote;
 import lombok.Getter;
@@ -23,7 +18,6 @@ public enum ScheduledJob {
 //    CREATE_ROUTINE_MEET(CreateRoutineMeet.class, "0 39 21 24 8 ? *"),
 //    SEND_DEPOSIT_MESSAGE(SendDepositMessage.class, "0 35 08 25 12 ? *"),
 //    SEND_DEPOSIT_WARNING_MESSAGE(SendDepositWarningMessage.class,"0 35 08 8 1 ? *"),
-    NOTIFY_MEET(NotifyMeet.class, "0 0 9 * * ? *")
     ;
 
     private final Class<? extends Job> jobClass;

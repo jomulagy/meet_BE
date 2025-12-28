@@ -3,7 +3,6 @@ package com.example.meet.batch.job;
 import com.example.meet.batch.CommonJob;
 import com.example.meet.infrastructure.dto.TemplateArgs;
 import com.example.meet.infrastructure.enumulation.Message;
-import com.example.meet.infrastructure.enumulation.VoteType;
 import com.example.meet.infrastructure.repository.BatchLogRepository;
 import com.example.meet.infrastructure.utils.MessageManager;
 import com.example.meet.post.application.port.out.UpdatePostPort;
@@ -84,20 +83,12 @@ public class TerminateVote extends CommonJob {
                 }
             }
 
-            if(VoteType.DATE.equals(vote.getType())) {
-                contentResult = result.getDateTime().toString();
-                updatePostPort.updateDate(vote.getPost().getId(), result.getDateTime());
-            } else if(VoteType.PLACE.equals(vote.getType())) {
-                contentResult = result.getContent();
-                updatePostPort.updatePlace(vote.getPost().getId(), result.getContent());
-            } else {
-                contentResult = result.getContent();
-            }
+            contentResult = result.getContent();
 
             updateVotePort.updateResult(vote.getId(), contentResult);
 
         } catch (Exception e) {
-            super.insertBatch("Fail to terminate ScheduleVote :: " + vote.getId(), "FAILURE", e.getMessage());
+            super.insertBatch("Fail to terminate vote :: " + vote.getId(), "FAILURE", e.getMessage());
             throw e;
         }
 
@@ -107,9 +98,9 @@ public class TerminateVote extends CommonJob {
                     .scheduleType(null)
                     .but(vote.getId().toString())
                     .build();
-            Message.VOTE.setTemplateArgs(templateArgs);
-            messageManager.sendAll(Message.VOTE).block();
-            messageManager.sendMe(Message.VOTE).block();
+            Message.PARTICIPATE.setTemplateArgs(templateArgs);
+            messageManager.sendAll(Message.PARTICIPATE).block();
+            messageManager.sendMe(Message.PARTICIPATE).block();
         } catch (Exception e) {
             super.insertBatch("Fail to send participate vote message :: " + vote.getId(), "FAILURE", e.getMessage());
             throw e;

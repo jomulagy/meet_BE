@@ -1,6 +1,6 @@
 package com.example.meet.post.adapter.in.dto.out;
 
-import com.example.meet.infrastructure.enumulation.MeetType;
+import com.example.meet.infrastructure.enumulation.PostType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -20,7 +20,7 @@ public class UpdatePostResponseDto {
     @Schema(description = "모임 내용", example = "정기 모임 입니다.")
     private String content;
     @Schema(description = "모임 종류", example = "Routine")
-    private MeetType type;
+    private PostType type;
     @Schema(description = "모임 날짜", example = "2024-07-05")
     private String date;
     @Schema(description = "모임장소", example = "강남역")

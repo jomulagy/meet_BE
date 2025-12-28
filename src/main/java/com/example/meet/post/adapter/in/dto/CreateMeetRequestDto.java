@@ -1,6 +1,5 @@
 package com.example.meet.post.adapter.in.dto;
 
-import com.example.meet.infrastructure.enumulation.MeetType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

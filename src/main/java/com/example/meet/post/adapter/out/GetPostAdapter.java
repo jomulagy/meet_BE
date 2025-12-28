@@ -7,7 +7,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,7 +19,7 @@ public class GetPostAdapter implements GetPostPort {
     private final MeetRepository meetRepository;
 
     @Override
-    public Optional<Post> getMeetById(Long meetId) {
+    public Optional<Post> getPostById(Long meetId) {
         return meetRepository.findById(meetId);
     }
 

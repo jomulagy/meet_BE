@@ -1,17 +1,9 @@
-package com.example.meet.entity;
+package com.example.meet.participate.application.domain.entity;
 
+import com.example.meet.entity.Member;
 import com.example.meet.post.application.domain.entity.Post;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,10 +23,14 @@ public class ParticipateVote {
     private Long id;
 
     @Column(name = "total_num")
+    @Setter
     private long totalNum;
 
     @Column(name = "end_date")
     private LocalDateTime endDate;
+
+    @Column(name = "isActive")
+    private boolean isActive;
 
     @Setter
     @OneToOne
@@ -44,15 +40,4 @@ public class ParticipateVote {
     @OneToMany(mappedBy = "participateVote", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @Builder.Default
     private List<ParticipateVoteItem> participateVoteItems = new ArrayList<>();
-
-    public void setTotalNum(){
-        ParticipateVoteItem item = this.participateVoteItems.stream()
-                .filter(ParticipateVoteItem::getIsParticipate)
-                .findFirst()
-                .orElse(null);
-
-        if(item != null){
-            this.totalNum = item.getParticipateVoters().size();
-        }
-    }
 }

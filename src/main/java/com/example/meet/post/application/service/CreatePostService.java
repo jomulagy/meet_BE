@@ -2,12 +2,14 @@ package com.example.meet.post.application.service;
 
 import com.example.meet.auth.application.port.in.GetLogginedInfoUseCase;
 import com.example.meet.entity.Member;
-import com.example.meet.entity.ParticipateVote;
-import com.example.meet.entity.ParticipateVoteItem;
 import com.example.meet.infrastructure.dto.TemplateArgs;
-import com.example.meet.infrastructure.enumulation.MeetType;
 import com.example.meet.infrastructure.enumulation.Message;
+import com.example.meet.infrastructure.enumulation.VoteStatus;
+import com.example.meet.infrastructure.enumulation.VoteType;
 import com.example.meet.infrastructure.utils.MessageManager;
+import com.example.meet.participate.application.domain.entity.ParticipateVote;
+import com.example.meet.participate.application.domain.entity.ParticipateVoteItem;
+import com.example.meet.infrastructure.enumulation.PostType;
 import com.example.meet.infrastructure.utils.ScheduleManager;
 import com.example.meet.post.adapter.in.dto.CreateMeetRequestDto;
 import com.example.meet.post.adapter.in.dto.CreateMeetResponseDto;
@@ -26,7 +28,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -62,11 +63,10 @@ public class CreatePostService implements CreatePostUseCase {
 
         Post post = Post.builder()
                 .title(inDto.getTitle())
-                .date(dateTime)
-                .place(inDto.getPlace())
                 .content(inDto.getContent())
                 .author(user)
-                .type(MeetType.MEET)
+                .type(PostType.MEET)
+                .status(VoteStatus.VOTE)
                 .build();
 
         //일정 투표 연결
@@ -95,15 +95,47 @@ public class CreatePostService implements CreatePostUseCase {
                 .scheduleType(null)
                 .build();
 
-        Message.SCHEDULE.setTemplateArgs(templateArgs);
-        messageManager.sendAll(Message.SCHEDULE).block();
-        messageManager.sendMe(Message.SCHEDULE).block();
+        Message.VOTE.setTemplateArgs(templateArgs);
+        messageManager.sendAll(Message.VOTE).block();
+        messageManager.sendMe(Message.VOTE).block();
 
         return CreateMeetResponseDto
                 .builder()
                 .id(post.getId())
                 .build();
     }
+
+    @Transactional
+    @PreAuthorize("@memberPermissionEvaluator.hasAdminAccess(authentication)")
+    public CreateMeetResponseDto createNotification(CreateMeetRequestDto inDto) {
+        Member user = getLogginedInfoUseCase.get();
+
+        Post post = Post.builder()
+                .title(inDto.getTitle())
+                .content(inDto.getContent())
+                .author(user)
+                .type(PostType.NOTIFICATION)
+                .status(VoteStatus.FINISHED)
+                .build();
+
+        createPostPort.create(post);
+
+        TemplateArgs templateArgs = TemplateArgs.builder()
+                .title(post.getTitle())
+                .but(post.getId().toString())
+                .scheduleType(null)
+                .build();
+
+        Message.POST.setTemplateArgs(templateArgs);
+        messageManager.sendAll(Message.POST).block();
+        messageManager.sendMe(Message.POST).block();
+
+        return CreateMeetResponseDto
+                .builder()
+                .id(post.getId())
+                .build();
+    }
+
 
     private Vote createScheduleVote(String voteDeadline) {
         LocalDateTime deadLine =
@@ -112,8 +144,10 @@ public class CreatePostService implements CreatePostUseCase {
 
         return Vote.builder()
                 .title("날짜 투표")
-                .activeYn(true)
                 .endDate(deadLine)
+                .activeYn(true)
+                .type(VoteType.DATE)
+                .isDuplicate(true)
                 .build();
     }
 
@@ -126,6 +160,8 @@ public class CreatePostService implements CreatePostUseCase {
                 .title("장소 투표")
                 .activeYn(true)
                 .endDate(deadLine)
+                .type(VoteType.PLACE)
+                .isDuplicate(true)
                 .build();
     }
 
@@ -136,6 +172,7 @@ public class CreatePostService implements CreatePostUseCase {
         return ParticipateVote.builder()
                 .totalNum(0)
                 .endDate(endDate)
+                .isActive(true)
                 .build();
     }
 
@@ -158,7 +195,10 @@ public class CreatePostService implements CreatePostUseCase {
         List<LocalDateTime> fridaysAndSaturdays = ScheduleManager.getFridaysAndSaturdays(firstDayOfNextQuarterMonth, lastDayOfNextQuarterMonth);
 
         for(LocalDateTime date : fridaysAndSaturdays){
-            VoteItem scheduleVoteItem = VoteItem.builder().dateTime(date).vote(scheduleVote).editable(false).build();
+            DateTimeFormatter formatter =
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+            VoteItem scheduleVoteItem = VoteItem.builder().content(date.format(formatter)).vote(scheduleVote).build();
             scheduleVote.getVoteItems().add(scheduleVoteItem);
         }
     }
@@ -167,13 +207,11 @@ public class CreatePostService implements CreatePostUseCase {
         ParticipateVoteItem participateVoteItem1 = ParticipateVoteItem.builder()
                 .isParticipate(true)
                 .participateVote(participateVote)
-                .editable(false)
                 .build();
 
         ParticipateVoteItem participateVoteItem2 = ParticipateVoteItem.builder()
                 .isParticipate(false)
                 .participateVote(participateVote)
-                .editable(false)
                 .build();
 
         participateVote.getParticipateVoteItems().add(participateVoteItem1);

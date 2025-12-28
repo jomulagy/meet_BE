@@ -3,6 +3,7 @@ package com.example.meet.post.application.service;
 import com.example.meet.auth.application.port.in.GetLogginedInfoUseCase;
 import com.example.meet.entity.Member;
 import com.example.meet.infrastructure.enumulation.ErrorCode;
+import com.example.meet.infrastructure.enumulation.VoteStatus;
 import com.example.meet.infrastructure.enumulation.VoteType;
 import com.example.meet.infrastructure.exception.BusinessException;
 import com.example.meet.post.adapter.in.dto.in.GetPostRequestDto;
@@ -38,16 +39,6 @@ public class GetPostService implements GetPostUseCase {
         GetDateResponseDto dateResponseDto;
         GetPlaceResponseDto placeResponseDto = null;
 
-        String date = null;
-        String time = null;
-
-        if(post.getDate() != null){
-            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-            date = post.getDate().toLocalDate().format(dateFormatter);
-            time = post.getDate().toLocalTime().format(timeFormatter);
-        }
-
         List<Vote> voteList = post.getVoteList();
         Boolean editable = false;
 
@@ -55,36 +46,21 @@ public class GetPostService implements GetPostUseCase {
             editable = true;
         }
 
-        dateResponseDto = GetDateResponseDto.builder()
-                .value(date)
-                .time(time)
-                .editable(editable.toString())
-                .build();
-
         if(post.getAuthor().equals(user) && voteList.stream().noneMatch(vote -> VoteType.PLACE.equals(vote.getType()))){
             editable = true;
         }
-
-        placeResponseDto = GetPlaceResponseDto.builder()
-                .value(post.getPlace())
-                .editable(editable.toString())
-                .build();
 
         Long participantsNum = post.getParticipantsNum();
         if(post.getParticipantsNum() == null){
             participantsNum = 0L;
         }
 
-        List<String> participants = new ArrayList<>();
-
-        for(Member m : post.getParticipants()){
-            participants.add(m.getName());
-        }
         return GetPostResponseDto.builder()
                 .id(post.getId())
                 .title(post.getTitle())
                 .content(post.getContent())
                 .isAuthor(post.getAuthor().equals(user))
+                .isVoteClosed(post.getStatus() != VoteStatus.VOTE)
                 .build();
     }
 
@@ -98,21 +74,6 @@ public class GetPostService implements GetPostUseCase {
         List<Post> postList = getPostPort.findAll();
 
         for(Post post : postList) {
-            date = null;
-
-            if(post.getDate() != null){
-                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-                date = post.getDate().format(dateTimeFormatter);
-            }
-
-            GetDateResponseDto dateResponseDto = GetDateResponseDto.builder()
-                    .value(date)
-                    .build();
-
-            GetPlaceResponseDto placeResponseDto = GetPlaceResponseDto.builder()
-                    .value(post.getPlace())
-                    .build();
-
             responseDtoList.add(
                     GetPostResponseDto.builder()
                             .id(post.getId())
@@ -126,7 +87,7 @@ public class GetPostService implements GetPostUseCase {
 
     @Override
     public Post getEntity(Long meetId) {
-        return getPostPort.getMeetById(meetId)
+        return getPostPort.getPostById(meetId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.MEET_NOT_EXISTS));
     }
 }

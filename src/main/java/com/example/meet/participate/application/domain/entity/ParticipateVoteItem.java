@@ -1,5 +1,6 @@
-package com.example.meet.entity;
+package com.example.meet.participate.application.domain.entity;
 
+import com.example.meet.entity.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -11,7 +12,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.time.LocalDate;
+
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -34,9 +35,6 @@ public class ParticipateVoteItem {
     @Column(name = "isParticipate", nullable = false)
     private Boolean isParticipate;
 
-    @Column(name = "editable", nullable = false)
-    private Boolean editable;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "participateVote_id")
     private ParticipateVote participateVote;
@@ -47,6 +45,7 @@ public class ParticipateVoteItem {
             joinColumns = @JoinColumn(name = "participateVoteItem_id"),
             inverseJoinColumns = @JoinColumn(name = "member_id")
     )
+    @Builder.Default
     private List<Member> participateVoters = new ArrayList<>();
 
     public void vote(List<Member> members){

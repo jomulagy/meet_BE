@@ -11,6 +11,5 @@ import lombok.NoArgsConstructor;
 @Builder
 public class CreateVoteItemRequestDto {
     private Long voteId;
-    private String date;
-    private String time;
+    private String value;
 }

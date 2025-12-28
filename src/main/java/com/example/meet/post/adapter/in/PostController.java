@@ -24,14 +24,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -61,13 +55,18 @@ public class PostController {
         return CommonResponse.success(createPostUseCase.createMeet(inDto));
     }
 
+    @PostMapping("/create/notification")
+    public CommonResponse<CreateMeetResponseDto> createNotification(@RequestBody CreateMeetRequestDto requestDto){
+        return CommonResponse.success(createPostUseCase.createNotification(requestDto));
+    }
+
     @GetMapping("/list")
     public CommonResponse<List<GetPostResponseDto>> findPostList(){
         return CommonResponse.success(getPostUseCase.findPostList());
     }
 
-    @GetMapping("")
-    public CommonResponse<GetPostResponseDto> findPost(@RequestParam(name = "postId") Long postId){
+    @GetMapping("/{postId}")
+    public CommonResponse<GetPostResponseDto> findPost(@PathVariable(name = "postId") Long postId){
         GetPostRequestDto inDto = GetPostRequestDto.builder()
                 .postId(postId)
                 .build();
@@ -76,38 +75,6 @@ public class PostController {
     }
 
     @PutMapping("")
-    @Tag(name = "Meet", description = "모임")
-    @Operation(summary = "모임 수정",
-            description = "Authorization header require<br> 투표료 결정된 필드는 수정 할 수 없습니다.<br>변경되지 않은 필드도 전송합니다.",
-            responses = {
-                    @ApiResponse(responseCode = "200",
-                            description = "성공",
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = UpdatePostResponseDto.class)
-                            )
-                    ),
-                    @ApiResponse(responseCode = "404",
-                            description = "존재하지 않는 멤버, 존재하지 않는 모임",
-                            content = @Content(
-                                    mediaType = "application/json"
-                            )
-                    ),
-                    @ApiResponse(responseCode = "403",
-                            description = "멤버 권한이 없음, 관리자와 작성자만 편집 할 수 있음",
-                            content = @Content(
-                                    mediaType = "application/json"
-                            )
-                    ),
-                    @ApiResponse(responseCode = "400",
-                            description = "투표한 필드는 편집 할 수 없음",
-                            content = @Content(
-                                    mediaType = "application/json"
-                            )
-                    )
-
-            })
-    @Parameter(name = "meetId", description = "모임 id", example = "1")
     public CommonResponse<UpdatePostResponseDto> editMeet(@RequestParam String meetId, @RequestBody UpdatePostRequestDto requestDto){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();

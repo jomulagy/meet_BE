@@ -1,15 +1,12 @@
 package com.example.meet.entity;
 
 import com.example.meet.infrastructure.enumulation.MemberPrevillege;
+import com.example.meet.participate.application.domain.entity.ParticipateVote;
+import com.example.meet.participate.application.domain.entity.ParticipateVoteItem;
 import com.example.meet.post.application.domain.entity.Post;
 import com.example.meet.vote.application.domain.entity.VoteItem;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import java.util.List;
 import java.util.ArrayList;
 import lombok.AllArgsConstructor;
@@ -51,9 +48,6 @@ public class Member {
 
     @ManyToMany(mappedBy = "participateVoters")
     private List<ParticipateVoteItem> participateVoters = new ArrayList<>();
-
-    @ManyToMany(mappedBy = "participants")
-    private List<Post> posts = new ArrayList<>();
 
     public void updatePrevillege(MemberPrevillege previllege){
         this.previllege = previllege;

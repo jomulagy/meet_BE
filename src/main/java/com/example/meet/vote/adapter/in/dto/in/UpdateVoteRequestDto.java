@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 @Builder
 public class UpdateVoteRequestDto {
     private Long voteId;
-    private List<Long> votedItemIdList;
+    private List<Long> voteItemIdList;
 }

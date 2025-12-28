@@ -10,6 +10,8 @@ import java.util.List;
 public interface GetVoteUseCase {
     List<FindVoteResponseDto> getFindVoteResponseDtoList(FindVoteRequestDto inDto);
 
+    FindVoteResponseDto getResponseDto(Long voteId);
+
     List<Vote> getVoteListByPost(Post post);
 
     Vote getVote(Long voteId);

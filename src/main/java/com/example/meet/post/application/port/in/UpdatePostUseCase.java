@@ -5,4 +5,6 @@ import com.example.meet.post.adapter.in.dto.out.UpdatePostResponseDto;
 
 public interface UpdatePostUseCase {
     UpdatePostResponseDto update(UpdatePostRequestDto inDto);
+
+    void terminateVote(Long id);
 }

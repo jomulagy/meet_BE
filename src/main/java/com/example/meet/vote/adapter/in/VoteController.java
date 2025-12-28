@@ -1,6 +1,7 @@
 package com.example.meet.vote.adapter.in;
 
 import com.example.meet.infrastructure.CommonResponse;
+import com.example.meet.vote.adapter.in.dto.out.DeleteVoteResponseDto;
 import com.example.meet.vote.adapter.in.dto.in.*;
 import com.example.meet.vote.adapter.in.dto.out.*;
 import com.example.meet.vote.application.port.in.*;
@@ -17,56 +18,59 @@ import static java.lang.Long.parseLong;
 public class VoteController {
 
     private final GetVoteUseCase getVoteUseCase;
-    private final GetVoteItemUseCase getVoteItemUseCase;
+    private final CreateVoteUseCase createVoteUseCase;
     private final CreateVoteItemUseCase createVoteItemUseCase;
     private final DeleteVoteItemUseCase deleteVoteItemUseCase;
+    private final DeleteVoteUseCase deleteVoteUseCase;
     private final UpdateVoteUseCase updateVoteUseCase;
 
     @GetMapping("/list")
-    public CommonResponse<List<FindVoteResponseDto>> findVoteList(@RequestParam(name = "meetId") String meetId) {
+    public CommonResponse<List<FindVoteResponseDto>> findVoteList(@RequestParam(name = "postId") Long meetId) {
         FindVoteRequestDto inDto = FindVoteRequestDto.builder()
-                .postId(parseLong(meetId))
+                .postId(meetId)
                 .build();
 
         return CommonResponse.success(getVoteUseCase.getFindVoteResponseDtoList(inDto));
     }
 
-    @GetMapping("/item/list")
-    public CommonResponse<List<GetVoteItemResponseDto>> findVoteItemList(@RequestParam(name = "meetId") String meetId) {
-        FindVoteItemRequestDto inDto = FindVoteItemRequestDto.builder()
-                .voteId(parseLong(meetId))
-                .build();
-
-        return CommonResponse.success(getVoteItemUseCase.getItemList(inDto));
+    @PostMapping("/item")
+    public CommonResponse<FindVoteResponseDto> createVoteItem(@RequestBody CreateVoteItemRequestDto request) {
+        return CommonResponse.success(createVoteItemUseCase.createItem(request));
     }
 
-    @PostMapping("/item")
-    public CommonResponse<CreateVoteItemResponseDto> createVoteItem(@RequestBody CreateVoteItemRequestDto request) {
-        CreateVoteItemRequestDto inDto = CreateVoteItemRequestDto.builder()
-                .voteId(request.getVoteId())
-                .date(request.getDate())
-                .time(request.getTime())
-                .build();
+    @PostMapping("")
+    public CommonResponse<Void> createVote(@RequestBody CreateVoteRequestDto request) {
+        createVoteUseCase.create(request);
+        return CommonResponse.success();
+    }
 
-        return CommonResponse.success(createVoteItemUseCase.createItem(inDto));
+    @PostMapping("/confirm")
+    public CommonResponse<FindVoteResponseDto> confirm(@RequestBody UpdateVoteRequestDto request) {
+        return CommonResponse.success(updateVoteUseCase.vote(request));
+    }
+
+    @PostMapping("/terminate")
+    public CommonResponse<TerminateResponseDto> terminate(@RequestBody TerminateVoteRequestDto request) {
+        return CommonResponse.success(updateVoteUseCase.terminate(request));
+    }
+
+    @PostMapping("/terminate/all")
+    public CommonResponse<Void> terminateAll(@RequestBody TerminateVoteRequestDto request) {
+        updateVoteUseCase.terminateAll(request);
+        return CommonResponse.success();
     }
 
     @DeleteMapping("/item")
-    public CommonResponse<DeleteVoteItemResponseDto> deleteVoteItem(@RequestParam String scheduleVoteItemId) {
+    public CommonResponse<DeleteVoteItemResponseDto> deleteVoteItem(@RequestParam String voteItemId) {
         DeleteVoteItemRequestDto inDto = DeleteVoteItemRequestDto.builder()
-                .scheduleVoteItemId(parseLong(scheduleVoteItemId))
+                .voteItemId(parseLong(voteItemId))
                 .build();
 
         return CommonResponse.success(deleteVoteItemUseCase.deleteItem(inDto));
     }
 
-    @PutMapping("")
-    public CommonResponse<UpdateVoteResponseDto> vote(@RequestBody UpdateVoteRequestDto requestDto) {
-        UpdateVoteRequestDto inDto = UpdateVoteRequestDto.builder()
-                .voteId(requestDto.getVoteId())
-                .votedItemIdList(requestDto.getVotedItemIdList())
-                .build();
-
-        return CommonResponse.success(updateVoteUseCase.vote(inDto));
+    @DeleteMapping("")
+    public CommonResponse<DeleteVoteResponseDto> deleteVote(@RequestParam Long voteId) {
+        return CommonResponse.success(deleteVoteUseCase.deleteVote(voteId));
     }
 }

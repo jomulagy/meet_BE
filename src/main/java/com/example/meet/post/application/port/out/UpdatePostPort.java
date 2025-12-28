@@ -7,7 +7,5 @@ import java.time.LocalDateTime;
 public interface UpdatePostPort {
     long update(UpdatePostRequestDto inDto);
 
-    void updateDate(Long id, LocalDateTime dateTime);
-
-    void updatePlace(Long id, String place);
+    void terminateVote(Long id);
 }

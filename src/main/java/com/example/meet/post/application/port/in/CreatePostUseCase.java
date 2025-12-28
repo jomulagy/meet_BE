@@ -5,4 +5,6 @@ import com.example.meet.post.adapter.in.dto.CreateMeetResponseDto;
 
 public interface CreatePostUseCase {
     CreateMeetResponseDto createMeet(CreateMeetRequestDto requestDto);
+
+    CreateMeetResponseDto createNotification(CreateMeetRequestDto requestDto);
 }

@@ -45,22 +45,16 @@ public class UpdatePostService implements UpdatePostUseCase {
             throw new BusinessException(ErrorCode.MEET_EDIT_PERMISSION_REQUIRED);
         }
 
-        List<Vote> voteList = post.getVoteList();
-
-        //투표한 필드는 편집 불가
-        if(post.getDate() != null && voteList.stream().anyMatch(vote -> vote.getType() == VoteType.DATE)){
-            throw new BusinessException(ErrorCode.VOTE_REQUIRED);
-        }
-
-        //투표한 필드는 편집 불가(장소)
-        if(post.getPlace() != null && voteList.stream().anyMatch(vote -> vote.getType() == VoteType.PLACE)){
-            throw new BusinessException(ErrorCode.VOTE_REQUIRED);
-        }
-
         updatePostPort.update(inDto);
 
         return UpdatePostResponseDto.builder()
                 .id(post.getId())
                 .build();
+    }
+
+    @Override
+    @PreAuthorize("@memberPermissionEvaluator.hasAdminAccess(authentication)")
+    public void terminateVote(Long id) {
+        updatePostPort.terminateVote(id);
     }
 }

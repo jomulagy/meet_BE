@@ -25,6 +25,7 @@ public enum ErrorCode {
 
     //모임
     MEET_NOT_EXISTS(HttpStatus.NOT_FOUND, "존재하지 않는 모임 id 입니다."),
+    VOTE_NOT_EXISTS(HttpStatus.NOT_FOUND, "존재하지 않는 투표 id 입니다."),
     MEET_EDIT_PERMISSION_REQUIRED(HttpStatus.FORBIDDEN, "편집 권한이 없는 유저 입니다."),
     VOTE_REQUIRED(HttpStatus.BAD_REQUEST, "투표한 필드는 편집 할 수 없습니다."),
 

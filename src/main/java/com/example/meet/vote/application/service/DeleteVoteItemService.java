@@ -28,12 +28,12 @@ public class DeleteVoteItemService implements DeleteVoteItemUseCase {
     @PreAuthorize("@memberPermissionEvaluator.hasAccess(authentication)")
     public DeleteVoteItemResponseDto deleteItem(DeleteVoteItemRequestDto inDto) {
         Member user = getLogginedInfoUseCase.get();
-        VoteItem voteItem = getVoteItemPort.get(inDto.getScheduleVoteItemId())
+        VoteItem voteItem = getVoteItemPort.get(inDto.getVoteItemId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.SCHEDULE_VOTE_ITEM_NOT_EXISTS));
 
         getVoteUseCase.getVote(voteItem.getVote().getId());
 
-        if (!voteItem.getAuthor().equals(user) || !Boolean.TRUE.equals(voteItem.getEditable()) || !voteItem.getVoters().isEmpty()) {
+        if (!voteItem.getAuthor().equals(user)) {
             throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
         }
 

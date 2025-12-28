@@ -37,11 +37,12 @@ public class Vote {
     @Builder.Default
     private VoteType type = TEXT;
 
+    @Column(name = "isDuplicate")
+    @Builder.Default
+    private boolean isDuplicate = false;
+
     @Column(name = "result")
     private String result;
-
-    @Column(name = "display_order")
-    private Integer displayOrder;
 
     @Setter
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

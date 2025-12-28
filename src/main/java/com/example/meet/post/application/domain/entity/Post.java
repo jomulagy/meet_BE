@@ -1,14 +1,12 @@
 package com.example.meet.post.application.domain.entity;
 
-import com.example.meet.post.adapter.in.dto.in.UpdatePostRequestDto;
+import com.example.meet.infrastructure.enumulation.VoteStatus;
 import com.example.meet.entity.Member;
-import com.example.meet.entity.ParticipateVote;
-import com.example.meet.infrastructure.enumulation.MeetType;
+import com.example.meet.participate.application.domain.entity.ParticipateVote;
+import com.example.meet.infrastructure.enumulation.PostType;
 import com.example.meet.vote.application.domain.entity.Vote;
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,16 +33,13 @@ public class Post {
     private String content;
 
     @Column(name = "type")
-    private MeetType type;
-
-    @Column(name = "date")
-    private LocalDateTime date;
-
-    @Column(name = "place")
-    private String place;
+    private PostType type;
 
     @Column(name = "participantsNum")
     private Long participantsNum;
+
+    @Column(name = "status")
+    private VoteStatus status;
 
     @Builder.Default
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -56,19 +51,6 @@ public class Post {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "author", nullable = false)
     private Member author;
-
-    @ManyToMany
-    @JoinTable(
-            name = "participants",
-            joinColumns = @JoinColumn(name = "post_id"),
-            inverseJoinColumns = @JoinColumn(name = "member_id")
-    )
-    @Builder.Default
-    private List<Member> participants = new ArrayList<>();
-
-    public void setParticipants(List<Member> participants) {
-        this.participants = participants;
-    }
 
     public void setParticipateVote(ParticipateVote participateVote) {
         this.participateVote = participateVote;
