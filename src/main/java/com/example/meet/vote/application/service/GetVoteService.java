@@ -30,7 +30,7 @@ public class GetVoteService implements GetVoteUseCase {
     private final GetLogginedInfoUseCase getLogginedInfoUseCase;
 
     @Override
-    @PreAuthorize("@memberPermissionEvaluator.hasAdminAccess(authentication)")
+    @PreAuthorize("@memberPermissionEvaluator.hasAccess(authentication)")
     public List<FindVoteResponseDto> getFindVoteResponseDtoList(FindVoteRequestDto inDto) {
         Member user = getLogginedInfoUseCase.get();
 
@@ -83,6 +83,7 @@ public class GetVoteService implements GetVoteUseCase {
     }
 
     @Override
+    @PreAuthorize("@memberPermissionEvaluator.hasAccess(authentication)")
     public FindVoteResponseDto getResponseDto(Long voteId) {
         Member user = getLogginedInfoUseCase.get();
         Optional<Vote> voteOptional = getVotePort.get(voteId);
@@ -130,11 +131,13 @@ public class GetVoteService implements GetVoteUseCase {
     }
 
     @Override
+    @PreAuthorize("@memberPermissionEvaluator.hasAccess(authentication)")
     public List<Vote> getVoteListByPost(Post post) {
         return getVotePort.getByPostId(post.getId());
     }
 
     @Override
+    @PreAuthorize("@memberPermissionEvaluator.hasAccess(authentication)")
     public Vote getVote(Long voteId) {
         return getVotePort.get(voteId).orElseThrow(() -> new BusinessException(ErrorCode.MEET_NOT_EXISTS));
     }
