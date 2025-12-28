@@ -1,6 +1,6 @@
 package com.example.meet.entity;
 
-import com.example.meet.meet.application.domain.entity.Meet;
+import com.example.meet.post.application.domain.entity.Post;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,5 +28,5 @@ public class Place {
 
     @OneToOne
     @JoinColumn(name = "meet_id", referencedColumnName = "id")
-    private Meet meet;
+    private Post post;
 }

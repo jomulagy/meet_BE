@@ -1,9 +1,7 @@
 package com.example.meet.infrastructure.repository;
 
-import com.example.meet.entity.ParticipateVote;
-import com.example.meet.entity.PlaceVote;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import com.example.meet.participate.application.domain.entity.ParticipateVote;
+
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

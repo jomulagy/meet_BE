@@ -5,15 +5,19 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class FindParticipateVoteResponseDto {
-    private String meetTitle;
-    private String date;
-    private String time;
-    private String place;
+    private Long id;
     private String endDate;
-    private String isAuthor;
+    private List<FindParticipateVoteItemResponseDto> itemList;
+    private boolean isActive;
+    private boolean isVoted;
+    @Builder.Default
+    private List<String> participants = new ArrayList<>();
 }

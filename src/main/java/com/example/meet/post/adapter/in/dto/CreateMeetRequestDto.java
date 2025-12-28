@@ -1,0 +1,33 @@
+package com.example.meet.post.adapter.in.dto;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString(exclude = {"userId", "title", "date", "time", "voteDeadline", "participationDeadline"})
+@Builder
+public class CreateMeetRequestDto {
+    @Schema(description = "제목", example = "3분기 정기 일정")
+    private String title;
+
+    @Schema(description = "날짜", example = "2024-07-05")
+    private String date;
+
+    @Schema(description = "시간", example = "19:00")
+    private String time;
+
+    private String place;
+
+    @Schema(description = "내용", example = "내용")
+    private String content;
+
+    private String voteDeadline;
+
+    private String participationDeadline;
+}

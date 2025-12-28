@@ -20,8 +20,8 @@ public class TestService {
                 .but(meetId)
                 .scheduleType("정기")
                 .build();
-        Message.VOTE.setTemplateArgs(templateArgs);
-        Mono<String> response = messageManager.sendAll(Message.VOTE);
+        Message.PARTICIPATE.setTemplateArgs(templateArgs);
+        Mono<String> response = messageManager.sendAll(Message.PARTICIPATE);
         log.info(response.toString());
         return response;
     }

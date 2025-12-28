@@ -4,7 +4,6 @@ import com.example.meet.infrastructure.CommonResponse;
 import com.example.meet.infrastructure.repository.TokenRepository;
 import com.example.meet.service.AuthService;
 import com.example.meet.service.MeetService;
-import com.example.meet.service.ScheduleService;
 import com.example.meet.service.TestService;
 import java.net.UnknownHostException;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +19,6 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/test")
 public class TestController {
     private final TestService testService;
-    private final ScheduleService scheduleService;
     private final MeetService meetService;
     private final AuthService authService;
     private final TokenRepository tokenRepository;
