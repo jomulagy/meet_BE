@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -21,6 +22,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class MessageManager {
@@ -54,6 +56,10 @@ public class MessageManager {
         try{
             String receiverUuidsJson = convertListToJson(messageRequestDto.getReceiverUuids());
             String templateArgsJson = objectMapper.writeValueAsString(messageRequestDto.getTemplateArgs());
+
+            log.debug("receiver_uuids : {}", receiverUuidsJson);
+            log.debug("template_id : {}", messageRequestDto.getTemplateId());
+            log.debug("template_args : {}", templateArgsJson);
 
             Mono<String> response = webClient.post()
                     .uri(url)
