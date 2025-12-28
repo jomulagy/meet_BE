@@ -20,4 +20,5 @@ public class GetPostResponseDto {
     @Schema(description = "작성자 여부", example = "true")
     private boolean isAuthor;
     private boolean isVoteClosed;
+    private String type;
 }

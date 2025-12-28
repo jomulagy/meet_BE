@@ -78,6 +78,7 @@ public class GetPostService implements GetPostUseCase {
                     GetPostResponseDto.builder()
                             .id(post.getId())
                             .title(post.getTitle())
+                            .type(post.getType().getName())
                             .build()
             );
         }

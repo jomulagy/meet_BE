@@ -6,7 +6,7 @@ import lombok.Getter;
 public enum PostType {
     MEET("회식"),
     TRAVEL("여행"),
-    NOTIFICATION("공지사항"),
+    NOTIFICATION("공지"),
     VOTE("투표");
 
     private final String name;
