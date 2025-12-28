@@ -8,7 +8,7 @@ public enum Message {
     PARTICIPATE("108553"),
     VOTE("108568"), // 투표가 등록 되었습니다.
     POST("127222"), // 글 등록
-    VOTE_TERMINATE("127215"), // 투표 종료
+    VOTE_TERMINATE("127224"), // 투표 종료
     MEET_NOTIFICATION("110979"),
     DEPOSIT("115531"),
     ;
