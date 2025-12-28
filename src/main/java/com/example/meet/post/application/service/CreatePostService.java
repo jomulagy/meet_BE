@@ -87,11 +87,11 @@ public class CreatePostService implements CreatePostUseCase {
         setParticiapteVoteItems(participateVote);
         post.setParticipateVote(participateVote);
 
-        createPostPort.create(post);
+        Post saved = createPostPort.create(post);
 
         TemplateArgs templateArgs = TemplateArgs.builder()
-                .title(post.getTitle())
-                .but(post.getId().toString())
+                .title(saved.getTitle())
+                .but(saved.getId().toString())
                 .scheduleType(null)
                 .build();
 
@@ -118,11 +118,11 @@ public class CreatePostService implements CreatePostUseCase {
                 .status(VoteStatus.FINISHED)
                 .build();
 
-        createPostPort.create(post);
+        Post saved = createPostPort.create(post);
 
         TemplateArgs templateArgs = TemplateArgs.builder()
-                .title(post.getTitle())
-                .but(post.getId().toString())
+                .title(saved.getTitle())
+                .but(saved.getId().toString())
                 .scheduleType(null)
                 .build();
 
@@ -149,11 +149,11 @@ public class CreatePostService implements CreatePostUseCase {
                 .status(VoteStatus.VOTE)
                 .build();
 
-        createPostPort.create(post);
+        Post saved = createPostPort.create(post);
 
         TemplateArgs templateArgs = TemplateArgs.builder()
-                .title(post.getTitle())
-                .but(post.getId().toString())
+                .title(saved.getTitle())
+                .but(saved.getId().toString())
                 .scheduleType(null)
                 .build();
 

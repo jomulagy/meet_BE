@@ -14,7 +14,7 @@ public class CreatePostAdapter implements CreatePostPort {
 
     @Override
     @Transactional
-    public void create(Post post) {
-        postRepository.save(post);
+    public Post create(Post post) {
+        return postRepository.save(post);
     }
 }

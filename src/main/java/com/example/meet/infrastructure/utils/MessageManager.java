@@ -67,9 +67,9 @@ public class MessageManager {
                             .with("template_args", templateArgsJson))
                     .retrieve()
                     .bodyToMono(String.class)
-                    .doOnError(WebClientResponseException.class, ex -> {
+                    .doOnError(Exception.class, ex -> {
                         try {
-                            String errorBody = ex.getResponseBodyAsString();
+                            String errorBody = ex.getLocalizedMessage();
                             System.err.println("Error response: " + errorBody);
                         } catch (Exception e) {
                             System.err.println("Error reading response body: " + e.getMessage());

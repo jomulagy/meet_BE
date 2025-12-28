@@ -22,7 +22,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     protected CommonResponse<Void> handleException(HttpServletRequest request, Exception e) {
-        log.error(Arrays.toString(e.getStackTrace()));
         return CommonResponse.fail(HttpStatus.INTERNAL_SERVER_ERROR,e.getMessage());
     }
 }
