@@ -60,6 +60,11 @@ public class PostController {
         return CommonResponse.success(createPostUseCase.createNotification(requestDto));
     }
 
+    @PostMapping("/create/vote")
+    public CommonResponse<CreateMeetResponseDto> createVote(@RequestBody CreateMeetRequestDto requestDto){
+        return CommonResponse.success(createPostUseCase.createVote(requestDto));
+    }
+
     @GetMapping("/list")
     public CommonResponse<List<GetPostResponseDto>> findPostList(){
         return CommonResponse.success(getPostUseCase.findPostList());

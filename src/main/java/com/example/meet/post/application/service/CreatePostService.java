@@ -136,6 +136,37 @@ public class CreatePostService implements CreatePostUseCase {
                 .build();
     }
 
+    @Transactional
+    @PreAuthorize("@memberPermissionEvaluator.hasAdminAccess(authentication)")
+    public CreateMeetResponseDto createVote(CreateMeetRequestDto inDto) {
+        Member user = getLogginedInfoUseCase.get();
+
+        Post post = Post.builder()
+                .title(inDto.getTitle())
+                .content(inDto.getContent())
+                .author(user)
+                .type(PostType.VOTE)
+                .status(VoteStatus.VOTE)
+                .build();
+
+        createPostPort.create(post);
+
+        TemplateArgs templateArgs = TemplateArgs.builder()
+                .title(post.getTitle())
+                .but(post.getId().toString())
+                .scheduleType(null)
+                .build();
+
+        Message.POST.setTemplateArgs(templateArgs);
+        messageManager.sendAll(Message.POST).block();
+        messageManager.sendMe(Message.POST).block();
+
+        return CreateMeetResponseDto
+                .builder()
+                .id(post.getId())
+                .build();
+    }
+
 
     private Vote createScheduleVote(String voteDeadline) {
         LocalDateTime deadLine =

@@ -7,4 +7,6 @@ public interface CreatePostUseCase {
     CreateMeetResponseDto createMeet(CreateMeetRequestDto requestDto);
 
     CreateMeetResponseDto createNotification(CreateMeetRequestDto requestDto);
+
+    CreateMeetResponseDto createVote(CreateMeetRequestDto requestDto);
 }
