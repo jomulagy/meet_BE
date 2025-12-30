@@ -3,6 +3,7 @@ package com.example.meet.vote.application.service;
 import com.example.meet.auth.application.port.in.GetLogginedInfoUseCase;
 import com.example.meet.entity.Member;
 import com.example.meet.infrastructure.enumulation.ErrorCode;
+import com.example.meet.infrastructure.enumulation.MemberPrevillege;
 import com.example.meet.infrastructure.exception.BusinessException;
 import com.example.meet.vote.adapter.in.dto.in.DeleteVoteItemRequestDto;
 import com.example.meet.vote.adapter.in.dto.out.DeleteVoteItemResponseDto;
@@ -33,7 +34,7 @@ public class DeleteVoteItemService implements DeleteVoteItemUseCase {
 
         getVoteUseCase.getVote(voteItem.getVote().getId());
 
-        if (!voteItem.getAuthor().equals(user)) {
+        if (!user.getPrevillege().equals(MemberPrevillege.admin) && !voteItem.getAuthor().equals(user)) {
             throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
         }
 
