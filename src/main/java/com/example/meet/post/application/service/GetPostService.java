@@ -3,6 +3,7 @@ package com.example.meet.post.application.service;
 import com.example.meet.auth.application.port.in.GetLogginedInfoUseCase;
 import com.example.meet.entity.Member;
 import com.example.meet.infrastructure.enumulation.ErrorCode;
+import com.example.meet.infrastructure.enumulation.PostType;
 import com.example.meet.infrastructure.enumulation.VoteStatus;
 import com.example.meet.infrastructure.enumulation.VoteType;
 import com.example.meet.infrastructure.exception.BusinessException;
@@ -18,7 +19,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,12 +66,11 @@ public class GetPostService implements GetPostUseCase {
 
     @Override
     @PreAuthorize("@memberPermissionEvaluator.hasAccess(authentication)")
-    public List<GetPostResponseDto> findPostList() {
+    public List<GetPostResponseDto> findPostList(String type) {
         String date;
         List<GetPostResponseDto> responseDtoList = new ArrayList<>();
-
         //모임 조회
-        List<Post> postList = getPostPort.findAll();
+        List<Post> postList = getPostPort.findListByType(PostType.fromName(type));
 
         for(Post post : postList) {
             responseDtoList.add(

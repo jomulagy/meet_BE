@@ -1,5 +1,6 @@
 package com.example.meet.post.adapter.out;
 
+import com.example.meet.infrastructure.enumulation.PostType;
 import com.example.meet.infrastructure.repository.MeetRepository;
 import com.example.meet.post.application.domain.entity.Post;
 import com.example.meet.post.application.port.out.GetPostPort;
@@ -27,6 +28,15 @@ public class GetPostAdapter implements GetPostPort {
     public List<Post> findAll() {
         return query
                 .selectFrom(post)
+                .orderBy(post.id.desc())
+                .fetch();
+    }
+
+    @Override
+    public List<Post> findListByType(PostType type) {
+        return query
+                .selectFrom(post)
+                .where(post.type.eq(type))
                 .orderBy(post.id.desc())
                 .fetch();
     }

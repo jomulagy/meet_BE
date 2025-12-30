@@ -9,7 +9,7 @@ import java.util.List;
 public interface GetPostUseCase {
     GetPostResponseDto get(GetPostRequestDto inDto);
 
-    List<GetPostResponseDto> findPostList();
+    List<GetPostResponseDto> findPostList(String type);
 
     Post getEntity(Long meetId);
 }

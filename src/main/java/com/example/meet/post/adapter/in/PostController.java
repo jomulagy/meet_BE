@@ -66,8 +66,8 @@ public class PostController {
     }
 
     @GetMapping("/list")
-    public CommonResponse<List<GetPostResponseDto>> findPostList(){
-        return CommonResponse.success(getPostUseCase.findPostList());
+    public CommonResponse<List<GetPostResponseDto>> findPostList(@RequestParam String type){
+        return CommonResponse.success(getPostUseCase.findPostList(type));
     }
 
     @GetMapping("/{postId}")
