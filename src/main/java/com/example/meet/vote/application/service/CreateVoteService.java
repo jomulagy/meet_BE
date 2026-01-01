@@ -49,7 +49,7 @@ public class CreateVoteService implements CreateVoteUseCase {
 
         Vote vote = Vote.builder()
                 .title(request.getTitle())
-                .endDate(LocalDate.parse(request.getVoteDeadline(), DateTimeFormatter.ISO_LOCAL_DATE).atTime(LocalTime.of(23, 59)))
+                .endDate(LocalDate.parse(request.getVoteDeadline(), DateTimeFormatter.ISO_LOCAL_DATE).plusDays(1).atTime(LocalTime.of(0, 0)))
                 .activeYn(true)
                 .type(request.getVoteType())
                 .isDuplicate(request.getDuplicateYn().equals("Y"))
