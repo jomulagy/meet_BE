@@ -1,5 +1,6 @@
 package com.example.meet.vote.application.service;
 
+import com.example.meet.batch.application.port.in.RegisterJobUseCase;
 import com.example.meet.infrastructure.dto.TemplateArgs;
 import com.example.meet.infrastructure.enumulation.ErrorCode;
 import com.example.meet.infrastructure.enumulation.Message;
@@ -34,7 +35,7 @@ import java.util.Optional;
 public class CreateVoteService implements CreateVoteUseCase {
     private final GetPostPort getPostPort;
     private final CreateVotePort createVotePort;
-    private final Scheduler scheduler;
+    private final RegisterJobUseCase registerJobUseCase;
 
     private final MessageManager messageManager;
 
@@ -49,7 +50,7 @@ public class CreateVoteService implements CreateVoteUseCase {
 
         Vote vote = Vote.builder()
                 .title(request.getTitle())
-                .endDate(LocalDate.parse(request.getVoteDeadline(), DateTimeFormatter.ISO_LOCAL_DATE).plusDays(1).atTime(LocalTime.of(0, 0)))
+                .endDate(LocalDate.parse(request.getVoteDeadline(), DateTimeFormatter.ISO_LOCAL_DATE).atTime(LocalTime.of(0, 0)))
                 .activeYn(true)
                 .type(request.getVoteType())
                 .isDuplicate(request.getDuplicateYn().equals("Y"))
@@ -68,34 +69,6 @@ public class CreateVoteService implements CreateVoteUseCase {
 
         Vote savedVote = createVotePort.create(vote);
 
-        registerTerminateVoteJob(savedVote);
-    }
-
-    private void registerTerminateVoteJob(Vote vote) {
-        LocalDateTime endDate = vote.getEndDate();
-
-        String cronExpression = String.format("%d %d %d %d %d ? %d",
-                endDate.getSecond(),
-                endDate.getMinute(),
-                endDate.getHour(),
-                endDate.getDayOfMonth(),
-                endDate.getMonthValue(),
-                endDate.getYear());
-
-        JobDetail jobDetail = JobBuilder.newJob(com.example.meet.batch.job.TerminateVote.class)
-                .withIdentity("TerminateVote_" + vote.getId())
-                .build();
-
-        Trigger trigger = TriggerBuilder.newTrigger()
-                .forJob(jobDetail)
-                .withIdentity("TerminateVoteTrigger_" + vote.getId())
-                .withSchedule(CronScheduleBuilder.cronSchedule(cronExpression))
-                .build();
-
-        try {
-            scheduler.scheduleJob(jobDetail, trigger);
-        } catch (SchedulerException e) {
-            throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR);
-        }
+        registerJobUseCase.terminateVote(savedVote);
     }
 }

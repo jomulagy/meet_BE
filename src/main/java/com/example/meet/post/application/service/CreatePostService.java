@@ -1,6 +1,7 @@
 package com.example.meet.post.application.service;
 
 import com.example.meet.auth.application.port.in.GetLogginedInfoUseCase;
+import com.example.meet.batch.application.port.in.RegisterJobUseCase;
 import com.example.meet.entity.Member;
 import com.example.meet.infrastructure.dto.TemplateArgs;
 import com.example.meet.infrastructure.enumulation.Message;
@@ -35,6 +36,7 @@ import java.util.List;
 public class CreatePostService implements CreatePostUseCase {
     private final GetLogginedInfoUseCase getLogginedInfoUseCase;
     private final CreatePostPort createPostPort;
+    private final RegisterJobUseCase registerJobUseCase;
 
     private final MessageManager messageManager;
 
@@ -45,6 +47,10 @@ public class CreatePostService implements CreatePostUseCase {
     @PreAuthorize("@memberPermissionEvaluator.hasAdminAccess(authentication)")
     public CreateMeetResponseDto createMeet(CreateMeetRequestDto inDto) {
         Member user = getLogginedInfoUseCase.get();
+
+        Vote scheduleVote = null;
+        Vote placeVote = null;
+        ParticipateVote participateVote = null;
 
         LocalDate date = null;
         LocalTime time = null;
@@ -71,19 +77,19 @@ public class CreatePostService implements CreatePostUseCase {
 
         //일정 투표 연결
         if(dateTime == null){
-            Vote scheduleVote = createScheduleVote(inDto.getVoteDeadline());
+            scheduleVote = createScheduleVote(inDto.getVoteDeadline());
             setScheduleVoteItems(scheduleVote);
             post.addVote(scheduleVote);
         }
 
         //장소 투표 연결
         if(inDto.getPlace() == null){
-            Vote placeVote = createPlaceVote(inDto.getVoteDeadline());
+            placeVote = createPlaceVote(inDto.getVoteDeadline());
             post.addVote(placeVote);
         }
 
         //참여 여부 투표 연결
-        ParticipateVote participateVote = createParticipateVote(inDto.getParticipationDeadline());
+        participateVote = createParticipateVote(inDto.getParticipationDeadline());
         setParticiapteVoteItems(participateVote);
         post.setParticipateVote(participateVote);
 
@@ -98,6 +104,16 @@ public class CreatePostService implements CreatePostUseCase {
         Message.VOTE.setTemplateArgs(templateArgs);
         messageManager.sendAll(Message.VOTE).block();
         messageManager.sendMe(Message.VOTE).block();
+
+        if(scheduleVote != null) {
+            registerJobUseCase.terminateVote(scheduleVote);
+        }
+
+        if(placeVote != null) {
+            registerJobUseCase.terminateVote(placeVote);
+        }
+
+        registerJobUseCase.terminateParticipateVote(participateVote);
 
         return CreateMeetResponseDto
                 .builder()
@@ -201,7 +217,6 @@ public class CreatePostService implements CreatePostUseCase {
     private Vote createScheduleVote(String voteDeadline) {
         LocalDateTime deadLine =
                 LocalDate.parse(voteDeadline)
-                        .plusDays(1)
                         .atTime(0, 0, 0);
 
         return Vote.builder()
@@ -216,7 +231,6 @@ public class CreatePostService implements CreatePostUseCase {
     private Vote createPlaceVote(String voteDeadline) {
         LocalDateTime deadLine =
                 LocalDate.parse(voteDeadline)
-                        .plusDays(1)
                         .atTime(0, 0, 0);
 
         return Vote.builder()

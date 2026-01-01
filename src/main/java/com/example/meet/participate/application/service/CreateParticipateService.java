@@ -1,5 +1,6 @@
 package com.example.meet.participate.application.service;
 
+import com.example.meet.batch.application.port.in.RegisterJobUseCase;
 import com.example.meet.infrastructure.enumulation.ErrorCode;
 import com.example.meet.infrastructure.exception.BusinessException;
 import com.example.meet.participate.application.domain.entity.ParticipateVote;
@@ -23,7 +24,7 @@ public class CreateParticipateService implements CreateParticipateUseCase {
     private final GetPostUseCase getPostUseCase;
     private final CreateParticipateVotePort createParticipateVotePort;
     private final CreateParticipateVoteItemPort createParticipateVoteItemPort;
-    private final Scheduler scheduler;
+    private final RegisterJobUseCase registerJobUseCase;
 
     @Override
     @PreAuthorize("@memberPermissionEvaluator.hasAdminAccess(authentication)")
@@ -32,7 +33,7 @@ public class CreateParticipateService implements CreateParticipateUseCase {
 
         ParticipateVote participateVote = ParticipateVote.builder()
                 .totalNum(0)
-                .endDate(LocalDateTime.now().plusDays(4))
+                .endDate(LocalDateTime.now().plusDays(3))
                 .post(post)
                 .build();
 
@@ -40,7 +41,7 @@ public class CreateParticipateService implements CreateParticipateUseCase {
 
         addVoteItems(saved);
 
-        registerTerminateVoteJob(saved);
+        registerJobUseCase.terminateParticipateVote(saved);
     }
 
     private void addVoteItems(ParticipateVote saved) {
@@ -59,33 +60,5 @@ public class CreateParticipateService implements CreateParticipateUseCase {
                         .build()
         );
 
-    }
-
-    private void registerTerminateVoteJob(ParticipateVote vote) {
-        LocalDateTime endDate = vote.getEndDate();
-
-        String cronExpression = String.format("%d %d %d %d %d ? %d",
-                endDate.getSecond(),
-                endDate.getMinute(),
-                endDate.getHour(),
-                endDate.getDayOfMonth(),
-                endDate.getMonthValue(),
-                endDate.getYear());
-
-        JobDetail jobDetail = JobBuilder.newJob(com.example.meet.batch.job.TerminateVote.class)
-                .withIdentity("TerminateParticipateVote_" + vote.getId())
-                .build();
-
-        Trigger trigger = TriggerBuilder.newTrigger()
-                .forJob(jobDetail)
-                .withIdentity("TerminateParticipateTrigger_" + vote.getId())
-                .withSchedule(CronScheduleBuilder.cronSchedule(cronExpression))
-                .build();
-
-        try {
-            scheduler.scheduleJob(jobDetail, trigger);
-        } catch (SchedulerException e) {
-            throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR);
-        }
     }
 }
