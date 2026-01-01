@@ -65,6 +65,11 @@ public class PostController {
         return CommonResponse.success(createPostUseCase.createVote(requestDto));
     }
 
+    @PostMapping("/create/travel")
+    public CommonResponse<CreateMeetResponseDto> createTravel(@RequestBody CreateMeetRequestDto requestDto){
+        return CommonResponse.success(createPostUseCase.createTravel(requestDto));
+    }
+
     @GetMapping("/list")
     public CommonResponse<List<GetPostResponseDto>> findPostList(@RequestParam String type){
         return CommonResponse.success(getPostUseCase.findPostList(type));

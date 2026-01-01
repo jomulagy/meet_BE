@@ -9,4 +9,6 @@ public interface CreatePostUseCase {
     CreateMeetResponseDto createNotification(CreateMeetRequestDto requestDto);
 
     CreateMeetResponseDto createVote(CreateMeetRequestDto requestDto);
+
+    CreateMeetResponseDto createTravel(CreateMeetRequestDto requestDto);
 }
