@@ -171,7 +171,8 @@ public class CreatePostService implements CreatePostUseCase {
     private Vote createScheduleVote(String voteDeadline) {
         LocalDateTime deadLine =
                 LocalDate.parse(voteDeadline)
-                        .atTime(23, 59, 59);
+                        .plusDays(1)
+                        .atTime(0, 0, 0);
 
         return Vote.builder()
                 .title("날짜 투표")
@@ -185,7 +186,8 @@ public class CreatePostService implements CreatePostUseCase {
     private Vote createPlaceVote(String voteDeadline) {
         LocalDateTime deadLine =
                 LocalDate.parse(voteDeadline)
-                        .atTime(23, 59, 59);
+                        .plusDays(1)
+                        .atTime(0, 0, 0);
 
         return Vote.builder()
                 .title("장소 투표")

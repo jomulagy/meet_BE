@@ -13,6 +13,13 @@ import com.example.meet.vote.application.domain.entity.Vote;
 import com.example.meet.vote.application.port.in.CreateVoteUseCase;
 import com.example.meet.vote.application.port.out.CreateVotePort;
 import lombok.RequiredArgsConstructor;
+import org.quartz.CronScheduleBuilder;
+import org.quartz.JobBuilder;
+import org.quartz.JobDetail;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.quartz.Trigger;
+import org.quartz.TriggerBuilder;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +34,7 @@ import java.util.Optional;
 public class CreateVoteService implements CreateVoteUseCase {
     private final GetPostPort getPostPort;
     private final CreateVotePort createVotePort;
+    private final Scheduler scheduler;
 
     private final MessageManager messageManager;
 
@@ -41,7 +49,7 @@ public class CreateVoteService implements CreateVoteUseCase {
 
         Vote vote = Vote.builder()
                 .title(request.getTitle())
-                .endDate(LocalDate.parse(request.getVoteDeadline(), DateTimeFormatter.ISO_LOCAL_DATE).atTime(LocalTime.of(23, 59)))
+                .endDate(LocalDate.parse(request.getVoteDeadline(), DateTimeFormatter.ISO_LOCAL_DATE).plusDays(1).atTime(LocalTime.of(0, 0)))
                 .activeYn(true)
                 .type(request.getVoteType())
                 .isDuplicate(request.getDuplicateYn().equals("Y"))
@@ -58,6 +66,36 @@ public class CreateVoteService implements CreateVoteUseCase {
         messageManager.sendAll(Message.VOTE).block();
         messageManager.sendMe(Message.VOTE).block();
 
-        createVotePort.create(vote);
+        Vote savedVote = createVotePort.create(vote);
+
+        registerTerminateVoteJob(savedVote);
+    }
+
+    private void registerTerminateVoteJob(Vote vote) {
+        LocalDateTime endDate = vote.getEndDate();
+
+        String cronExpression = String.format("%d %d %d %d %d ? %d",
+                endDate.getSecond(),
+                endDate.getMinute(),
+                endDate.getHour(),
+                endDate.getDayOfMonth(),
+                endDate.getMonthValue(),
+                endDate.getYear());
+
+        JobDetail jobDetail = JobBuilder.newJob(com.example.meet.batch.job.TerminateVote.class)
+                .withIdentity("TerminateVote_" + vote.getId())
+                .build();
+
+        Trigger trigger = TriggerBuilder.newTrigger()
+                .forJob(jobDetail)
+                .withIdentity("TerminateVoteTrigger_" + vote.getId())
+                .withSchedule(CronScheduleBuilder.cronSchedule(cronExpression))
+                .build();
+
+        try {
+            scheduler.scheduleJob(jobDetail, trigger);
+        } catch (SchedulerException e) {
+            throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
     }
 }
