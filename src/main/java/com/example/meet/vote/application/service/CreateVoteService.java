@@ -13,6 +13,7 @@ import com.example.meet.vote.adapter.in.dto.in.CreateVoteRequestDto;
 import com.example.meet.vote.application.domain.entity.Vote;
 import com.example.meet.vote.application.port.in.CreateVoteUseCase;
 import com.example.meet.vote.application.port.out.CreateVotePort;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.JobBuilder;
@@ -41,6 +42,7 @@ public class CreateVoteService implements CreateVoteUseCase {
 
     @Override
     @PreAuthorize("@memberPermissionEvaluator.hasAdminAccess(authentication)")
+    @Transactional
     public void create(CreateVoteRequestDto request) {
         Optional<Post> post = getPostPort.getPostById(request.getPostId());
 

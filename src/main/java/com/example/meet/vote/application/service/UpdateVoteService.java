@@ -90,6 +90,7 @@ public class UpdateVoteService implements UpdateVoteUseCase {
 
     @Override
     @PreAuthorize("@memberPermissionEvaluator.hasAdminAccess(authentication)")
+    @Transactional
     public void terminateAll(TerminateVoteRequestDto request) {
         Post post = getPostUseCase.getEntity(request.getPostId());
 

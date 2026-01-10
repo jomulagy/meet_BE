@@ -15,7 +15,9 @@ import lombok.RequiredArgsConstructor;
 import org.quartz.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Service
@@ -27,13 +29,15 @@ public class CreateParticipateService implements CreateParticipateUseCase {
     private final RegisterJobUseCase registerJobUseCase;
 
     @Override
+    @Transactional
     @PreAuthorize("@memberPermissionEvaluator.hasAdminAccess(authentication)")
     public void create(Long postId) {
         Post post = getPostUseCase.getEntity(postId);
 
         ParticipateVote participateVote = ParticipateVote.builder()
                 .totalNum(0)
-                .endDate(LocalDateTime.now().plusDays(3))
+                .endDate(LocalDate.now().plusDays(4).atTime(0,0))
+                .isActive(true)
                 .post(post)
                 .build();
 
