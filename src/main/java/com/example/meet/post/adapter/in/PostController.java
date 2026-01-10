@@ -37,22 +37,9 @@ public class PostController {
     private final GetPostUseCase getPostUseCase;
     private final UpdatePostUseCase updatePostUseCase;
 
-    @PostMapping("")
+    @PostMapping("/create/meet")
     public CommonResponse<CreateMeetResponseDto> createMeet(@RequestBody CreateMeetRequestDto requestDto){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
-        CreateMeetRequestDto inDto = CreateMeetRequestDto.builder()
-                .title(requestDto.getTitle())
-                .date(requestDto.getDate())
-                .time(requestDto.getTime())
-                .place(requestDto.getPlace())
-                .content(requestDto.getContent())
-                .voteDeadline(requestDto.getVoteDeadline())
-                .participationDeadline(requestDto.getParticipationDeadline())
-                .build();
-
-        return CommonResponse.success(createPostUseCase.createMeet(inDto));
+        return CommonResponse.success(createPostUseCase.createMeet(requestDto));
     }
 
     @PostMapping("/create/notification")

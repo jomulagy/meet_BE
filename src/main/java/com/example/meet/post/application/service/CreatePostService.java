@@ -43,6 +43,7 @@ public class CreatePostService implements CreatePostUseCase {
     private final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
 
+    @Override
     @Transactional
     @PreAuthorize("@memberPermissionEvaluator.hasAdminAccess(authentication)")
     public CreateMeetResponseDto createMeet(CreateMeetRequestDto inDto) {
@@ -50,7 +51,6 @@ public class CreatePostService implements CreatePostUseCase {
 
         Vote scheduleVote = null;
         Vote placeVote = null;
-        ParticipateVote participateVote = null;
 
         LocalDate date = null;
         LocalTime time = null;
@@ -88,11 +88,6 @@ public class CreatePostService implements CreatePostUseCase {
             post.addVote(placeVote);
         }
 
-        //참여 여부 투표 연결
-        participateVote = createParticipateVote(inDto.getParticipationDeadline());
-        setParticiapteVoteItems(participateVote);
-        post.setParticipateVote(participateVote);
-
         Post saved = createPostPort.create(post);
 
         TemplateArgs templateArgs = TemplateArgs.builder()
@@ -100,10 +95,6 @@ public class CreatePostService implements CreatePostUseCase {
                 .but(saved.getId().toString())
                 .scheduleType(null)
                 .build();
-
-        Message.VOTE.setTemplateArgs(templateArgs);
-        messageManager.sendAll(Message.VOTE).block();
-        messageManager.sendMe(Message.VOTE).block();
 
         if(scheduleVote != null) {
             registerJobUseCase.terminateVote(scheduleVote);
@@ -113,7 +104,9 @@ public class CreatePostService implements CreatePostUseCase {
             registerJobUseCase.terminateVote(placeVote);
         }
 
-        registerJobUseCase.terminateParticipateVote(participateVote);
+        Message.VOTE.setTemplateArgs(templateArgs);
+        messageManager.sendAll(Message.VOTE).block();
+        messageManager.sendMe(Message.VOTE).block();
 
         return CreateMeetResponseDto
                 .builder()
@@ -121,6 +114,7 @@ public class CreatePostService implements CreatePostUseCase {
                 .build();
     }
 
+    @Override
     @Transactional
     @PreAuthorize("@memberPermissionEvaluator.hasAdminAccess(authentication)")
     public CreateMeetResponseDto createNotification(CreateMeetRequestDto inDto) {
@@ -152,6 +146,7 @@ public class CreatePostService implements CreatePostUseCase {
                 .build();
     }
 
+    @Override
     @Transactional
     @PreAuthorize("@memberPermissionEvaluator.hasAdminAccess(authentication)")
     public CreateMeetResponseDto createVote(CreateMeetRequestDto inDto) {
@@ -184,6 +179,7 @@ public class CreatePostService implements CreatePostUseCase {
     }
 
     @Override
+    @Transactional
     @PreAuthorize("@memberPermissionEvaluator.hasAdminAccess(authentication)")
     public CreateMeetResponseDto createTravel(CreateMeetRequestDto requestDto) {
         Member user = getLogginedInfoUseCase.get();
@@ -242,17 +238,6 @@ public class CreatePostService implements CreatePostUseCase {
                 .build();
     }
 
-    private ParticipateVote createParticipateVote(String participationDeadline) {
-        DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDateTime endDate = LocalDate.parse(participationDeadline, DATE_FORMATTER).atTime(23,59);
-
-        return ParticipateVote.builder()
-                .totalNum(0)
-                .endDate(endDate)
-                .isActive(true)
-                .build();
-    }
-
     private void setScheduleVoteItems(Vote scheduleVote) {
         LocalDate today = LocalDate.now();
 
@@ -278,20 +263,5 @@ public class CreatePostService implements CreatePostUseCase {
             VoteItem scheduleVoteItem = VoteItem.builder().content(date.format(formatter)).vote(scheduleVote).build();
             scheduleVote.getVoteItems().add(scheduleVoteItem);
         }
-    }
-
-    private void setParticiapteVoteItems(ParticipateVote participateVote) {
-        ParticipateVoteItem participateVoteItem1 = ParticipateVoteItem.builder()
-                .isParticipate(true)
-                .participateVote(participateVote)
-                .build();
-
-        ParticipateVoteItem participateVoteItem2 = ParticipateVoteItem.builder()
-                .isParticipate(false)
-                .participateVote(participateVote)
-                .build();
-
-        participateVote.getParticipateVoteItems().add(participateVoteItem1);
-        participateVote.getParticipateVoteItems().add(participateVoteItem2);
     }
 }

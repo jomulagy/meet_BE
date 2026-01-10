@@ -118,7 +118,7 @@ public class UpdateVoteService implements UpdateVoteUseCase {
             updateVotePort.updateResult(vote.getId(), result);
         }
 
-        if(post.getType().equals(PostType.TRAVEL)) {
+        if(post.getType().equals(PostType.TRAVEL) || post.getType().equals(PostType.MEET)) {
             createParticipate.create(post.getId());
         }
 

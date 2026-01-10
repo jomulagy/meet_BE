@@ -28,6 +28,4 @@ public class CreateMeetRequestDto {
     private String content;
 
     private String voteDeadline;
-
-    private String participationDeadline;
 }

@@ -52,17 +52,6 @@ public class Post {
     @JoinColumn(name = "author", nullable = false)
     private Member author;
 
-    public void setParticipateVote(ParticipateVote participateVote) {
-        this.participateVote = participateVote;
-        if (participateVote != null) {
-            participateVote.setPost(this);
-        }
-    }
-
-    public void setParticipantsNum(long totalNum) {
-        this.participantsNum = totalNum;
-    }
-
     public void addVote(Vote vote) {
         this.voteList.add(vote);
         vote.setPost(this);
