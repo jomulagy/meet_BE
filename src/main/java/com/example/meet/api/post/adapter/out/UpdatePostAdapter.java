@@ -1,8 +1,8 @@
 package com.example.meet.api.post.adapter.out;
 
-import com.example.meet.infrastructure.enumulation.VoteStatus;
 import com.example.meet.api.post.adapter.in.dto.in.UpdatePostRequestDto;
 import com.example.meet.api.post.application.port.out.UpdatePostPort;
+import com.example.meet.infrastructure.enumulation.VoteStatus;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-import static com.example.meet.post.application.domain.entity.QPost.post;
+import static com.example.meet.api.post.application.domain.entity.QPost.post;
 
 
 @Repository
