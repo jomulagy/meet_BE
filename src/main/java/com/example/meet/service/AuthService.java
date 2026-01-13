@@ -5,7 +5,7 @@ import com.example.meet.infrastructure.exception.BusinessException;
 import com.example.meet.infrastructure.enumulation.ErrorCode;
 import com.example.meet.infrastructure.enumulation.MemberPrevillege;
 import com.example.meet.member.application.domain.entity.Member;
-import com.example.meet.entity.Token;
+import com.example.meet.token.application.domain.entity.Token;
 import com.example.meet.infrastructure.repository.MemberRepository;
 import com.example.meet.infrastructure.repository.TokenRepository;
 import java.time.LocalDateTime;
