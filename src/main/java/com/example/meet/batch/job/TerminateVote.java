@@ -5,6 +5,7 @@ import com.example.meet.infrastructure.dto.TemplateArgs;
 import com.example.meet.infrastructure.enumulation.Message;
 import com.example.meet.infrastructure.repository.BatchLogRepository;
 import com.example.meet.infrastructure.utils.MessageManager;
+import com.example.meet.message.application.port.in.SendMessageUseCase;
 import com.example.meet.post.application.port.out.UpdatePostPort;
 import com.example.meet.vote.application.domain.entity.Vote;
 import com.example.meet.vote.application.domain.entity.VoteItem;
@@ -19,17 +20,15 @@ import java.util.List;
 
 public class TerminateVote extends CommonJob {
     private final GetVotePort getVotePort;
-    private final UpdatePostPort updatePostPort;
     private final UpdateVotePort updateVotePort;
-    private final MessageManager messageManager;
+    private final SendMessageUseCase sendMessageUseCase;
 
     public TerminateVote(BatchLogRepository batchLogRepository,
-                         GetVotePort getVotePort, UpdatePostPort updatePostPort, UpdateVotePort updateVotePort, MessageManager messageManager) {
-        super(batchLogRepository);;
+                         GetVotePort getVotePort, UpdatePostPort updatePostPort, UpdateVotePort updateVotePort, MessageManager messageManager, SendMessageUseCase sendMessageUseCase) {
+        super(batchLogRepository);
+        this.sendMessageUseCase = sendMessageUseCase;
         this.getVotePort = getVotePort;
-        this.updatePostPort = updatePostPort;
         this.updateVotePort = updateVotePort;
-        this.messageManager = messageManager;
     }
 
     @Override
@@ -93,13 +92,8 @@ public class TerminateVote extends CommonJob {
         }
 
         try {
-            TemplateArgs templateArgs = TemplateArgs.builder()
-                    .title(vote.getTitle())
-                    .scheduleType(null)
-                    .but(vote.getId().toString())
-                    .build();
-            Message.PARTICIPATE.setTemplateArgs(templateArgs);
-            messageManager.sendAll(Message.PARTICIPATE).block();
+            sendMessageUseCase.sendParticipate(vote.getTitle(), vote.getId().toString());
+
         } catch (Exception e) {
             super.insertBatch("Fail to send participate vote message :: " + vote.getId(), "FAILURE", e.getMessage());
             throw e;

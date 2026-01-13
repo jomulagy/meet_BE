@@ -1,12 +1,9 @@
 package com.example.meet.vote.application.service;
 
 import com.example.meet.batch.application.port.in.RegisterJobUseCase;
-import com.example.meet.infrastructure.dto.TemplateArgs;
 import com.example.meet.infrastructure.enumulation.ErrorCode;
-import com.example.meet.infrastructure.enumulation.Message;
-import com.example.meet.infrastructure.enumulation.VoteType;
 import com.example.meet.infrastructure.exception.BusinessException;
-import com.example.meet.infrastructure.utils.MessageManager;
+import com.example.meet.message.application.port.in.SendMessageUseCase;
 import com.example.meet.post.application.domain.entity.Post;
 import com.example.meet.post.application.port.out.GetPostPort;
 import com.example.meet.vote.adapter.in.dto.in.CreateVoteRequestDto;
@@ -15,18 +12,10 @@ import com.example.meet.vote.application.port.in.CreateVoteUseCase;
 import com.example.meet.vote.application.port.out.CreateVotePort;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.quartz.CronScheduleBuilder;
-import org.quartz.JobBuilder;
-import org.quartz.JobDetail;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
-import org.quartz.Trigger;
-import org.quartz.TriggerBuilder;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
@@ -38,7 +27,7 @@ public class CreateVoteService implements CreateVoteUseCase {
     private final CreateVotePort createVotePort;
     private final RegisterJobUseCase registerJobUseCase;
 
-    private final MessageManager messageManager;
+    private final SendMessageUseCase sendMessageUseCase;
 
     @Override
     @PreAuthorize("@memberPermissionEvaluator.hasAdminAccess(authentication)")
@@ -59,15 +48,7 @@ public class CreateVoteService implements CreateVoteUseCase {
                 .post(post.get())
                 .build();
 
-        TemplateArgs templateArgs = TemplateArgs.builder()
-                .title(vote.getPost().getTitle() + " : " + vote.getTitle())
-                .but(vote.getPost().getId().toString())
-                .scheduleType(null)
-                .build();
-
-        Message.VOTE.setTemplateArgs(templateArgs);
-        messageManager.sendAll(Message.VOTE).block();
-        messageManager.sendMe(Message.VOTE).block();
+        sendMessageUseCase.sendVoteCreated(vote.getPost().getTitle() + " : " + vote.getTitle(), vote.getPost().getId().toString());
 
         Vote savedVote = createVotePort.create(vote);
 

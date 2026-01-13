@@ -8,6 +8,7 @@ import com.example.meet.infrastructure.enumulation.Message;
 import com.example.meet.infrastructure.enumulation.PostType;
 import com.example.meet.infrastructure.exception.BusinessException;
 import com.example.meet.infrastructure.utils.MessageManager;
+import com.example.meet.message.application.port.in.SendMessageUseCase;
 import com.example.meet.participate.application.port.in.CreateParticipateUseCase;
 import com.example.meet.post.application.domain.entity.Post;
 import com.example.meet.post.application.port.in.GetPostUseCase;
@@ -38,8 +39,7 @@ public class UpdateVoteService implements UpdateVoteUseCase {
     private final CreateParticipateUseCase createParticipate;
     private final UpdateVotePort updateVotePort;
     private final UpdatePostUseCase updatePostUseCase;
-
-    private final MessageManager messageManager;
+    private final SendMessageUseCase sendMessageUseCase;
 
     @Override
     @Transactional
@@ -122,16 +122,7 @@ public class UpdateVoteService implements UpdateVoteUseCase {
             createParticipate.create(post.getId());
         }
 
-        TemplateArgs templateArgs = TemplateArgs.builder()
-                .title(post.getTitle())
-                .but(post.getId().toString())
-                .scheduleType(null)
-                .build();
-
-        Message.VOTE_TERMINATE.setTemplateArgs(templateArgs);
-        messageManager.sendAll(Message.VOTE_TERMINATE).block();
-        messageManager.sendMe(Message.VOTE_TERMINATE).block();
-
+        sendMessageUseCase.sendVoteTerminated(post.getTitle(), post.getId().toString());
 
         updatePostUseCase.terminateVote(post.getId());
     }
