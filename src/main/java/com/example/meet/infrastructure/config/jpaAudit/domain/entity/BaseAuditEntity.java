@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public abstract class BaseAuditEntity {
 
     @CreatedDate
-    @Column(updatable = false)
+    @Column(updatable = false, nullable = false)
     private LocalDateTime createdAt;
 
     @CreatedBy

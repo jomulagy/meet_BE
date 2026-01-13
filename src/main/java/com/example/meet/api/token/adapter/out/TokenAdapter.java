@@ -1,12 +1,13 @@
 package com.example.meet.api.token.adapter.out;
 
-import static com.example.meet.entity.QToken.token;
 
 import com.example.meet.api.token.application.port.out.TokenPort;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.example.meet.api.token.application.domain.entity.QToken.token;
 
 @Repository
 @RequiredArgsConstructor
