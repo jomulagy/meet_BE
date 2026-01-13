@@ -10,8 +10,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import static com.example.meet.participate.application.domain.entity.QParticipateVote.participateVote;
-import static com.example.meet.participate.application.domain.entity.QParticipateVoteItem.participateVoteItem;
+import static com.example.meet.api.participate.application.domain.entity.QParticipateVote.participateVote;
+import static com.example.meet.api.participate.application.domain.entity.QParticipateVoteItem.participateVoteItem;
 
 @Repository
 @RequiredArgsConstructor

@@ -1,4 +1,4 @@
-package com.example.meet.infrastructure.config;
+package com.example.meet.infrastructure.config.jpaAudit;
 
 import com.example.meet.api.member.application.domain.entity.Member;
 import com.example.meet.infrastructure.repository.MemberRepository;

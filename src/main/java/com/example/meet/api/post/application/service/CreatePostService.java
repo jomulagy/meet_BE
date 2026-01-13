@@ -32,7 +32,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class CreatePostService implements CreatePostUseCase {
-    private final GetLogginedInfoUseCase getLogginedInfoUseCase;
     private final CreatePostPort createPostPort;
     private final RegisterJobUseCase registerJobUseCase;
 
@@ -45,8 +44,6 @@ public class CreatePostService implements CreatePostUseCase {
     @Transactional
     @PreAuthorize("@memberPermissionEvaluator.hasAdminAccess(authentication)")
     public CreateMeetResponseDto createMeet(CreateMeetRequestDto inDto) {
-        Member user = getLogginedInfoUseCase.get();
-
         Vote scheduleVote = null;
         Vote placeVote = null;
 
@@ -68,7 +65,6 @@ public class CreatePostService implements CreatePostUseCase {
         Post post = Post.builder()
                 .title(inDto.getTitle())
                 .content(inDto.getContent())
-                .author(user)
                 .type(PostType.MEET)
                 .status(VoteStatus.VOTE)
                 .build();
@@ -116,12 +112,9 @@ public class CreatePostService implements CreatePostUseCase {
     @Transactional
     @PreAuthorize("@memberPermissionEvaluator.hasAdminAccess(authentication)")
     public CreateMeetResponseDto createNotification(CreateMeetRequestDto inDto) {
-        Member user = getLogginedInfoUseCase.get();
-
         Post post = Post.builder()
                 .title(inDto.getTitle())
                 .content(inDto.getContent())
-                .author(user)
                 .type(PostType.NOTIFICATION)
                 .status(VoteStatus.FINISHED)
                 .build();
@@ -148,12 +141,9 @@ public class CreatePostService implements CreatePostUseCase {
     @Transactional
     @PreAuthorize("@memberPermissionEvaluator.hasAdminAccess(authentication)")
     public CreateMeetResponseDto createVote(CreateMeetRequestDto inDto) {
-        Member user = getLogginedInfoUseCase.get();
-
         Post post = Post.builder()
                 .title(inDto.getTitle())
                 .content(inDto.getContent())
-                .author(user)
                 .type(PostType.VOTE)
                 .status(VoteStatus.VOTE)
                 .build();
@@ -180,12 +170,9 @@ public class CreatePostService implements CreatePostUseCase {
     @Transactional
     @PreAuthorize("@memberPermissionEvaluator.hasAdminAccess(authentication)")
     public CreateMeetResponseDto createTravel(CreateMeetRequestDto requestDto) {
-        Member user = getLogginedInfoUseCase.get();
-
         Post post = Post.builder()
                 .title(requestDto.getTitle())
                 .content(requestDto.getContent())
-                .author(user)
                 .type(PostType.TRAVEL)
                 .status(VoteStatus.VOTE)
                 .build();

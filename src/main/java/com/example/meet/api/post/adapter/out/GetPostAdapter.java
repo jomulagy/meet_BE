@@ -1,9 +1,9 @@
 package com.example.meet.api.post.adapter.out;
 
-import com.example.meet.infrastructure.enumulation.PostType;
-import com.example.meet.infrastructure.repository.MeetRepository;
 import com.example.meet.api.post.application.domain.entity.Post;
 import com.example.meet.api.post.application.port.out.GetPostPort;
+import com.example.meet.infrastructure.enumulation.PostType;
+import com.example.meet.infrastructure.repository.MeetRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-import static com.example.meet.post.application.domain.entity.QPost.post;
+import static com.example.meet.api.post.application.domain.entity.QPost.post;
 
 @Repository
 @RequiredArgsConstructor

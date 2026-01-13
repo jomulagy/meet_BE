@@ -7,9 +7,9 @@ import com.example.meet.api.vote.adapter.in.dto.out.TerminateResponseDto;
 import com.example.meet.api.vote.application.port.in.*;
 import com.example.meet.infrastructure.CommonResponse;
 import com.example.meet.api.vote.adapter.in.dto.out.DeleteVoteResponseDto;
-import com.example.meet.vote.adapter.in.dto.in.*;
-import com.example.meet.vote.adapter.in.dto.out.*;
-import com.example.meet.vote.application.port.in.*;
+import com.example.meet.api.vote.adapter.in.dto.in.*;
+import com.example.meet.api.vote.adapter.in.dto.out.*;
+import com.example.meet.api.vote.application.port.in.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

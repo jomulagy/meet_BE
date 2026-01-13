@@ -11,8 +11,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static com.example.meet.vote.application.domain.entity.QVote.vote;
-import static com.example.meet.vote.application.domain.entity.QVoteItem.voteItem;
+import static com.example.meet.api.vote.application.domain.entity.QVote.vote;
+import static com.example.meet.api.vote.application.domain.entity.QVoteItem.voteItem;
 
 @Repository
 @RequiredArgsConstructor

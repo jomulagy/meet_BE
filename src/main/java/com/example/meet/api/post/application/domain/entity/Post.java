@@ -1,5 +1,6 @@
 package com.example.meet.api.post.application.domain.entity;
 
+import com.example.meet.infrastructure.config.jpaAudit.domain.entity.BaseAuditEntity;
 import com.example.meet.infrastructure.enumulation.VoteStatus;
 import com.example.meet.api.member.application.domain.entity.Member;
 import com.example.meet.api.participate.application.domain.entity.ParticipateVote;
@@ -12,6 +13,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+
 import java.util.List;
 
 @Entity
@@ -20,7 +23,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Post {
+public class Post extends BaseAuditEntity {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,10 +50,6 @@ public class Post {
 
     @OneToOne(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private ParticipateVote participateVote;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "author", nullable = false)
-    private Member author;
 
     public void addVote(Vote vote) {
         this.voteList.add(vote);

@@ -12,7 +12,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import static com.example.meet.vote.application.domain.entity.QVote.vote;
+import static com.example.meet.api.vote.application.domain.entity.QVote.vote;
+
 
 @Repository
 @RequiredArgsConstructor
