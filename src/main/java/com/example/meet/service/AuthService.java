@@ -1,11 +1,10 @@
 package com.example.meet.service;
 
-import com.example.meet.infrastructure.dto.request.Batch.BatchRequestDto;
 import com.example.meet.infrastructure.dto.response.AdminAccessTokenResponseDto;
 import com.example.meet.infrastructure.exception.BusinessException;
 import com.example.meet.infrastructure.enumulation.ErrorCode;
 import com.example.meet.infrastructure.enumulation.MemberPrevillege;
-import com.example.meet.entity.Member;
+import com.example.meet.member.application.domain.entity.Member;
 import com.example.meet.entity.Token;
 import com.example.meet.infrastructure.repository.MemberRepository;
 import com.example.meet.infrastructure.repository.TokenRepository;
@@ -96,13 +95,5 @@ public class AuthService {
 
                 tokenRepository.save(kakaoToken);
         return kakaoToken;
-    }
-
-    public void isAdmin(BatchRequestDto inDto){
-        String accessToken = tokenRepository.findByName("kakao").getAccessToken();
-
-        if(!accessToken.equals(inDto.getToken())){
-            throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
-        }
     }
 }

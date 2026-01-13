@@ -1,6 +1,5 @@
-package com.example.meet.infrastructure.dto.request;
+package com.example.meet.participate.adapter.in.dto.in;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MemberRequestDto {
-    @Schema(hidden = true)
+public class FindParticipateVoteItemRequestDto {
+    private Long meetId;
     private Long userId;
 }

@@ -1,6 +1,6 @@
 package com.example.meet.vote.adapter.out;
 
-import com.example.meet.entity.Member;
+import com.example.meet.member.application.domain.entity.Member;
 import com.example.meet.infrastructure.repository.VoteItemRepository;
 import com.example.meet.vote.application.domain.entity.VoteItem;
 import com.example.meet.vote.application.port.out.UpdateVotePort;

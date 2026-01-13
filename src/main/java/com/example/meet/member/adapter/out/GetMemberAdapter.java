@@ -1,6 +1,6 @@
 package com.example.meet.member.adapter.out;
 
-import com.example.meet.entity.Member;
+import com.example.meet.member.application.domain.entity.Member;
 import com.example.meet.infrastructure.repository.MemberRepository;
 import com.example.meet.member.application.port.out.GetMemberPort;
 import lombok.RequiredArgsConstructor;

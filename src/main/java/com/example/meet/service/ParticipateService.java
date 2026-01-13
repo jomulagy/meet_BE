@@ -1,24 +1,17 @@
 package com.example.meet.service;
 
-import com.example.meet.infrastructure.dto.request.participate.FindParticipateVoteItemRequestDto;
-import com.example.meet.infrastructure.dto.request.participate.FindParticipateVoteRequestDto;
-import com.example.meet.infrastructure.dto.response.member.SimpleMemberResponseDto;
-import com.example.meet.infrastructure.dto.response.participate.FindParticipateVoteItemResponseDto;
-import com.example.meet.infrastructure.dto.response.participate.FindParticipateVoteResponseDto;
 import com.example.meet.infrastructure.dto.response.participate.UpdateParticipateVoteResponseDto;
 import com.example.meet.infrastructure.enumulation.ErrorCode;
 import com.example.meet.infrastructure.enumulation.MemberPrevillege;
 import com.example.meet.infrastructure.exception.BusinessException;
-import com.example.meet.infrastructure.dto.request.participate.UpdateParticipateVoteRequestDto;
-import com.example.meet.infrastructure.utils.DateTimeUtils;
+import com.example.meet.participate.adapter.in.dto.in.UpdateParticipateVoteRequestDto;
 import com.example.meet.post.application.domain.entity.Post;
-import com.example.meet.entity.Member;
+import com.example.meet.member.application.domain.entity.Member;
 import com.example.meet.participate.application.domain.entity.ParticipateVoteItem;
 import com.example.meet.infrastructure.repository.MeetRepository;
 import com.example.meet.infrastructure.repository.MemberRepository;
 import com.example.meet.infrastructure.repository.ParticipateVoteItemRepository;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;

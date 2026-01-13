@@ -1,4 +1,4 @@
-package com.example.meet.infrastructure.dto.request;
+package com.example.meet.member.adapter.in.dto.in;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

@@ -1,4 +1,4 @@
-package com.example.meet.infrastructure.dto.request;
+package com.example.meet.auth.adapter.in.dto.in;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;

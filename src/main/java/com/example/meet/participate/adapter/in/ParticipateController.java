@@ -3,7 +3,7 @@ package com.example.meet.participate.adapter.in;
 import static java.lang.Long.parseLong;
 
 import com.example.meet.infrastructure.CommonResponse;
-import com.example.meet.infrastructure.dto.request.participate.FindParticipateVoteRequestDto;
+import com.example.meet.participate.adapter.in.dto.in.FindParticipateVoteRequestDto;
 import com.example.meet.infrastructure.dto.response.participate.FindParticipateVoteResponseDto;
 import com.example.meet.participate.adapter.in.dto.in.TerminateParticipateVoteRequestDto;
 import com.example.meet.participate.adapter.in.dto.in.VoteParticipateVoteRequestDto;

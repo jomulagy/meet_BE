@@ -1,7 +1,7 @@
 package com.example.meet.post.application.service;
 
 import com.example.meet.auth.application.port.in.GetLogginedInfoUseCase;
-import com.example.meet.entity.Member;
+import com.example.meet.member.application.domain.entity.Member;
 import com.example.meet.infrastructure.enumulation.ErrorCode;
 import com.example.meet.infrastructure.enumulation.PostType;
 import com.example.meet.infrastructure.enumulation.VoteStatus;

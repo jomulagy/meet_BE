@@ -1,7 +1,6 @@
-package com.example.meet.infrastructure.dto.request.participate;
+package com.example.meet.post.adapter.in.dto.in;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,10 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UpdateParticipateVoteRequestDto {
+public class DeleteMeetRequestDto {
     @Schema(hidden = true)
     private Long userId;
+    @Schema(hidden = true)
     private Long meetId;
-    @Schema(description = "참여여부 투표 항목 id 리스트", example = "[1,2,3]")
-    private List<Long> participateVoteItemIdList;
 }

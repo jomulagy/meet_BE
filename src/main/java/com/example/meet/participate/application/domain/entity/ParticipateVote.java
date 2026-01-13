@@ -1,6 +1,5 @@
 package com.example.meet.participate.application.domain.entity;
 
-import com.example.meet.entity.Member;
 import com.example.meet.post.application.domain.entity.Post;
 import jakarta.persistence.*;
 

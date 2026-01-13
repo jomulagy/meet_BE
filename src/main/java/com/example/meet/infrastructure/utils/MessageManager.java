@@ -1,11 +1,11 @@
 package com.example.meet.infrastructure.utils;
 
-import com.example.meet.infrastructure.dto.request.MessageRequestDto;
+import com.example.meet.infrastructure.utils.dto.in.MessageRequestDto;
 import com.example.meet.infrastructure.enumulation.ErrorCode;
 import com.example.meet.infrastructure.enumulation.MemberPrevillege;
 import com.example.meet.infrastructure.enumulation.Message;
 import com.example.meet.infrastructure.exception.BusinessException;
-import com.example.meet.entity.Member;
+import com.example.meet.member.application.domain.entity.Member;
 import com.example.meet.infrastructure.repository.MemberRepository;
 import com.example.meet.service.AuthService;
 import com.fasterxml.jackson.core.JsonProcessingException;

@@ -1,6 +1,6 @@
 package com.example.meet.infrastructure.security;
 
-import com.example.meet.entity.Member;
+import com.example.meet.member.application.domain.entity.Member;
 import com.example.meet.infrastructure.enumulation.ErrorCode;
 import com.example.meet.infrastructure.enumulation.MemberPrevillege;
 import com.example.meet.infrastructure.exception.BusinessException;

@@ -4,7 +4,7 @@ import static java.lang.Long.parseLong;
 
 import com.example.meet.auth.application.port.in.AuthLoginUseCase;
 import com.example.meet.infrastructure.CommonResponse;
-import com.example.meet.infrastructure.dto.request.KakaoTokenRequestDto;
+import com.example.meet.auth.adapter.in.dto.in.KakaoTokenRequestDto;
 import com.example.meet.infrastructure.auth.JwtTokenResponseDto;
 import com.example.meet.infrastructure.dto.response.AdminAccessTokenResponseDto;
 import com.example.meet.service.AuthService;

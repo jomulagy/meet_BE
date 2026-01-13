@@ -1,6 +1,6 @@
 package com.example.meet.infrastructure.repository;
 
-import com.example.meet.entity.BatchLog;
+import com.example.meet.batch.application.domain.entity.BatchLog;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;

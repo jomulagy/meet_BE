@@ -1,6 +1,6 @@
 package com.example.meet.vote.application.domain.entity;
 
-import com.example.meet.entity.Member;
+import com.example.meet.member.application.domain.entity.Member;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -9,7 +9,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 

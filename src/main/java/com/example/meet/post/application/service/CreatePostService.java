@@ -2,14 +2,12 @@ package com.example.meet.post.application.service;
 
 import com.example.meet.auth.application.port.in.GetLogginedInfoUseCase;
 import com.example.meet.batch.application.port.in.RegisterJobUseCase;
-import com.example.meet.entity.Member;
+import com.example.meet.member.application.domain.entity.Member;
 import com.example.meet.infrastructure.dto.TemplateArgs;
 import com.example.meet.infrastructure.enumulation.Message;
 import com.example.meet.infrastructure.enumulation.VoteStatus;
 import com.example.meet.infrastructure.enumulation.VoteType;
 import com.example.meet.infrastructure.utils.MessageManager;
-import com.example.meet.participate.application.domain.entity.ParticipateVote;
-import com.example.meet.participate.application.domain.entity.ParticipateVoteItem;
 import com.example.meet.infrastructure.enumulation.PostType;
 import com.example.meet.infrastructure.utils.ScheduleManager;
 import com.example.meet.post.adapter.in.dto.CreateMeetRequestDto;

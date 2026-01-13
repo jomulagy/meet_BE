@@ -1,10 +1,9 @@
 package com.example.meet.post.application.service;
 
 import com.example.meet.auth.application.port.in.GetLogginedInfoUseCase;
-import com.example.meet.entity.Member;
+import com.example.meet.member.application.domain.entity.Member;
 import com.example.meet.infrastructure.enumulation.ErrorCode;
 import com.example.meet.infrastructure.enumulation.MemberPrevillege;
-import com.example.meet.infrastructure.enumulation.VoteType;
 import com.example.meet.infrastructure.exception.BusinessException;
 import com.example.meet.post.adapter.in.dto.in.UpdatePostRequestDto;
 import com.example.meet.post.adapter.in.dto.out.UpdatePostResponseDto;
@@ -12,14 +11,12 @@ import com.example.meet.post.application.domain.entity.Post;
 import com.example.meet.post.application.port.in.GetPostUseCase;
 import com.example.meet.post.application.port.in.UpdatePostUseCase;
 import com.example.meet.post.application.port.out.UpdatePostPort;
-import com.example.meet.vote.application.domain.entity.Vote;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

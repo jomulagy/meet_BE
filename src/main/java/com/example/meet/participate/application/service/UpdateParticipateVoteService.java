@@ -1,7 +1,7 @@
 package com.example.meet.participate.application.service;
 
 import com.example.meet.auth.application.port.in.GetLogginedInfoUseCase;
-import com.example.meet.entity.Member;
+import com.example.meet.member.application.domain.entity.Member;
 import com.example.meet.participate.adapter.in.dto.in.TerminateParticipateVoteRequestDto;
 import com.example.meet.participate.adapter.in.dto.in.VoteParticipateVoteRequestDto;
 import com.example.meet.participate.application.domain.entity.ParticipateVote;

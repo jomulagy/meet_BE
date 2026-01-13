@@ -1,8 +1,8 @@
 package com.example.meet.participate.application.service;
 
 import com.example.meet.auth.application.port.in.GetLogginedInfoUseCase;
-import com.example.meet.entity.Member;
-import com.example.meet.infrastructure.dto.request.participate.FindParticipateVoteRequestDto;
+import com.example.meet.member.application.domain.entity.Member;
+import com.example.meet.participate.adapter.in.dto.in.FindParticipateVoteRequestDto;
 import com.example.meet.infrastructure.dto.response.participate.FindParticipateVoteItemResponseDto;
 import com.example.meet.infrastructure.dto.response.participate.FindParticipateVoteResponseDto;
 import com.example.meet.infrastructure.utils.DateTimeUtils;

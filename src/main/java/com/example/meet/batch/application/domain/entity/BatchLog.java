@@ -1,32 +1,32 @@
-package com.example.meet.entity;
+package com.example.meet.batch.application.domain.entity;
 
-import com.example.meet.post.application.domain.entity.Post;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
+
 import lombok.Data;
 
 @Entity
-@Table(name = "place")
+@Table(name = "BatchLog")
 @Data
-public class Place {
+public class BatchLog {
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "name")
     private String name;
 
-    @Column(name = "url")
-    private String url;
+    @Column(name = "status")
+    private String status;
 
-    @OneToOne
-    @JoinColumn(name = "meet_id", referencedColumnName = "id")
-    private Post post;
+    @Column(name = "message")
+    private String message;
+
+    @Column(name = "startDate")
+    private LocalDateTime startDate;
 }

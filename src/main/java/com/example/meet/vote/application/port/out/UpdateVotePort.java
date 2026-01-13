@@ -1,6 +1,6 @@
 package com.example.meet.vote.application.port.out;
 
-import com.example.meet.entity.Member;
+import com.example.meet.member.application.domain.entity.Member;
 
 import java.util.List;
 

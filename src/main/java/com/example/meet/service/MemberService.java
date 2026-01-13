@@ -1,9 +1,9 @@
 package com.example.meet.service;
 
-import com.example.meet.infrastructure.dto.request.member.EditMemberPrevillegeRequestDto;
-import com.example.meet.infrastructure.dto.request.MemberListRequestDto;
-import com.example.meet.infrastructure.dto.request.MemberRequestDto;
-import com.example.meet.infrastructure.dto.request.member.EditMemberDepositRequestDto;
+import com.example.meet.member.adapter.in.dto.in.EditMemberPrevillegeRequestDto;
+import com.example.meet.member.adapter.in.dto.in.MemberListRequestDto;
+import com.example.meet.member.adapter.in.dto.in.MemberRequestDto;
+import com.example.meet.member.adapter.in.dto.in.EditMemberDepositRequestDto;
 import com.example.meet.infrastructure.dto.response.member.MemberDepositResponseDto;
 import com.example.meet.infrastructure.dto.response.member.MemberPrevillegeResponseDto;
 import com.example.meet.infrastructure.dto.response.member.MemberResponseDto;
@@ -11,7 +11,7 @@ import com.example.meet.infrastructure.exception.BusinessException;
 import com.example.meet.infrastructure.enumulation.EditMemberPrevillegeOption;
 import com.example.meet.infrastructure.enumulation.ErrorCode;
 import com.example.meet.infrastructure.enumulation.MemberPrevillege;
-import com.example.meet.entity.Member;
+import com.example.meet.member.application.domain.entity.Member;
 import com.example.meet.infrastructure.mapper.MemberMapper;
 import com.example.meet.infrastructure.repository.MemberRepository;
 import java.util.Optional;

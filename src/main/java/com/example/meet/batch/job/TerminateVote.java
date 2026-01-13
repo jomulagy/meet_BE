@@ -100,7 +100,6 @@ public class TerminateVote extends CommonJob {
                     .build();
             Message.PARTICIPATE.setTemplateArgs(templateArgs);
             messageManager.sendAll(Message.PARTICIPATE).block();
-            messageManager.sendMe(Message.PARTICIPATE).block();
         } catch (Exception e) {
             super.insertBatch("Fail to send participate vote message :: " + vote.getId(), "FAILURE", e.getMessage());
             throw e;

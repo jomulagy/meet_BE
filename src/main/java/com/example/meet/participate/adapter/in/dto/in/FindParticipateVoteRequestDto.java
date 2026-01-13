@@ -1,4 +1,4 @@
-package com.example.meet.infrastructure.dto.request.place;
+package com.example.meet.participate.adapter.in.dto.in;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class DeletePlaceVoteItemRequestDto {
+public class FindParticipateVoteRequestDto {
     private Long userId;
-    private Long placeVoteItemId;
+    private Long postId;
 }

@@ -1,12 +1,12 @@
-package com.example.meet.controller;
+package com.example.meet.member.adapter.in;
 
 import static java.lang.Long.parseLong;
 
 import com.example.meet.infrastructure.CommonResponse;
-import com.example.meet.infrastructure.dto.request.member.EditMemberPrevillegeRequestDto;
-import com.example.meet.infrastructure.dto.request.MemberListRequestDto;
-import com.example.meet.infrastructure.dto.request.MemberRequestDto;
-import com.example.meet.infrastructure.dto.request.member.EditMemberDepositRequestDto;
+import com.example.meet.member.adapter.in.dto.in.EditMemberPrevillegeRequestDto;
+import com.example.meet.member.adapter.in.dto.in.MemberListRequestDto;
+import com.example.meet.member.adapter.in.dto.in.MemberRequestDto;
+import com.example.meet.member.adapter.in.dto.in.EditMemberDepositRequestDto;
 import com.example.meet.infrastructure.dto.response.member.MemberDepositResponseDto;
 import com.example.meet.infrastructure.dto.response.member.MemberPrevillegeResponseDto;
 import com.example.meet.infrastructure.dto.response.member.MemberResponseDto;

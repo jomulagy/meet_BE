@@ -1,6 +1,6 @@
 package com.example.meet.participate.application.domain.entity;
 
-import com.example.meet.entity.Member;
+import com.example.meet.member.application.domain.entity.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

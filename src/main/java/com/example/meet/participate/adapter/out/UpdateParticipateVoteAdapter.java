@@ -1,21 +1,17 @@
 package com.example.meet.participate.adapter.out;
 
-import com.example.meet.entity.Member;
+import com.example.meet.member.application.domain.entity.Member;
 import com.example.meet.infrastructure.repository.ParticipateVoteItemRepository;
 import com.example.meet.participate.application.domain.entity.ParticipateVote;
 import com.example.meet.participate.application.domain.entity.ParticipateVoteItem;
 import com.example.meet.participate.application.port.out.UpdateParticipateVotePort;
-import com.example.meet.vote.application.domain.entity.VoteItem;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 import static com.example.meet.participate.application.domain.entity.QParticipateVote.participateVote;
 import static com.example.meet.participate.application.domain.entity.QParticipateVoteItem.participateVoteItem;
-import static com.example.meet.vote.application.domain.entity.QVoteItem.voteItem;
 
 @Repository
 @RequiredArgsConstructor

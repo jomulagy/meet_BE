@@ -1,9 +1,7 @@
-package com.example.meet.entity;
+package com.example.meet.member.application.domain.entity;
 
 import com.example.meet.infrastructure.enumulation.MemberPrevillege;
-import com.example.meet.participate.application.domain.entity.ParticipateVote;
 import com.example.meet.participate.application.domain.entity.ParticipateVoteItem;
-import com.example.meet.post.application.domain.entity.Post;
 import com.example.meet.vote.application.domain.entity.VoteItem;
 import jakarta.persistence.*;
 

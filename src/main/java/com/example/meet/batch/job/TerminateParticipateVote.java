@@ -3,14 +3,11 @@ package com.example.meet.batch.job;
 import com.example.meet.batch.CommonJob;
 import com.example.meet.participate.adapter.in.dto.in.TerminateParticipateVoteRequestDto;
 import com.example.meet.participate.application.port.in.UpdateParticipateVoteUseCase;
-import com.example.meet.post.application.domain.entity.Post;
-import com.example.meet.entity.Member;
 import com.example.meet.participate.application.domain.entity.ParticipateVote;
-import com.example.meet.participate.application.domain.entity.ParticipateVoteItem;
 import com.example.meet.infrastructure.repository.BatchLogRepository;
 import com.example.meet.infrastructure.repository.MeetRepository;
 import com.example.meet.infrastructure.repository.ParticipateVoteRepository;
-import java.util.ArrayList;
+
 import java.util.List;
 
 import org.quartz.JobExecutionContext;

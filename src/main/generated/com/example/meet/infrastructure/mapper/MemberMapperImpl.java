@@ -1,6 +1,6 @@
 package com.example.meet.infrastructure.mapper;
 
-import com.example.meet.entity.Member;
+import com.example.meet.member.application.domain.entity.Member;
 import com.example.meet.infrastructure.dto.response.member.MemberResponseDto;
 import com.example.meet.infrastructure.enumulation.MemberPrevillege;
 import java.util.ArrayList;

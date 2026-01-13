@@ -1,10 +1,10 @@
 package com.example.meet.auth.application.service;
 
 import com.example.meet.auth.application.port.in.AuthLoginUseCase;
-import com.example.meet.entity.Member;
+import com.example.meet.member.application.domain.entity.Member;
 import com.example.meet.infrastructure.auth.JwtTokenProvider;
 import com.example.meet.infrastructure.auth.JwtTokenResponseDto;
-import com.example.meet.infrastructure.dto.request.KakaoTokenRequestDto;
+import com.example.meet.auth.adapter.in.dto.in.KakaoTokenRequestDto;
 import com.example.meet.infrastructure.dto.response.KakaoUserInfoResponseDto;
 import com.example.meet.infrastructure.enumulation.ErrorCode;
 import com.example.meet.infrastructure.enumulation.MemberPrevillege;

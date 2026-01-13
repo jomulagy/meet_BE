@@ -1,7 +1,7 @@
 package com.example.meet.batch;
 
 
-import com.example.meet.entity.BatchLog;
+import com.example.meet.batch.application.domain.entity.BatchLog;
 import com.example.meet.infrastructure.repository.BatchLogRepository;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;

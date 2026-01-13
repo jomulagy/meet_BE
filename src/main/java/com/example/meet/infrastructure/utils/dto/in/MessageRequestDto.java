@@ -1,4 +1,4 @@
-package com.example.meet.infrastructure.dto.request;
+package com.example.meet.infrastructure.utils.dto.in;
 
 import com.example.meet.infrastructure.dto.TemplateArgs;
 import com.fasterxml.jackson.annotation.JsonProperty;

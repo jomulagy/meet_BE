@@ -4,7 +4,7 @@ import static java.lang.Long.parseLong;
 
 import com.example.meet.infrastructure.CommonResponse;
 import com.example.meet.post.adapter.in.dto.CreateMeetRequestDto;
-import com.example.meet.infrastructure.dto.request.DeleteMeetRequestDto;
+import com.example.meet.post.adapter.in.dto.in.DeleteMeetRequestDto;
 import com.example.meet.post.adapter.in.dto.in.GetPostRequestDto;
 import com.example.meet.post.adapter.in.dto.in.UpdatePostRequestDto;
 import com.example.meet.post.adapter.in.dto.CreateMeetResponseDto;
@@ -17,7 +17,6 @@ import com.example.meet.service.MeetService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,7 @@
 package com.example.meet.post.application.domain.entity;
 
 import com.example.meet.infrastructure.enumulation.VoteStatus;
-import com.example.meet.entity.Member;
+import com.example.meet.member.application.domain.entity.Member;
 import com.example.meet.participate.application.domain.entity.ParticipateVote;
 import com.example.meet.infrastructure.enumulation.PostType;
 import com.example.meet.vote.application.domain.entity.Vote;
