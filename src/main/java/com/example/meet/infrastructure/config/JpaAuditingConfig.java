@@ -1,6 +1,6 @@
 package com.example.meet.infrastructure.config;
 
-import com.example.meet.member.application.domain.entity.Member;
+import com.example.meet.api.member.application.domain.entity.Member;
 import com.example.meet.infrastructure.repository.MemberRepository;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;

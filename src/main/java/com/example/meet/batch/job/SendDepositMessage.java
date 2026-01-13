@@ -4,7 +4,7 @@ import com.example.meet.batch.CommonJob;
 import com.example.meet.infrastructure.dto.TemplateArgs;
 import com.example.meet.infrastructure.enumulation.Message;
 import com.example.meet.infrastructure.utils.MessageManager;
-import com.example.meet.member.application.domain.entity.Member;
+import com.example.meet.api.member.application.domain.entity.Member;
 import com.example.meet.infrastructure.repository.BatchLogRepository;
 import com.example.meet.infrastructure.repository.MemberRepository;
 import java.time.LocalDate;

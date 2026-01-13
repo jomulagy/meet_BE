@@ -1,13 +1,13 @@
 package com.example.meet.service;
 
-import com.example.meet.member.application.domain.entity.Member;
-import com.example.meet.post.adapter.in.dto.in.DeleteMeetRequestDto;
+import com.example.meet.api.member.application.domain.entity.Member;
+import com.example.meet.api.post.adapter.in.dto.in.DeleteMeetRequestDto;
 import com.example.meet.infrastructure.enumulation.ErrorCode;
 import com.example.meet.infrastructure.enumulation.MemberPrevillege;
 import com.example.meet.infrastructure.exception.BusinessException;
 import com.example.meet.infrastructure.repository.MeetRepository;
 import com.example.meet.infrastructure.repository.MemberRepository;
-import com.example.meet.post.application.domain.entity.Post;
+import com.example.meet.api.post.application.domain.entity.Post;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

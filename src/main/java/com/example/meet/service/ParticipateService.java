@@ -4,10 +4,10 @@ import com.example.meet.infrastructure.dto.response.participate.UpdateParticipat
 import com.example.meet.infrastructure.enumulation.ErrorCode;
 import com.example.meet.infrastructure.enumulation.MemberPrevillege;
 import com.example.meet.infrastructure.exception.BusinessException;
-import com.example.meet.participate.adapter.in.dto.in.UpdateParticipateVoteRequestDto;
-import com.example.meet.post.application.domain.entity.Post;
-import com.example.meet.member.application.domain.entity.Member;
-import com.example.meet.participate.application.domain.entity.ParticipateVoteItem;
+import com.example.meet.api.participate.adapter.in.dto.in.UpdateParticipateVoteRequestDto;
+import com.example.meet.api.post.application.domain.entity.Post;
+import com.example.meet.api.member.application.domain.entity.Member;
+import com.example.meet.api.participate.application.domain.entity.ParticipateVoteItem;
 import com.example.meet.infrastructure.repository.MeetRepository;
 import com.example.meet.infrastructure.repository.MemberRepository;
 import com.example.meet.infrastructure.repository.ParticipateVoteItemRepository;

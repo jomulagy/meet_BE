@@ -1,6 +1,6 @@
 package com.example.meet.infrastructure.repository;
 
-import com.example.meet.token.application.domain.entity.Token;
+import com.example.meet.api.token.application.domain.entity.Token;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

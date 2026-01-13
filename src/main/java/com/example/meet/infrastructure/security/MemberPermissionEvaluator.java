@@ -1,10 +1,10 @@
 package com.example.meet.infrastructure.security;
 
-import com.example.meet.member.application.domain.entity.Member;
+import com.example.meet.api.member.application.domain.entity.Member;
 import com.example.meet.infrastructure.enumulation.ErrorCode;
 import com.example.meet.infrastructure.enumulation.MemberPrevillege;
 import com.example.meet.infrastructure.exception.BusinessException;
-import com.example.meet.member.application.port.out.GetMemberPort;
+import com.example.meet.api.member.application.port.out.GetMemberPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;

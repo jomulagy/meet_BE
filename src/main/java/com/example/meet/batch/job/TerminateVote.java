@@ -1,16 +1,14 @@
 package com.example.meet.batch.job;
 
 import com.example.meet.batch.CommonJob;
-import com.example.meet.infrastructure.dto.TemplateArgs;
-import com.example.meet.infrastructure.enumulation.Message;
 import com.example.meet.infrastructure.repository.BatchLogRepository;
 import com.example.meet.infrastructure.utils.MessageManager;
-import com.example.meet.message.application.port.in.SendMessageUseCase;
-import com.example.meet.post.application.port.out.UpdatePostPort;
-import com.example.meet.vote.application.domain.entity.Vote;
-import com.example.meet.vote.application.domain.entity.VoteItem;
-import com.example.meet.vote.application.port.out.GetVotePort;
-import com.example.meet.vote.application.port.out.UpdateVotePort;
+import com.example.meet.api.message.application.port.in.SendMessageUseCase;
+import com.example.meet.api.post.application.port.out.UpdatePostPort;
+import com.example.meet.api.vote.application.domain.entity.Vote;
+import com.example.meet.api.vote.application.domain.entity.VoteItem;
+import com.example.meet.api.vote.application.port.out.GetVotePort;
+import com.example.meet.api.vote.application.port.out.UpdateVotePort;
 import org.quartz.JobExecutionContext;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;

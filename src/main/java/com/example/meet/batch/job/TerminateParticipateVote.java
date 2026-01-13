@@ -1,9 +1,9 @@
 package com.example.meet.batch.job;
 
 import com.example.meet.batch.CommonJob;
-import com.example.meet.participate.adapter.in.dto.in.TerminateParticipateVoteRequestDto;
-import com.example.meet.participate.application.port.in.UpdateParticipateVoteUseCase;
-import com.example.meet.participate.application.domain.entity.ParticipateVote;
+import com.example.meet.api.participate.adapter.in.dto.in.TerminateParticipateVoteRequestDto;
+import com.example.meet.api.participate.application.port.in.UpdateParticipateVoteUseCase;
+import com.example.meet.api.participate.application.domain.entity.ParticipateVote;
 import com.example.meet.infrastructure.repository.BatchLogRepository;
 import com.example.meet.infrastructure.repository.MeetRepository;
 import com.example.meet.infrastructure.repository.ParticipateVoteRepository;

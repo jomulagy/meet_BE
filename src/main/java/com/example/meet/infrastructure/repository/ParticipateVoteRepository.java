@@ -1,6 +1,6 @@
 package com.example.meet.infrastructure.repository;
 
-import com.example.meet.participate.application.domain.entity.ParticipateVote;
+import com.example.meet.api.participate.application.domain.entity.ParticipateVote;
 
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;

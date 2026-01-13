@@ -1,15 +1,15 @@
 package com.example.meet.infrastructure.mapper;
 
-import com.example.meet.member.application.domain.entity.Member;
 import com.example.meet.infrastructure.dto.response.member.MemberResponseDto;
 import com.example.meet.infrastructure.enumulation.MemberPrevillege;
+import com.example.meet.api.member.application.domain.entity.Member;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-12-28T14:55:20+0900",
+    date = "2026-01-13T23:08:19+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.10 (Oracle Corporation)"
 )
 public class MemberMapperImpl implements MemberMapper {

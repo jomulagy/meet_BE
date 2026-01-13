@@ -1,0 +1,20 @@
+package com.example.meet.api.post.adapter.out;
+
+import com.example.meet.infrastructure.repository.PostRepository;
+import com.example.meet.api.post.application.domain.entity.Post;
+import com.example.meet.api.post.application.port.out.CreatePostPort;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
+
+@Repository
+@RequiredArgsConstructor
+public class CreatePostAdapter implements CreatePostPort {
+    private final PostRepository postRepository;
+
+    @Override
+    @Transactional
+    public Post create(Post post) {
+        return postRepository.save(post);
+    }
+}
