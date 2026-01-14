@@ -7,7 +7,7 @@ import com.example.meet.infrastructure.auth.JwtTokenResponseDto;
 import com.example.meet.api.auth.adapter.in.dto.in.KakaoTokenRequestDto;
 import com.example.meet.infrastructure.dto.response.KakaoUserInfoResponseDto;
 import com.example.meet.infrastructure.enumulation.ErrorCode;
-import com.example.meet.infrastructure.enumulation.MemberPrevillege;
+import com.example.meet.infrastructure.enumulation.MemberRole;
 import com.example.meet.infrastructure.exception.BusinessException;
 import com.example.meet.infrastructure.repository.MemberRepository;
 import com.example.meet.api.token.application.port.out.TokenPort;
@@ -43,7 +43,7 @@ public class AuthLoginService implements AuthLoginUseCase {
             tokenPort.updateAdminKakaoRefreshToken(request.getRefreshToken());
         }
 
-        if(member.getPrevillege().equals(MemberPrevillege.denied)){
+        if(member.getRole().equals(MemberRole.denied)){
             throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
         }
         // jwt 토큰 반환
@@ -58,7 +58,7 @@ public class AuthLoginService implements AuthLoginUseCase {
                 .id(kakaoUserInfoResponseDto.getUserID())
                 .name(kakaoUserInfoResponseDto.getProperties().getNickname())
                 .email(kakaoUserInfoResponseDto.getKakaoAccount().getEmail())
-                .previllege(MemberPrevillege.denied)
+                .role(MemberRole.denied)
                 .build();
         memberRepository.save(member);
     }

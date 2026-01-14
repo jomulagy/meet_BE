@@ -7,10 +7,10 @@ import com.example.meet.api.member.adapter.in.dto.in.EditMemberDepositRequestDto
 import com.example.meet.infrastructure.dto.response.member.MemberDepositResponseDto;
 import com.example.meet.infrastructure.dto.response.member.MemberPrevillegeResponseDto;
 import com.example.meet.infrastructure.dto.response.member.MemberResponseDto;
+import com.example.meet.infrastructure.enumulation.MemberRole;
 import com.example.meet.infrastructure.exception.BusinessException;
 import com.example.meet.infrastructure.enumulation.EditMemberPrevillegeOption;
 import com.example.meet.infrastructure.enumulation.ErrorCode;
-import com.example.meet.infrastructure.enumulation.MemberPrevillege;
 import com.example.meet.api.member.application.domain.entity.Member;
 import com.example.meet.infrastructure.mapper.MemberMapper;
 import com.example.meet.infrastructure.repository.MemberRepository;
@@ -32,7 +32,7 @@ public class MemberService {
         if(!user.isPresent()){
             throw new BusinessException(ErrorCode.MEMBER_NOT_EXISTS);
         }
-        return new MemberPrevillegeResponseDto(user.get().getPrevillege());
+        return new MemberPrevillegeResponseDto(user.get().getRole());
 
     }
 
@@ -43,7 +43,7 @@ public class MemberService {
         );
 
         //로그인 한 유저의 권한 확인 (관리자 여부)
-        if(!member.getPrevillege().equals(MemberPrevillege.admin)){
+        if(!member.getRole().equals(MemberRole.admin)){
             throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
         }
 
@@ -62,7 +62,7 @@ public class MemberService {
                             .name(m.getName())
                             .email(m.getEmail())
                             .deposit(m.getDeposit().toString())
-                            .previllege(m.getPrevillege().toString())
+                            .previllege(m.getRole().toString())
                             .isFirst(isFirst.toString())
                             .build();
                 })
@@ -77,7 +77,7 @@ public class MemberService {
         );
 
         //로그인 한 유저의 권한 확인 (관리자 여부)
-        if(!user.getPrevillege().equals(MemberPrevillege.admin)){
+        if(!user.getRole().equals(MemberRole.admin)){
             throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
         }
 
@@ -91,10 +91,10 @@ public class MemberService {
         }
 
         if(inDto.getOption().equals(EditMemberPrevillegeOption.accept) && member.getUuid() != null){
-            member.updatePrevillege(MemberPrevillege.accepted);
+            member.updatePrevillege(MemberRole.accepted);
         }
         else{
-            member.updatePrevillege(MemberPrevillege.denied);
+            member.updatePrevillege(MemberRole.denied);
         }
         memberRepository.save(member);
 
@@ -107,7 +107,7 @@ public class MemberService {
         );
 
         //로그인 한 유저의 권한 확인
-        if(member.getPrevillege().equals(MemberPrevillege.denied)){
+        if(member.getRole().equals(MemberRole.denied)){
             throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
         }
 
@@ -121,7 +121,7 @@ public class MemberService {
         );
 
         //로그인 한 유저의 권한 확인 (관리자 여부)
-        if(!user.getPrevillege().equals(MemberPrevillege.admin)){
+        if(!user.getRole().equals(MemberRole.admin)){
             throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
         }
 

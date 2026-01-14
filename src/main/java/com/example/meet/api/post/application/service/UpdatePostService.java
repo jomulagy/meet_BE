@@ -3,7 +3,7 @@ package com.example.meet.api.post.application.service;
 import com.example.meet.api.auth.application.port.in.GetLogginedInfoUseCase;
 import com.example.meet.api.member.application.domain.entity.Member;
 import com.example.meet.infrastructure.enumulation.ErrorCode;
-import com.example.meet.infrastructure.enumulation.MemberPrevillege;
+import com.example.meet.infrastructure.enumulation.MemberRole;
 import com.example.meet.infrastructure.exception.BusinessException;
 import com.example.meet.api.post.adapter.in.dto.in.UpdatePostRequestDto;
 import com.example.meet.api.post.adapter.in.dto.out.UpdatePostResponseDto;
@@ -38,7 +38,7 @@ public class UpdatePostService implements UpdatePostUseCase {
         Post post = getPostUseCase.getEntity(inDto.getPostId());
 
         //작성자 or 관리자 인지 확인
-        if(!(user.getPrevillege().equals(MemberPrevillege.admin) || post.getAuthor() == user)){
+        if(!(user.getRole().equals(MemberRole.admin) || post.getAuthor() == user)){
             throw new BusinessException(ErrorCode.MEET_EDIT_PERMISSION_REQUIRED);
         }
 

@@ -2,7 +2,7 @@ package com.example.meet.infrastructure.security;
 
 import com.example.meet.api.member.application.domain.entity.Member;
 import com.example.meet.infrastructure.enumulation.ErrorCode;
-import com.example.meet.infrastructure.enumulation.MemberPrevillege;
+import com.example.meet.infrastructure.enumulation.MemberRole;
 import com.example.meet.infrastructure.exception.BusinessException;
 import com.example.meet.api.member.application.port.out.GetMemberPort;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ public class MemberPermissionEvaluator {
         Member member = getMemberPort.getMemberById(memberId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_EXISTS));
 
-        if (MemberPrevillege.denied.equals(member.getPrevillege())) {
+        if (MemberRole.denied.equals(member.getRole())) {
             throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
         }
 
@@ -33,7 +33,7 @@ public class MemberPermissionEvaluator {
         Member member = getMemberPort.getMemberById(getMemberId(authentication))
                 .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_EXISTS));
 
-        if (!MemberPrevillege.admin.equals(member.getPrevillege())) {
+        if (!MemberRole.admin.equals(member.getRole())) {
             throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
         }
 

@@ -1,7 +1,7 @@
 package com.example.meet.batch.job;
 
 import com.example.meet.batch.CommonJob;
-import com.example.meet.infrastructure.enumulation.MemberPrevillege;
+import com.example.meet.infrastructure.enumulation.MemberRole;
 import com.example.meet.api.member.application.domain.entity.Member;
 import com.example.meet.infrastructure.repository.BatchLogRepository;
 import com.example.meet.infrastructure.repository.MemberRepository;
@@ -27,7 +27,7 @@ public class DeleteMemberPrevillege extends CommonJob {
         log.append("[");
 
         for(Member member: memberList){
-            member.setPrevillege(MemberPrevillege.denied);
+            member.setRole(MemberRole.denied);
 
             log.append(member.getName());
             log.append(", ");

@@ -3,7 +3,7 @@ package com.example.meet.api.vote.application.service;
 import com.example.meet.api.auth.application.port.in.GetLogginedInfoUseCase;
 import com.example.meet.api.member.application.domain.entity.Member;
 import com.example.meet.infrastructure.enumulation.ErrorCode;
-import com.example.meet.infrastructure.enumulation.MemberPrevillege;
+import com.example.meet.infrastructure.enumulation.MemberRole;
 import com.example.meet.infrastructure.enumulation.VoteType;
 import com.example.meet.infrastructure.exception.BusinessException;
 import com.example.meet.infrastructure.utils.DateTimeUtils;
@@ -57,7 +57,7 @@ public class GetVoteService implements GetVoteUseCase {
                                     .id(voteItem.getId())
                                     .value(voteItem.getContent())
                                     .isVoted(voters.contains(user))
-                                    .editable(voteItem.getAuthor().equals(user) || user.getPrevillege().equals(MemberPrevillege.admin))
+                                    .editable(voteItem.getAuthor().equals(user) || user.getRole().equals(MemberRole.admin))
                                     .voterList(voters.stream().map(Member::getName).toList())
                                     .build()
                     );
@@ -110,7 +110,7 @@ public class GetVoteService implements GetVoteUseCase {
                                 .id(voteItem.getId())
                                 .value(voteItem.getContent())
                                 .isVoted(voters.contains(user))
-                                .editable(voteItem.getAuthor().equals(user) || user.getPrevillege().equals(MemberPrevillege.admin))
+                                .editable(voteItem.getAuthor().equals(user) || user.getRole().equals(MemberRole.admin))
                                 .voterList(voters.stream().map(Member::getName).toList())
                                 .build()
                 );

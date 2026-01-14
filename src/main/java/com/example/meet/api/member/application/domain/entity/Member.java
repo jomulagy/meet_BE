@@ -1,6 +1,6 @@
 package com.example.meet.api.member.application.domain.entity;
 
-import com.example.meet.infrastructure.enumulation.MemberPrevillege;
+import com.example.meet.infrastructure.enumulation.MemberRole;
 import com.example.meet.api.participate.application.domain.entity.ParticipateVoteItem;
 import com.example.meet.api.vote.application.domain.entity.VoteItem;
 import jakarta.persistence.*;
@@ -31,8 +31,8 @@ public class Member {
     @Column(name = "uuid")
     private String uuid;
 
-    @Column(name = "previllege",nullable = false)
-    private MemberPrevillege previllege = MemberPrevillege.denied;
+    @Column(name = "role",nullable = false)
+    private MemberRole role = MemberRole.denied;
 
     @Column(name = "deposit",nullable = false)
     private Boolean deposit = false;
@@ -47,8 +47,8 @@ public class Member {
     @ManyToMany(mappedBy = "participateVoters")
     private List<ParticipateVoteItem> participateVoters = new ArrayList<>();
 
-    public void updatePrevillege(MemberPrevillege previllege){
-        this.previllege = previllege;
+    public void updatePrevillege(MemberRole previllege){
+        this.role = previllege;
     }
 
     public void updateUUID(String uuid) {
@@ -59,7 +59,7 @@ public class Member {
         this.deposit = deposit;
     }
 
-    public void setPrevillege(MemberPrevillege previllege) {
-        this.previllege = previllege;
+    public void setRole(MemberRole role) {
+        this.role = role;
     }
 }

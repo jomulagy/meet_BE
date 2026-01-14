@@ -3,7 +3,7 @@ package com.example.meet.service;
 import com.example.meet.api.member.application.domain.entity.Member;
 import com.example.meet.api.post.adapter.in.dto.in.DeleteMeetRequestDto;
 import com.example.meet.infrastructure.enumulation.ErrorCode;
-import com.example.meet.infrastructure.enumulation.MemberPrevillege;
+import com.example.meet.infrastructure.enumulation.MemberRole;
 import com.example.meet.infrastructure.exception.BusinessException;
 import com.example.meet.infrastructure.repository.MeetRepository;
 import com.example.meet.infrastructure.repository.MemberRepository;
@@ -26,7 +26,7 @@ public class MeetService {
         );
 
         //로그인 한 유저의 권한 확인 (관리자, 멤버 여부)
-        if(user.getPrevillege().equals(MemberPrevillege.denied)){
+        if(user.getRole().equals(MemberRole.denied)){
             throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
         }
 
@@ -36,7 +36,7 @@ public class MeetService {
         );
 
         //작성자 or 관리자 인지 확인
-        if(!(user.getPrevillege().equals(MemberPrevillege.admin) || post.getAuthor() == user)){
+        if(!(user.getRole().equals(MemberRole.admin) || post.getAuthor() == user)){
             throw new BusinessException(ErrorCode.MEET_EDIT_PERMISSION_REQUIRED);
         }
 

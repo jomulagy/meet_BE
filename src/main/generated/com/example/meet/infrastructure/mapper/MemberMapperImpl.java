@@ -2,14 +2,13 @@ package com.example.meet.infrastructure.mapper;
 
 import com.example.meet.api.member.application.domain.entity.Member;
 import com.example.meet.infrastructure.dto.response.member.MemberResponseDto;
-import com.example.meet.infrastructure.enumulation.MemberPrevillege;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-01-13T23:24:29+0900",
+    date = "2026-01-15T00:46:28+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.10 (Oracle Corporation)"
 )
 public class MemberMapperImpl implements MemberMapper {
@@ -29,9 +28,6 @@ public class MemberMapperImpl implements MemberMapper {
         if ( member.getDeposit() != null ) {
             memberResponseDto.deposit( String.valueOf( member.getDeposit() ) );
         }
-        if ( member.getPrevillege() != null ) {
-            memberResponseDto.previllege( member.getPrevillege().name() );
-        }
         memberResponseDto.email( member.getEmail() );
 
         return memberResponseDto.build();
@@ -50,9 +46,6 @@ public class MemberMapperImpl implements MemberMapper {
         }
         member.name( memberDto.getName() );
         member.email( memberDto.getEmail() );
-        if ( memberDto.getPrevillege() != null ) {
-            member.previllege( Enum.valueOf( MemberPrevillege.class, memberDto.getPrevillege() ) );
-        }
         if ( memberDto.getDeposit() != null ) {
             member.deposit( Boolean.parseBoolean( memberDto.getDeposit() ) );
         }

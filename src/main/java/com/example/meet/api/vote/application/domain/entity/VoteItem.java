@@ -1,6 +1,7 @@
 package com.example.meet.api.vote.application.domain.entity;
 
 import com.example.meet.api.member.application.domain.entity.Member;
+import com.example.meet.infrastructure.config.jpaAudit.domain.entity.BaseAuditEntity;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -19,7 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @EntityListeners(AuditingEntityListener.class)
-public class VoteItem {
+public class VoteItem extends BaseAuditEntity {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,11 +28,6 @@ public class VoteItem {
 
     @Column(name = "content")
     private String content;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "author")
-    @CreatedBy
-    private Member author;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vote_id")

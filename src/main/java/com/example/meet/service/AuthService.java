@@ -3,7 +3,7 @@ package com.example.meet.service;
 import com.example.meet.infrastructure.dto.response.AdminAccessTokenResponseDto;
 import com.example.meet.infrastructure.exception.BusinessException;
 import com.example.meet.infrastructure.enumulation.ErrorCode;
-import com.example.meet.infrastructure.enumulation.MemberPrevillege;
+import com.example.meet.infrastructure.enumulation.MemberRole;
 import com.example.meet.api.member.application.domain.entity.Member;
 import com.example.meet.api.token.application.domain.entity.Token;
 import com.example.meet.infrastructure.repository.MemberRepository;
@@ -41,7 +41,7 @@ public class AuthService {
         );
 
         //로그인 한 유저의 권한 확인 (관리자 여부)
-        if(!user.getPrevillege().equals(MemberPrevillege.admin)){
+        if(!user.getRole().equals(MemberRole.admin)){
             throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
         }
 

@@ -1,8 +1,9 @@
 package com.example.meet.infrastructure.utils;
 
+import com.example.meet.api.member.application.port.out.GetMemberPort;
+import com.example.meet.infrastructure.enumulation.MemberRole;
 import com.example.meet.infrastructure.utils.dto.in.MessageRequestDto;
 import com.example.meet.infrastructure.enumulation.ErrorCode;
-import com.example.meet.infrastructure.enumulation.MemberPrevillege;
 import com.example.meet.infrastructure.enumulation.Message;
 import com.example.meet.infrastructure.exception.BusinessException;
 import com.example.meet.api.member.application.domain.entity.Member;
@@ -30,6 +31,8 @@ public class MessageManager {
     private final MemberRepository memberRepository;
     private final ObjectMapper objectMapper;
     private final AuthService authService;
+
+    private final GetMemberPort getMemberPort;
     @Value("${spring.profiles.active:}")
     private String activeProfiles;
 
@@ -193,10 +196,7 @@ public class MessageManager {
     }
 
     private List<String> getAllUUIDs(){
-        return memberRepository.findByPrevillegeGreaterThanAndUuidIsNotNull(MemberPrevillege.denied)
-                .stream()
-                .map(Member::getUuid)
-                .collect(Collectors.toList());
+        return getMemberPort.getAllUUIDs();
     }
 
     private String convertListToJson(List<String> list) {
