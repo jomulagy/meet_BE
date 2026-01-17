@@ -19,6 +19,5 @@ public class FindVoteResponseDto {
     private boolean isActive;
     private boolean isVoted;
     private String type;
-    private String result;
     private List<FindVoteItemResponseDto> itemList;
 }

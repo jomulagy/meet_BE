@@ -43,10 +43,10 @@ public class UpdateVoteAdapter implements UpdateVotePort {
 
     @Override
     @Transactional
-    public void updateResult(Long id, String contentResult) {
+    public void updateResult(Long id, VoteItem result) {
         queryFactory
                 .update(vote)
-                .set(vote.result, contentResult)
+                .set(vote.result, result)
                 .set(vote.activeYn, false)
                 .where(vote.id.eq(id))
                 .execute();

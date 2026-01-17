@@ -39,29 +39,34 @@ public class GetVoteService implements GetVoteUseCase {
         List<Vote> voteList = getVotePort.getByPostId(inDto.getPostId());
 
         for(Vote vote : voteList) {
-            boolean isVoted = false;
+            boolean isVoteAfter = false;
             String endDate = vote.getEndDate() != null ? DateTimeUtils.formatWithOffset(vote.getEndDate()) : null;
 
             voteItemResponseDtoList = new ArrayList<>();
 
-            if(vote.getActiveYn()) {
-                for (VoteItem voteItem : vote.getVoteItems()) {
-                    List<Member> voters = voteItem.getVoters() == null ? List.of() : voteItem.getVoters();
+            for (VoteItem voteItem : vote.getVoteItems()) {
+                boolean isVoted = false;
+                List<Member> voters = voteItem.getVoters() == null ? List.of() : voteItem.getVoters();
 
-                    if (!isVoted && voters.contains(user)) {
-                        isVoted = true;
-                    }
-
-                    voteItemResponseDtoList.add(
-                            FindVoteItemResponseDto.builder()
-                                    .id(voteItem.getId())
-                                    .value(voteItem.getContent())
-                                    .isVoted(voters.contains(user))
-                                    .editable(voteItem.getAuthor().equals(user) || user.getRole().equals(MemberRole.admin))
-                                    .voterList(voters.stream().map(Member::getName).toList())
-                                    .build()
-                    );
+                if (!isVoteAfter && voters.contains(user)) {
+                    isVoteAfter = true;
                 }
+
+                if(vote.getActiveYn()) {
+                   isVoted = voters.contains(user);
+                } else {
+                    isVoted = voteItem.equals(vote.getResult());
+                }
+
+                voteItemResponseDtoList.add(
+                        FindVoteItemResponseDto.builder()
+                                .id(voteItem.getId())
+                                .value(voteItem.getContent())
+                                .isVoted(isVoted)
+                                .editable(voteItem.getAuthor().equals(user) || user.getRole().equals(MemberRole.admin))
+                                .voterList(voters.stream().map(Member::getName).toList())
+                                .build()
+                );
             }
 
             responseDtoList.add(
@@ -71,9 +76,8 @@ public class GetVoteService implements GetVoteUseCase {
                             .endDate(endDate)
                             .isDuplicate(vote.isDuplicate())
                             .isActive(vote.getActiveYn())
-                            .isVoted(isVoted)
+                            .isVoted(isVoteAfter)
                             .type(VoteType.of(vote.getType()))
-                            .result(vote.getResult())
                             .itemList(voteItemResponseDtoList)
                             .build()
             );
@@ -92,24 +96,31 @@ public class GetVoteService implements GetVoteUseCase {
         if(voteOptional.isEmpty()) throw new BusinessException(ErrorCode.VOTE_NOT_EXISTS);
 
         Vote vote = voteOptional.get();
-        boolean isVoted = false;
+        boolean isVoteAfter = false;
         String endDate = vote.getEndDate() != null ? DateTimeUtils.formatWithOffset(vote.getEndDate()) : null;
 
         voteItemResponseDtoList = new ArrayList<>();
 
         if(vote.getActiveYn()) {
             for (VoteItem voteItem : vote.getVoteItems()) {
+                boolean isVoted = false;
                 List<Member> voters = voteItem.getVoters() == null ? List.of() : voteItem.getVoters();
 
-                if (!isVoted && voters.contains(user)) {
-                    isVoted = true;
+                if (!isVoteAfter && voters.contains(user)) {
+                    isVoteAfter = true;
+                }
+
+                if(vote.getActiveYn()) {
+                    isVoted = voters.contains(user);
+                } else {
+                    isVoted = voteItem.equals(vote.getResult());
                 }
 
                 voteItemResponseDtoList.add(
                         FindVoteItemResponseDto.builder()
                                 .id(voteItem.getId())
                                 .value(voteItem.getContent())
-                                .isVoted(voters.contains(user))
+                                .isVoted(isVoted)
                                 .editable(voteItem.getAuthor().equals(user) || user.getRole().equals(MemberRole.admin))
                                 .voterList(voters.stream().map(Member::getName).toList())
                                 .build()
@@ -123,9 +134,8 @@ public class GetVoteService implements GetVoteUseCase {
                 .endDate(endDate)
                 .isDuplicate(vote.isDuplicate())
                 .isActive(vote.getActiveYn())
-                .isVoted(isVoted)
+                .isVoted(isVoteAfter)
                 .type(VoteType.of(vote.getType()))
-                .result(vote.getResult())
                 .itemList(voteItemResponseDtoList)
                 .build();
     }

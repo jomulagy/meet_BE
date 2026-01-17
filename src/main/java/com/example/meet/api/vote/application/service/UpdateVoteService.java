@@ -60,7 +60,7 @@ public class UpdateVoteService implements UpdateVoteUseCase {
     public TerminateResponseDto terminate(TerminateVoteRequestDto request) {
         Vote vote = getVoteUseCase.getVote(request.getVoteId());
 
-        String result = null;
+        VoteItem result = null;
         int max = -1;
         int count;
 
@@ -74,7 +74,7 @@ public class UpdateVoteService implements UpdateVoteUseCase {
 
             if (count > max) {
                 max = count;
-                result = voteItem.getContent();
+                result = voteItem;
             }
         }
 
@@ -94,7 +94,7 @@ public class UpdateVoteService implements UpdateVoteUseCase {
         for(Vote vote : post.getVoteList()) {
             if(!vote.getActiveYn()) continue;
 
-            String result = null;
+            VoteItem result = null;
             int max = -1;
             int count;
 
@@ -108,7 +108,7 @@ public class UpdateVoteService implements UpdateVoteUseCase {
 
                 if (count > max) {
                     max = count;
-                    result = voteItem.getContent();
+                    result = voteItem;
                 }
             }
 

@@ -79,7 +79,6 @@ public class CreateVoteItemService implements CreateVoteItemUseCase {
                 .isActive(vote.getActiveYn())
                 .isVoted(false)
                 .type(VoteType.of(vote.getType()))
-                .result(vote.getResult())
                 .itemList(voteItemResponseDtoList)
                 .build();
     }

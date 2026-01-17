@@ -41,8 +41,9 @@ public class Vote {
     @Builder.Default
     private boolean isDuplicate = false;
 
-    @Column(name = "result")
-    private String result;
+    @OneToOne
+    @JoinColumn(name = "result_id")
+    private VoteItem result;
 
     @Setter
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

@@ -62,7 +62,6 @@ public class TerminateVote extends CommonJob {
     private void process(Vote vote, StringBuilder log) {
         try {
             VoteItem result;
-            String contentResult;
             List<VoteItem> voteItemList = vote.getVoteItems();
 
             if(voteItemList.isEmpty()){
@@ -80,9 +79,7 @@ public class TerminateVote extends CommonJob {
                 }
             }
 
-            contentResult = result.getContent();
-
-            updateVotePort.updateResult(vote.getId(), contentResult);
+            updateVotePort.updateResult(vote.getId(), result);
 
         } catch (Exception e) {
             super.insertBatch("Fail to terminate vote :: " + vote.getId(), "FAILURE", e.getMessage());
