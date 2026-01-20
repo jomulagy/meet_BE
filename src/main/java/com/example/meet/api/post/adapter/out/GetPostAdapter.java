@@ -4,6 +4,7 @@ import com.example.meet.api.post.application.domain.entity.Post;
 import com.example.meet.api.post.application.port.out.GetPostPort;
 import com.example.meet.infrastructure.enumulation.PostType;
 import com.example.meet.infrastructure.repository.MeetRepository;
+import com.querydsl.core.types.dsl.DateExpression;
 import com.querydsl.core.types.dsl.DateTimeExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
@@ -11,6 +12,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -39,19 +41,8 @@ public class GetPostAdapter implements GetPostPort {
 
     @Override
     public List<Post> findListByType(PostType type, Long memberId) {
-        DateTimeExpression<LocalDateTime> startDateTime =
-                Expressions.dateTimeTemplate(
-                        LocalDateTime.class,
-                        "{0}",
-                        privilege.startDate
-                );
-
-        DateTimeExpression<LocalDateTime> endDateTime =
-                Expressions.dateTimeTemplate(
-                        LocalDateTime.class,
-                        "DATE_ADD({0}, INTERVAL 1 DAY)",
-                        privilege.endDate
-                );
+        DateExpression<LocalDate> createdDate =
+                Expressions.dateTemplate(LocalDate.class, "DATE({0})", post.createdAt);
 
         return query
                 .selectFrom(post)
@@ -61,8 +52,8 @@ public class GetPostAdapter implements GetPostPort {
                                 .from(privilege)
                                 .where(
                                         privilege.member.id.eq(memberId),
-                                        post.createdAt.goe(startDateTime),
-                                        post.createdAt.lt(endDateTime)
+                                        createdDate.goe(privilege.startDate),
+                                        createdDate.loe(privilege.endDate)
                                 )
                                 .exists(),
                         post.type.eq(type)
