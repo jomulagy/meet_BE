@@ -7,9 +7,11 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import static com.example.meet.api.auth.application.domain.entity.QPrivilege.privilege;
 import static com.example.meet.api.member.application.domain.entity.QMember.member;
 
 @Repository
@@ -28,6 +30,12 @@ public class GetMemberAdapter implements GetMemberPort {
         return jpaQueryFactory
                 .select(member.uuid)
                 .from(member)
+                .innerJoin(privilege)
+                .on(member.eq(privilege.member))
+                .where(
+                    privilege.endDate.loe(LocalDate.now()),
+                    privilege.startDate.goe(LocalDate.now())
+                )
                 .fetch();
     }
 }
