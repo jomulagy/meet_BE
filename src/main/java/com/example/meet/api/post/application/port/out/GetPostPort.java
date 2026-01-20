@@ -11,5 +11,5 @@ public interface GetPostPort {
 
     List<Post> findAll();
 
-    List<Post> findListByType(PostType type);
+    List<Post> findListByType(PostType type, Long memberId);
 }

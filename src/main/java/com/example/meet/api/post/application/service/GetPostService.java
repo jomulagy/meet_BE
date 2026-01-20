@@ -67,10 +67,10 @@ public class GetPostService implements GetPostUseCase {
     @Override
     @PreAuthorize("@memberPermissionEvaluator.hasAccess(authentication)")
     public List<GetPostResponseDto> findPostList(String type) {
-        String date;
+        Member loginUser = getLogginedInfoUseCase.get();
         List<GetPostResponseDto> responseDtoList = new ArrayList<>();
         //모임 조회
-        List<Post> postList = getPostPort.findListByType(PostType.fromName(type));
+        List<Post> postList = getPostPort.findListByType(PostType.fromName(type), loginUser.getId());
 
         for(Post post : postList) {
             responseDtoList.add(
