@@ -33,8 +33,8 @@ public class GetMemberAdapter implements GetMemberPort {
                 .innerJoin(privilege)
                 .on(member.eq(privilege.member))
                 .where(
-                    privilege.endDate.loe(LocalDate.now()),
-                    privilege.startDate.goe(LocalDate.now())
+                    privilege.startDate.loe(LocalDate.now()),
+                    privilege.endDate.goe(LocalDate.now())
                 )
                 .fetch();
     }
