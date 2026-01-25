@@ -34,7 +34,7 @@ public class DeleteVoteItemService implements DeleteVoteItemUseCase {
 
         getVoteUseCase.getVote(voteItem.getVote().getId());
 
-        if (!user.getRole().equals(MemberRole.admin) && !voteItem.getAuthor().equals(user)) {
+        if (voteItem.getAuthor().equals(user)) {
             throw new BusinessException(ErrorCode.MEMBER_PERMISSION_REQUIRED);
         }
 
