@@ -133,7 +133,12 @@ public class MemberService {
             throw new BusinessException(ErrorCode.VALUE_REQUIRED);
         }
 
-        member.setDeposit(inDto.getOption().equals("true"));
+        if("true".equals(inDto.getOption())) {
+            member.payed();
+        } else {
+            member.unPayed();
+        }
+
         memberRepository.save(member);
 
         return new MemberDepositResponseDto(member.getDeposit().toString());

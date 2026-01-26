@@ -58,4 +58,16 @@ public class Member {
     public boolean isAdmin() {
         return this.role.equals(MemberRole.admin);
     }
+
+    public void payed() {
+        this.deposit = true;
+    }
+
+    public void unPayed() {
+        this.deposit = false;
+    }
+
+    public void deny() {
+        this.role = MemberRole.denied;
+    }
 }

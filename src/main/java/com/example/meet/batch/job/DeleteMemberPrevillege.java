@@ -27,7 +27,7 @@ public class DeleteMemberPrevillege extends CommonJob {
         log.append("[");
 
         for(Member member: memberList){
-            member.setRole(MemberRole.denied);
+            member.deny();
 
             log.append(member.getName());
             log.append(", ");

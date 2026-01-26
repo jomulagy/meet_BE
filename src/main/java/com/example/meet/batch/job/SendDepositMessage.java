@@ -32,7 +32,7 @@ public class SendDepositMessage extends CommonJob {
         List<Member> memberList = memberRepository.findAll();
 
         for(Member member : memberList){
-            member.setDeposit(false);
+            member.unPayed();
         }
 
         TemplateArgs templateArgs = TemplateArgs.builder()
