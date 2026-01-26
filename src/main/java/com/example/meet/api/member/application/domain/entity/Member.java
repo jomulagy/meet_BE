@@ -55,11 +55,7 @@ public class Member {
         this.uuid = uuid;
     }
 
-    public void setDeposit(Boolean deposit) {
-        this.deposit = deposit;
-    }
-
-    public void setRole(MemberRole role) {
-        this.role = role;
+    public boolean isAdmin() {
+        return this.role.equals(MemberRole.admin);
     }
 }

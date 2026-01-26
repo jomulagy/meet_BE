@@ -63,7 +63,7 @@ public class GetVoteService implements GetVoteUseCase {
                                 .id(voteItem.getId())
                                 .value(voteItem.getContent())
                                 .isVoted(isVoted)
-                                .editable(voteItem.getAuthor().equals(user) || user.getRole().equals(MemberRole.admin))
+                                .editable(voteItem.getAuthor().equals(user) || user.isAdmin())
                                 .voterList(voters.stream().map(Member::getName).toList())
                                 .build()
                 );
