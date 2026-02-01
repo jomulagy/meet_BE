@@ -35,7 +35,10 @@ public class GetVoteAdapter implements GetVotePort {
     public List<Vote> getListByEndDate(LocalDateTime dateTime) {
         return query
                 .selectFrom(vote)
-                .where(vote.endDate.eq(dateTime))
+                .where(
+                        vote.endDate.loe(dateTime),
+                        vote.activeYn.eq(true)
+                )
                 .fetch();
     }
 }

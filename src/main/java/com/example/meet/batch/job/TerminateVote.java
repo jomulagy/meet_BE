@@ -41,6 +41,7 @@ public class TerminateVote extends CommonJob {
         for(Vote vote : voteList){
             try {
                 process(vote, log);
+                
             } catch (Exception e) {
                 continue;
             }
