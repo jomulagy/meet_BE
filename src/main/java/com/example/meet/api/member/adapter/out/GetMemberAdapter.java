@@ -30,12 +30,6 @@ public class GetMemberAdapter implements GetMemberPort {
         return jpaQueryFactory
                 .select(member.uuid)
                 .from(member)
-                .innerJoin(privilege)
-                .on(member.eq(privilege.member))
-                .where(
-                    privilege.startDate.loe(LocalDate.now()),
-                    privilege.endDate.goe(LocalDate.now())
-                )
                 .fetch();
     }
 }

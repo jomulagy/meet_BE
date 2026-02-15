@@ -5,5 +5,7 @@ public interface SendMessageUseCase {
 
     void sendVoteCreated(String title, String id);
 
+    void sendVoteItemCreated(String title, String id);
+
     void sendVoteTerminated(String title, String id);
 }

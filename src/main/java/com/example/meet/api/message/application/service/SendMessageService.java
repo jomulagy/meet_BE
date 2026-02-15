@@ -38,6 +38,18 @@ public class SendMessageService implements SendMessageUseCase {
     }
 
     @Override
+    public void sendVoteItemCreated(String title, String id) {
+        TemplateArgs templateArgs = TemplateArgs.builder()
+                .title(title)
+                .but(id)
+                .scheduleType(null)
+                .build();
+
+        Message.VOTE_ITEM_CREATED.setTemplateArgs(templateArgs);
+        messageManager.sendAll(Message.VOTE_ITEM_CREATED).block();
+    }
+
+    @Override
     public void sendVoteTerminated(String title, String id) {
         TemplateArgs templateArgs = TemplateArgs.builder()
                 .title(title)

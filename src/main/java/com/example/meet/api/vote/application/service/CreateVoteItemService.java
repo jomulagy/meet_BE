@@ -15,6 +15,7 @@ import com.example.meet.api.vote.application.domain.entity.VoteItem;
 import com.example.meet.api.vote.application.port.in.CreateVoteItemUseCase;
 import com.example.meet.api.vote.application.port.in.GetVoteUseCase;
 import com.example.meet.api.vote.application.port.out.CreateVoteItemPort;
+import com.example.meet.api.message.application.port.in.SendMessageUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,7 @@ public class CreateVoteItemService implements CreateVoteItemUseCase {
     private final GetLogginedInfoUseCase getLogginedInfoUseCase;
     private final GetVoteUseCase getVoteUseCase;
     private final CreateVoteItemPort createVoteItemPort;
+    private final SendMessageUseCase sendMessageUseCase;
 
     @Override
     @Transactional
@@ -54,6 +56,8 @@ public class CreateVoteItemService implements CreateVoteItemUseCase {
                 .build();
 
         createVoteItemPort.create(entity);
+
+        sendMessageUseCase.sendVoteItemCreated(vote.getTitle(), vote.getPost().getId().toString());
 
         String endDate = vote.getEndDate() != null ? DateTimeUtils.formatWithOffset(vote.getEndDate()) : null;
 

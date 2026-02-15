@@ -41,21 +41,10 @@ public class GetPostAdapter implements GetPostPort {
 
     @Override
     public List<Post> findListByType(PostType type, Long memberId) {
-        DateExpression<LocalDate> createdDate =
-                Expressions.dateTemplate(LocalDate.class, "DATE({0})", post.createdAt);
 
         return query
                 .selectFrom(post)
                 .where(
-                        JPAExpressions
-                                .selectOne()
-                                .from(privilege)
-                                .where(
-                                        privilege.member.id.eq(memberId),
-                                        createdDate.goe(privilege.startDate),
-                                        createdDate.loe(privilege.endDate)
-                                )
-                                .exists(),
                         post.type.eq(type)
                 )
                 .orderBy(post.id.desc())
