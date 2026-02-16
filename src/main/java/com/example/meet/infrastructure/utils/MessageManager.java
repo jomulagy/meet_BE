@@ -37,6 +37,7 @@ public class MessageManager {
     private String activeProfiles;
 
     public Mono<String> sendAll(Message msg){
+        log.info("active profile : {}", activeProfiles);
         if(!activeProfiles.contains("deploy")){
             return Mono.empty();
         }
