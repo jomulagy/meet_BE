@@ -88,7 +88,7 @@ public class TerminateVote extends CommonJob {
         }
 
         try {
-            sendMessageUseCase.sendParticipate(vote.getTitle(), vote.getId().toString());
+            sendMessageUseCase.sendVoteTerminated(vote.getTitle(), vote.getId().toString());
 
         } catch (Exception e) {
             super.insertBatch("Fail to send participate vote message :: " + vote.getId(), "FAILURE", e.getMessage());
