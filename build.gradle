@@ -40,6 +40,9 @@ dependencies {
 	//MySQL
 	implementation 'mysql:mysql-connector-java:8.0.29'
 
+	//p6spy
+	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.1'
+
 	//Mapstructure
 	implementation 'org.mapstruct:mapstruct:1.5.2.Final'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.2.Final'
