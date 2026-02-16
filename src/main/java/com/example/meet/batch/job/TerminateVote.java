@@ -1,6 +1,8 @@
 package com.example.meet.batch.job;
 
 import com.example.meet.batch.CommonJob;
+import com.example.meet.infrastructure.enumulation.ErrorCode;
+import com.example.meet.infrastructure.exception.BusinessException;
 import com.example.meet.infrastructure.repository.BatchLogRepository;
 import com.example.meet.infrastructure.utils.MessageManager;
 import com.example.meet.api.message.application.port.in.SendMessageUseCase;
@@ -13,7 +15,6 @@ import org.quartz.JobExecutionContext;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class TerminateVote extends CommonJob {
@@ -32,60 +33,42 @@ public class TerminateVote extends CommonJob {
     @Override
     @Transactional
     protected String performJob(JobExecutionContext context) {
-        LocalDateTime currentDate = LocalDateTime.now();
-        List<Vote> voteList = getVotePort.getListByEndDate(currentDate);
-        StringBuilder log = new StringBuilder();
+        try {
+            Long voteId = context.getJobDetail().getJobDataMap().getLong("voteId");
+            Vote vote = getVotePort.get(voteId)
+                    .orElseThrow(() -> new BusinessException(ErrorCode.VOTE_NOT_EXISTS));
 
-        log.append("[");
+            process(vote);
 
-        for(Vote vote : voteList){
-            try {
-                process(vote, log);
-                
-            } catch (Exception e) {
-                continue;
-            }
+            return vote.getTitle();
+
+        } catch (Exception e) {
+            super.insertBatch("Fail to terminate vote", "FAILURE", e.getMessage());
+            throw e;
         }
-
-        // 마지막 ", " 제거
-        int index = log.lastIndexOf( ", ");
-
-        if (index != -1 && index == log.length() - 2) {
-            log.delete(index, log.length());
-        }
-
-        log.append("]");
-
-        return log.toString();
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    private void process(Vote vote, StringBuilder log) {
-        try {
-            VoteItem result;
-            List<VoteItem> voteItemList = vote.getVoteItems();
+    private void process(Vote vote) {
+        VoteItem result;
+        List<VoteItem> voteItemList = vote.getVoteItems();
 
-            if(voteItemList.isEmpty()){
-                return;
-            }
-
-            int max = -1;
-            result = null;
-
-            for(VoteItem item : voteItemList){
-                if(item.getVoters().size() > max){
-                    max = item.getVoters().size();
-
-                    result = item;
-                }
-            }
-
-            updateVotePort.updateResult(vote.getId(), result);
-
-        } catch (Exception e) {
-            super.insertBatch("Fail to terminate vote :: " + vote.getId(), "FAILURE", e.getMessage());
-            throw e;
+        if(voteItemList.isEmpty()){
+            return;
         }
+
+        int max = -1;
+        result = null;
+
+        for(VoteItem item : voteItemList){
+            if(item.getVoters().size() > max){
+                max = item.getVoters().size();
+
+                result = item;
+            }
+        }
+
+        updateVotePort.updateResult(vote.getId(), result);
 
         try {
             sendMessageUseCase.sendVoteTerminated(vote.getTitle(), vote.getId().toString());
@@ -94,8 +77,5 @@ public class TerminateVote extends CommonJob {
             super.insertBatch("Fail to send participate vote message :: " + vote.getId(), "FAILURE", e.getMessage());
             throw e;
         }
-
-        log.append(vote.getTitle());
-        log.append(", ");
     }
 }

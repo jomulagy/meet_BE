@@ -30,6 +30,7 @@ public class RegisterJobService implements RegisterJobUseCase {
 
         JobDetail jobDetail = JobBuilder.newJob(com.example.meet.batch.job.TerminateVote.class)
                 .withIdentity("TerminateVote_" + vote.getId())
+                .usingJobData("voteId", vote.getId())
                 .build();
 
         Trigger trigger = TriggerBuilder.newTrigger()
