@@ -30,8 +30,8 @@ jobs:
       - name: Make application.properties
         run: |
           cd ./src/main/resources
-          touch ./application-dev.yml
-          echo "${{ secrets.PROPERTIES_DEPLOY }}" > ./application-dev.yml
+          touch ./application-deploy.yml
+          echo "${{ secrets.PROPERTIES_DEPLOY }}" > ./application-deploy.yml
         shell: bash
 
       # gradle을 통해 소스를 빌드.
@@ -48,11 +48,11 @@ jobs:
           name: build-artifacts
           path: build/libs/
 
-      - name: Upload application-dev.yml
+      - name: Upload application-deploy.yml
         uses: actions/upload-artifact@v4
         with:
           name: application-deploy-file
-          path: ./src/main/resources/application-dev.yml
+          path: ./src/main/resources/application-deploy.yml
 
   docker:
     runs-on: ubuntu-latest # ubuntu 최신 버전에서 script를 실행
@@ -112,5 +112,5 @@ jobs:
             docker rm $(docker ps -aq) || true
             docker image prune -a -f        
             docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:${{ github.sha }}
-            docker run -d --restart on-failure:5 -p 8080:8080 -v /home/ubuntu/data:/data -v /etc/localtime:/etc/localtime:ro -v /etc/timezone:/etc/timezone:ro --name meetService -e SPRING_PROFILES_ACTIVE=dev,deploy ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:${{ github.sha }}
+            docker run -d --restart on-failure:5 -p 8080:8080 -v /home/ubuntu/data:/data -v /etc/localtime:/etc/localtime:ro -v /etc/timezone:/etc/timezone:ro --name meetService -e SPRING_PROFILES_ACTIVE=deploy ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:${{ github.sha }}
 

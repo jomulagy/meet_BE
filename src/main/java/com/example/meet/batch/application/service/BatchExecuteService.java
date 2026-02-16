@@ -1,6 +1,5 @@
 package com.example.meet.batch.application.service;
 
-import com.example.meet.batch.ScheduledJob;
 import com.example.meet.batch.adapter.in.dto.in.BatchExecuteRequestDto;
 import com.example.meet.batch.application.port.in.BatchExecutePort;
 import com.example.meet.batch.application.domain.entity.BatchLog;
@@ -13,17 +12,24 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class BatchExecuteService implements BatchExecutePort {
+    private static final String JOB_PACKAGE = "com.example.meet.batch.job";
+
     private final BatchLogRepository batchLogRepository;
     private final Scheduler scheduler;
 
     @Override
     public Boolean execute(BatchExecuteRequestDto requestDto) {
         try {
-            Class<? extends Job> job = ScheduledJob.valueOf(toSnakeCase(requestDto.getName())).getJobClass();
+            Class<? extends Job> job = resolveJobClass(requestDto.getName());
 
-            JobDetail jobDetail = JobBuilder.newJob(job)
-                    .withIdentity(requestDto.getName() + "_web")
-                    .build();
+            JobBuilder jobBuilder = JobBuilder.newJob(job)
+                    .withIdentity(requestDto.getName() + "_web");
+
+            if (requestDto.getParams() != null) {
+                requestDto.getParams().forEach(jobBuilder::usingJobData);
+            }
+
+            JobDetail jobDetail = jobBuilder.build();
 
             Trigger trigger = TriggerBuilder.newTrigger()
                     .startNow()
@@ -36,6 +42,15 @@ public class BatchExecuteService implements BatchExecutePort {
         }
 
         return true;
+    }
+
+    @SuppressWarnings("unchecked")
+    private Class<? extends Job> resolveJobClass(String name) throws ClassNotFoundException {
+        Class<?> clazz = Class.forName(JOB_PACKAGE + "." + name);
+        if (!Job.class.isAssignableFrom(clazz)) {
+            throw new IllegalArgumentException(name + " is not a Job class");
+        }
+        return (Class<? extends Job>) clazz;
     }
 
     private String toSnakeCase(String str) {
