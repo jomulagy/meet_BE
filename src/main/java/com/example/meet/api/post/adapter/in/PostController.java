@@ -6,6 +6,7 @@ import com.example.meet.infrastructure.CommonResponse;
 import com.example.meet.api.post.adapter.in.dto.CreateMeetRequestDto;
 import com.example.meet.api.post.adapter.in.dto.in.DeleteMeetRequestDto;
 import com.example.meet.api.post.adapter.in.dto.in.GetPostRequestDto;
+import com.example.meet.api.post.adapter.in.dto.in.SaveMeetDateRequestDto;
 import com.example.meet.api.post.adapter.in.dto.in.UpdatePostRequestDto;
 import com.example.meet.api.post.adapter.in.dto.CreateMeetResponseDto;
 import com.example.meet.api.post.adapter.in.dto.out.UpdatePostResponseDto;
@@ -88,27 +89,6 @@ public class PostController {
     }
 
     @DeleteMapping("")
-    @Tag(name = "Meet", description = "모임")
-    @Operation(summary = "모임 삭제",
-            description = "Authorization header require",
-            responses = {
-                    @ApiResponse(responseCode = "200",
-                            description = "성공"
-                    ),
-                    @ApiResponse(responseCode = "404",
-                            description = "존재하지 않는 멤버, 존재하지 않는 모임",
-                            content = @Content(
-                                    mediaType = "application/json"
-                            )
-                    ),
-                    @ApiResponse(responseCode = "403",
-                            description = "멤버 권한이 없음, 관리자와 작성자만 삭제 할 수 있음",
-                            content = @Content(
-                                    mediaType = "application/json"
-                            )
-                    )
-            })
-    @Parameter(name = "meetId", description = "모임 id", example = "1")
     public CommonResponse<Void> deleteMeet(@RequestParam String meetId){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -118,6 +98,18 @@ public class PostController {
                 .meetId(parseLong(meetId))
                 .build();
         meetService.deleteMeet(inDto);
+        return CommonResponse.success();
+    }
+
+    @PutMapping("/{postId}/meetDate")
+    public CommonResponse<Void> saveMeetDate(@PathVariable(name = "postId") Long postId,
+                                             @RequestBody SaveMeetDateRequestDto requestDto) {
+        SaveMeetDateRequestDto inDto = SaveMeetDateRequestDto.builder()
+                .postId(postId)
+                .meetDate(requestDto.getMeetDate())
+                .build();
+
+        updatePostUseCase.saveMeetDate(inDto);
         return CommonResponse.success();
     }
 

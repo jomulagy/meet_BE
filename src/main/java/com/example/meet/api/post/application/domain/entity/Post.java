@@ -1,20 +1,18 @@
 package com.example.meet.api.post.application.domain.entity;
 
-import com.example.meet.infrastructure.config.jpaAudit.domain.entity.BaseAuditEntity;
-import com.example.meet.infrastructure.enumulation.VoteStatus;
-import com.example.meet.api.member.application.domain.entity.Member;
 import com.example.meet.api.participate.application.domain.entity.ParticipateVote;
-import com.example.meet.infrastructure.enumulation.PostType;
 import com.example.meet.api.vote.application.domain.entity.Vote;
+import com.example.meet.infrastructure.config.jpaAudit.domain.entity.BaseAuditEntity;
+import com.example.meet.infrastructure.enumulation.PostType;
+import com.example.meet.infrastructure.enumulation.VoteStatus;
 import jakarta.persistence.*;
-
-import java.util.ArrayList;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -43,6 +41,9 @@ public class Post extends BaseAuditEntity {
 
     @Column(name = "status")
     private VoteStatus status;
+
+    @Column(name = "meet_date")
+    private LocalDate meetDate;
 
     @Builder.Default
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)

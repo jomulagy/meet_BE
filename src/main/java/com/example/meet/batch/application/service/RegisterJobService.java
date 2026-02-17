@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.quartz.*;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Service
@@ -65,6 +66,37 @@ public class RegisterJobService implements RegisterJobUseCase {
         Trigger trigger = TriggerBuilder.newTrigger()
                 .forJob(jobDetail)
                 .withIdentity("TerminateParticipateTrigger_" + vote.getId())
+                .withSchedule(CronScheduleBuilder.cronSchedule(cronExpression))
+                .build();
+
+        try {
+            scheduler.scheduleJob(jobDetail, trigger);
+        } catch (SchedulerException e) {
+            throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public void updateParticipants(Long postId, LocalDate meetDate) {
+        // 모임날짜의 다음날 12시
+        LocalDateTime reminderDate = meetDate.plusDays(1).atTime(12, 0, 0);
+
+        String cronExpression = String.format("%d %d %d %d %d ? %d",
+                reminderDate.getSecond(),
+                reminderDate.getMinute(),
+                reminderDate.getHour(),
+                reminderDate.getDayOfMonth(),
+                reminderDate.getMonthValue(),
+                reminderDate.getYear());
+
+        JobDetail jobDetail = JobBuilder.newJob(com.example.meet.batch.job.SendParticipantInputReminder.class)
+                .withIdentity("SendParticipantInputReminder_" + postId)
+                .usingJobData("postId", postId)
+                .build();
+
+        Trigger trigger = TriggerBuilder.newTrigger()
+                .forJob(jobDetail)
+                .withIdentity("SendParticipantInputReminderTrigger_" + postId)
                 .withSchedule(CronScheduleBuilder.cronSchedule(cronExpression))
                 .build();
 

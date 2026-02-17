@@ -8,6 +8,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
@@ -46,6 +47,16 @@ public class UpdatePostAdapter implements UpdatePostPort {
                 .update(post)
                 .set(post.status, VoteStatus.FINISHED)
                 .where(post.id.eq(id))
+                .execute();
+    }
+
+    @Override
+    @Transactional
+    public void updateMeetDate(Long postId, LocalDate meetDate) {
+        jpaQueryFactory
+                .update(post)
+                .set(post.meetDate, meetDate)
+                .where(post.id.eq(postId))
                 .execute();
     }
 }

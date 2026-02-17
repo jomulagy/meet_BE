@@ -60,4 +60,15 @@ public class SendMessageService implements SendMessageUseCase {
         Message.VOTE_TERMINATE.setTemplateArgs(templateArgs);
         messageManager.sendAll(Message.VOTE_TERMINATE).block();
     }
+
+    @Override
+    public void sendParticipantInputReminder(String title, Long id) {
+        TemplateArgs templateArgs = TemplateArgs.builder()
+                .title(title)
+                .but(String.valueOf(id))
+                .build();
+
+        Message.PARTICIPANT_INPUT_REMIND.setTemplateArgs(templateArgs);
+        messageManager.sendMe(Message.PARTICIPANT_INPUT_REMIND).block();
+    }
 }

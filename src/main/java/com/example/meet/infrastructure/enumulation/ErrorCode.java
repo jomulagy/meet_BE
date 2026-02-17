@@ -45,7 +45,7 @@ public enum ErrorCode {
     //메일
     MAIL_SEND_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "메일 전송중 오류가 발생했습니다."),
 
-    ;
+    INVALID_INPUT_VALUE(HttpStatus.BAD_REQUEST, "입력값 오류 입니다.");
 
     private final HttpStatus httpStatus;
     private final String message;

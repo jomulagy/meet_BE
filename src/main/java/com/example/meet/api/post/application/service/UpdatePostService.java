@@ -2,20 +2,25 @@ package com.example.meet.api.post.application.service;
 
 import com.example.meet.api.auth.application.port.in.GetLogginedInfoUseCase;
 import com.example.meet.api.member.application.domain.entity.Member;
-import com.example.meet.infrastructure.enumulation.ErrorCode;
-import com.example.meet.infrastructure.enumulation.MemberRole;
-import com.example.meet.infrastructure.exception.BusinessException;
+import com.example.meet.api.post.adapter.in.dto.in.SaveMeetDateRequestDto;
 import com.example.meet.api.post.adapter.in.dto.in.UpdatePostRequestDto;
 import com.example.meet.api.post.adapter.in.dto.out.UpdatePostResponseDto;
 import com.example.meet.api.post.application.domain.entity.Post;
 import com.example.meet.api.post.application.port.in.GetPostUseCase;
 import com.example.meet.api.post.application.port.in.UpdatePostUseCase;
 import com.example.meet.api.post.application.port.out.UpdatePostPort;
+import com.example.meet.batch.application.port.in.RegisterJobUseCase;
+import com.example.meet.infrastructure.enumulation.ErrorCode;
+import com.example.meet.infrastructure.enumulation.MemberRole;
+import com.example.meet.infrastructure.exception.BusinessException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 @Service
@@ -23,6 +28,7 @@ import java.time.format.DateTimeFormatter;
 public class UpdatePostService implements UpdatePostUseCase {
     private final GetLogginedInfoUseCase getLogginedInfoUseCase;
     private final GetPostUseCase getPostUseCase;
+    private final RegisterJobUseCase registerJobUseCase;
 
     private final UpdatePostPort updatePostPort;
 
@@ -53,5 +59,19 @@ public class UpdatePostService implements UpdatePostUseCase {
     @PreAuthorize("@memberPermissionEvaluator.hasAdminAccess(authentication)")
     public void terminateVote(Long id) {
         updatePostPort.terminateVote(id);
+    }
+
+    @Override
+    @Transactional
+    @PreAuthorize("@memberPermissionEvaluator.hasAdminAccess(authentication)")
+    public void saveMeetDate(SaveMeetDateRequestDto inDto) {
+        if (inDto.getMeetDate() == null) {
+            throw new BusinessException(ErrorCode.INVALID_INPUT_VALUE);
+        }
+
+        updatePostPort.updateMeetDate(inDto.getPostId(), inDto.getMeetDate());
+
+        // 모임날짜의 다음날 12시에 참여자 입력 알림 배치 작업 등록
+        registerJobUseCase.updateParticipants(inDto.getPostId(), inDto.getMeetDate());
     }
 }

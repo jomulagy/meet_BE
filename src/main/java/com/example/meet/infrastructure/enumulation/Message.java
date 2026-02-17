@@ -12,6 +12,7 @@ public enum Message {
     VOTE_TERMINATE("127224"), // 투표 종료
     MEET_NOTIFICATION("110979"),
     DEPOSIT("115531"),
+    PARTICIPANT_INPUT_REMIND("129508"), // 참여자 입력 알림
     ;
 
     private String id;

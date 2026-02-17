@@ -8,4 +8,6 @@ public interface SendMessageUseCase {
     void sendVoteItemCreated(String title, String id);
 
     void sendVoteTerminated(String title, String id);
+
+    void sendParticipantInputReminder(String title, Long id);
 }
