@@ -1,5 +1,7 @@
 package com.example.meet.api.message.application.port.in;
 
+import com.example.meet.api.member.application.domain.entity.Member;
+
 public interface SendMessageUseCase {
     void sendParticipate(String title, String id);
 
@@ -10,4 +12,6 @@ public interface SendMessageUseCase {
     void sendVoteTerminated(String title, String id);
 
     void sendParticipantInputReminder(String title, Long id);
+
+    void sendDepositPenalty(Member member, String meetTitle, String deadline);
 }

@@ -106,4 +106,51 @@ public class RegisterJobService implements RegisterJobUseCase {
             throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @Override
+    public void checkDepositStatus(Long memberId, Long postId, String postTitle, String memberName, LocalDate checkDate) {
+        LocalDateTime checkDateTime = checkDate.atTime(10, 0, 0); // 오전 10시
+
+        String cronExpression = String.format("%d %d %d %d %d ? %d",
+                checkDateTime.getSecond(),
+                checkDateTime.getMinute(),
+                checkDateTime.getHour(),
+                checkDateTime.getDayOfMonth(),
+                checkDateTime.getMonthValue(),
+                checkDateTime.getYear());
+
+        JobDetail jobDetail = JobBuilder.newJob(com.example.meet.batch.job.CheckDepositStatus.class)
+                .withIdentity("CheckDepositStatus_" + memberId + "_" + postId + "_" + checkDate)
+                .usingJobData("memberId", memberId)
+                .usingJobData("postId", postId)
+                .usingJobData("postTitle", postTitle)
+                .usingJobData("memberName", memberName)
+                .build();
+
+        Trigger trigger = TriggerBuilder.newTrigger()
+                .forJob(jobDetail)
+                .withIdentity("CheckDepositStatusTrigger_" + memberId + "_" + postId + "_" + checkDate)
+                .withSchedule(CronScheduleBuilder.cronSchedule(cronExpression))
+                .build();
+
+        try {
+            scheduler.scheduleJob(jobDetail, trigger);
+        } catch (SchedulerException e) {
+            throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public void cancelCheckDepositStatus(Long memberId, Long postId, LocalDate checkDate) {
+        String jobIdentity = "CheckDepositStatus_" + memberId + "_" + postId + "_" + checkDate;
+
+        try {
+            JobKey jobKey = JobKey.jobKey(jobIdentity);
+            if (scheduler.checkExists(jobKey)) {
+                scheduler.deleteJob(jobKey);
+            }
+        } catch (SchedulerException e) {
+            throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

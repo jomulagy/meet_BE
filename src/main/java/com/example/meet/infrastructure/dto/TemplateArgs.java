@@ -22,4 +22,8 @@ public class TemplateArgs {
     private String year;
     @JsonProperty("nextYear")
     private String nextYear;
+    @JsonProperty("deadline")
+    private String deadline;
+    @JsonProperty("memberName")
+    private String memberName;
 }

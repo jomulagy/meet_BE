@@ -13,6 +13,8 @@ public enum Message {
     MEET_NOTIFICATION("110979"),
     DEPOSIT("115531"),
     PARTICIPANT_INPUT_REMIND("129508"), // 참여자 입력 알림
+    DEPOSIT_PENALTY("129512"), // 연속 3회 불참 벌금 알림
+    DEPOSIT_CHECK_ADMIN("129513"), // 관리자에게 입금 확인 요청
     ;
 
     private String id;

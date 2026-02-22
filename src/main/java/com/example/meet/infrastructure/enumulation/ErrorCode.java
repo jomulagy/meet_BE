@@ -42,6 +42,10 @@ public enum ErrorCode {
     PARTICIPATE_VOTE_END(HttpStatus.BAD_REQUEST, "종료된 투표 입니다."),
     PARTICIPAT_VOTE_ITEM_NOT_EXISTS(HttpStatus.NOT_FOUND, "존재하지 않는 투표 항목 입니다."),
 
+    //출석
+    ATTENDANCE_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "이미 해당 모임의 출석 기록이 존재합니다."),
+    ATTENDANCE_NOT_EXISTS(HttpStatus.NOT_FOUND, "존재하지 않는 출석 기록입니다."),
+
     //메일
     MAIL_SEND_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "메일 전송중 오류가 발생했습니다."),
 

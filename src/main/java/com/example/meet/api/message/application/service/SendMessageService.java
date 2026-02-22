@@ -1,5 +1,6 @@
 package com.example.meet.api.message.application.service;
 
+import com.example.meet.api.member.application.domain.entity.Member;
 import com.example.meet.infrastructure.dto.TemplateArgs;
 import com.example.meet.infrastructure.enumulation.Message;
 import com.example.meet.infrastructure.utils.MessageManager;
@@ -70,5 +71,16 @@ public class SendMessageService implements SendMessageUseCase {
 
         Message.PARTICIPANT_INPUT_REMIND.setTemplateArgs(templateArgs);
         messageManager.sendMe(Message.PARTICIPANT_INPUT_REMIND).block();
+    }
+
+    @Override
+    public void sendDepositPenalty(Member member, String meetTitle, String deadline) {
+        TemplateArgs templateArgs = TemplateArgs.builder()
+                .title(meetTitle)
+                .deadline(deadline)
+                .build();
+
+        Message.DEPOSIT_PENALTY.setTemplateArgs(templateArgs);
+        messageManager.send(Message.DEPOSIT_PENALTY, member).block();
     }
 }
