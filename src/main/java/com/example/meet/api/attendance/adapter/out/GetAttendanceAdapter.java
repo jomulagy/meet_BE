@@ -1,10 +1,13 @@
 package com.example.meet.api.attendance.adapter.out;
 
 import com.example.meet.api.attendance.application.domain.entity.Attendance;
+import com.example.meet.api.attendance.application.domain.entity.QAttendance;
 import com.example.meet.api.attendance.application.port.out.GetAttendancePort;
 import com.example.meet.api.member.application.domain.entity.Member;
 import com.example.meet.api.post.application.domain.entity.Post;
 import com.example.meet.infrastructure.repository.AttendanceRepository;
+
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -15,6 +18,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class GetAttendanceAdapter implements GetAttendancePort {
     private final AttendanceRepository attendanceRepository;
+    private final JPAQueryFactory queryFactory;
 
     @Override
     public Optional<Attendance> findLatestByMember(Member member) {
@@ -35,4 +39,22 @@ public class GetAttendanceAdapter implements GetAttendancePort {
     public Optional<Attendance> findLatestByMemberExcluding(Member member, Long excludeId) {
         return attendanceRepository.findFirstByMemberAndIdNotOrderByAttendanceDateDescIdDesc(member, excludeId);
     }
+
+    @Override
+    public List<Attendance> findLatestAttendanceForAllMembers() {
+        QAttendance a = QAttendance.attendance;
+        QAttendance sub = new QAttendance("sub");
+
+        List<Long> maxIds = queryFactory
+                .select(sub.id.max())
+                .from(sub)
+                .groupBy(sub.member.id)
+                .fetch();
+
+        return queryFactory
+                .selectFrom(a)
+                .where(a.id.in(maxIds))
+                .fetch();
+    }
+
 }

@@ -17,6 +17,5 @@ public class AttendanceRecordDto {
     private String memberName;
     private Boolean isAttended;
     private Integer consecutiveAbsences;
-    private Boolean penaltyPaid;
     private LocalDate attendanceDate;
 }

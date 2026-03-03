@@ -45,6 +45,7 @@ public enum ErrorCode {
     //출석
     ATTENDANCE_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "이미 해당 모임의 출석 기록이 존재합니다."),
     ATTENDANCE_NOT_EXISTS(HttpStatus.NOT_FOUND, "존재하지 않는 출석 기록입니다."),
+    PENALTY_NOT_EXISTS(HttpStatus.NOT_FOUND, "존재하지 않는 벌금 기록입니다."),
 
     //메일
     MAIL_SEND_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "메일 전송중 오류가 발생했습니다."),

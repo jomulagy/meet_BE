@@ -37,7 +37,6 @@ public class GetAttendanceService implements GetAttendanceUseCase {
                         .memberName(attendance.getMember().getName())
                         .isAttended(attendance.getIsAttended())
                         .consecutiveAbsences(attendance.getConsecutiveAbsences())
-                        .penaltyPaid(attendance.getPenaltyPaid())
                         .attendanceDate(attendance.getAttendanceDate())
                         .build())
                 .collect(Collectors.toList());

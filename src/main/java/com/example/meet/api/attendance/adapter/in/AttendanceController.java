@@ -1,8 +1,10 @@
 package com.example.meet.api.attendance.adapter.in;
 
 import com.example.meet.api.attendance.adapter.in.dto.in.SaveAttendanceRequestDto;
+import com.example.meet.api.attendance.adapter.in.dto.out.AbsencesResponseDto;
 import com.example.meet.api.attendance.adapter.in.dto.out.GetAttendanceResponseDto;
 import com.example.meet.api.attendance.adapter.in.dto.out.SaveAttendanceResponseDto;
+import com.example.meet.api.attendance.application.port.in.GetAbsencesUseCase;
 import com.example.meet.api.attendance.application.port.in.GetAttendanceUseCase;
 import com.example.meet.api.attendance.application.port.in.SaveAttendanceUseCase;
 import com.example.meet.infrastructure.CommonResponse;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 public class AttendanceController {
     private final SaveAttendanceUseCase saveAttendanceUseCase;
     private final GetAttendanceUseCase getAttendanceUseCase;
+    private final GetAbsencesUseCase getAbsencesUseCase;
 
     @PostMapping
     @Operation(summary = "출석 체크/수정", description = "모임 참석/불참 회원 기록 (기존 기록이 있으면 업데이트)")
@@ -33,5 +36,11 @@ public class AttendanceController {
     public CommonResponse<GetAttendanceResponseDto> getAttendance(
             @PathVariable(name = "postId") Long postId) {
         return CommonResponse.success(getAttendanceUseCase.getAttendanceByPostId(postId));
+    }
+
+    @GetMapping("/absences")
+    @Operation(summary = "변절현황 조회", description = "연속 불참 1회 이상인 회원 목록 조회")
+    public CommonResponse<AbsencesResponseDto> getAbsences() {
+        return CommonResponse.success(getAbsencesUseCase.getAbsences());
     }
 }

@@ -15,4 +15,6 @@ public interface GetAttendancePort {
     List<Attendance> findAllByPost(Post post);
 
     Optional<Attendance> findLatestByMemberExcluding(Member member, Long excludeId);
+
+    List<Attendance> findLatestAttendanceForAllMembers();
 }

@@ -81,6 +81,6 @@ public class SendMessageService implements SendMessageUseCase {
                 .build();
 
         Message.DEPOSIT_PENALTY.setTemplateArgs(templateArgs);
-        messageManager.send(Message.DEPOSIT_PENALTY, member).block();
+        messageManager.sendMe(Message.DEPOSIT_PENALTY).block();
     }
 }

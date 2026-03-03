@@ -17,4 +17,5 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
 
     // 특정 기록을 제외한 가장 최근 기록 조회 (날짜 및 ID 기준)
     Optional<Attendance> findFirstByMemberAndIdNotOrderByAttendanceDateDescIdDesc(Member member, Long excludeId);
+
 }
