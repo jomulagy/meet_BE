@@ -227,7 +227,7 @@ public class CreatePostService implements CreatePostUseCase {
         LocalDate today = LocalDate.now();
 
         // 다음 달 계산
-        int nextMonth = today.getMonthValue() + 1;
+        int nextMonth = today.getMonthValue() + 3;
         if (nextMonth > 12) {
             nextMonth = 1;
             today = today.plusYears(1);
