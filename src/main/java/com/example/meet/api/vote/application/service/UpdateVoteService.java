@@ -3,7 +3,6 @@ package com.example.meet.api.vote.application.service;
 import com.example.meet.api.auth.application.port.in.GetLogginedInfoUseCase;
 import com.example.meet.api.member.application.domain.entity.Member;
 import com.example.meet.infrastructure.enumulation.ErrorCode;
-import com.example.meet.infrastructure.enumulation.PostType;
 import com.example.meet.infrastructure.exception.BusinessException;
 import com.example.meet.api.message.application.port.in.SendMessageUseCase;
 import com.example.meet.api.participate.application.port.in.CreateParticipateUseCase;
@@ -115,11 +114,11 @@ public class UpdateVoteService implements UpdateVoteUseCase {
             updateVotePort.updateResult(vote.getId(), result);
         }
 
-        if(post.getType().equals(PostType.TRAVEL) || post.getType().equals(PostType.MEET)) {
+        if(post.getType().requiresParticipation()) {
             createParticipate.create(post.getId());
+        } else {
+            sendMessageUseCase.sendVoteTerminated(post.getTitle(), post.getId().toString());
         }
-
-        sendMessageUseCase.sendVoteTerminated(post.getTitle(), post.getId().toString());
 
         updatePostUseCase.terminateVote(post.getId());
     }

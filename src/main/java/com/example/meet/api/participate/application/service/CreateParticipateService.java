@@ -1,5 +1,6 @@
 package com.example.meet.api.participate.application.service;
 
+import com.example.meet.api.message.application.port.in.SendMessageUseCase;
 import com.example.meet.batch.application.port.in.RegisterJobUseCase;
 import com.example.meet.api.participate.application.domain.entity.ParticipateVote;
 import com.example.meet.api.participate.application.domain.entity.ParticipateVoteItem;
@@ -22,6 +23,7 @@ public class CreateParticipateService implements CreateParticipateUseCase {
     private final CreateParticipateVotePort createParticipateVotePort;
     private final CreateParticipateVoteItemPort createParticipateVoteItemPort;
     private final RegisterJobUseCase registerJobUseCase;
+    private final SendMessageUseCase sendMessageUseCase;
 
     @Override
     @Transactional
@@ -39,6 +41,8 @@ public class CreateParticipateService implements CreateParticipateUseCase {
         ParticipateVote saved = createParticipateVotePort.create(participateVote);
 
         addVoteItems(saved);
+
+        sendMessageUseCase.sendParticipate(post.getTitle(), post.getId().toString());
 
         registerJobUseCase.terminateParticipateVote(saved);
     }

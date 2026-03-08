@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 public enum Message {
-    PARTICIPATE("108553"),
+    PARTICIPATE("108553"), // 참여여부 투표
     VOTE("108568"), // 투표가 등록 되었습니다.
     POST("127222"), // 글 등록
     VOTE_ITEM_CREATED("129489"), // 투표 항목 등록
