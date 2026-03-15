@@ -2,12 +2,12 @@ package com.example.meet.api.participate.application.service;
 
 import com.example.meet.api.auth.application.port.in.GetLogginedInfoUseCase;
 import com.example.meet.api.member.application.domain.entity.Member;
+import com.example.meet.api.message.application.port.in.SendMessageUseCase;
 import com.example.meet.api.participate.adapter.in.dto.in.TerminateParticipateVoteRequestDto;
 import com.example.meet.api.participate.adapter.in.dto.in.VoteParticipateVoteRequestDto;
 import com.example.meet.api.participate.application.domain.entity.ParticipateVote;
 import com.example.meet.api.participate.application.domain.entity.ParticipateVoteItem;
 import com.example.meet.api.participate.application.port.in.UpdateParticipateVoteUseCase;
-import com.example.meet.api.participate.application.port.out.GetParticipateVotePort;
 import com.example.meet.api.participate.application.port.out.UpdateParticipateVotePort;
 import com.example.meet.api.post.application.domain.entity.Post;
 import com.example.meet.api.post.application.port.in.GetPostUseCase;
@@ -23,8 +23,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UpdateParticipateVoteService implements UpdateParticipateVoteUseCase {
     private final GetLogginedInfoUseCase getLogginedInfoUseCase;
-    private final GetParticipateVotePort getParticipateVotePort;
     private final UpdateParticipateVotePort updateParticipateVotePort;
+    private final SendMessageUseCase sendMessageUseCase;
 
     private final GetPostUseCase getPostUseCase;
 
@@ -44,6 +44,7 @@ public class UpdateParticipateVoteService implements UpdateParticipateVoteUseCas
 
         updateParticipateVotePort.terminate(vote.getId(), participants.size());
 
+        sendMessageUseCase.sendParticipateVoteTerminated(post.getTitle(), post.getId());
     }
 
     @PreAuthorize("@memberPermissionEvaluator.hasAccess(authentication)")

@@ -30,6 +30,11 @@ public class MemberPermissionEvaluator {
     }
 
     public boolean hasAdminAccess(Authentication authentication) {
+        if (authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(a -> "ROLE_SYSTEM".equals(a.getAuthority()))) {
+            return true;
+        }
+
         Member member = getMemberPort.getMemberById(getMemberId(authentication))
                 .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_EXISTS));
 

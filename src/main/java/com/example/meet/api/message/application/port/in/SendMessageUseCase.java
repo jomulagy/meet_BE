@@ -11,6 +11,8 @@ public interface SendMessageUseCase {
 
     void sendVoteTerminated(String title, String id);
 
+    void sendParticipateVoteTerminated(String title, Long id);
+
     void sendParticipantInputReminder(String title, Long id);
 
     void sendDepositPenalty(Member member, String meetTitle, String deadline);

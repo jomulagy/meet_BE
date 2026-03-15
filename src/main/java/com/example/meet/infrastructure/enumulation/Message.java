@@ -16,6 +16,7 @@ public enum Message {
     DEPOSIT_PENALTY("129512"), // 연속 3회 불참 벌금 알림
     DEPOSIT_CHECK_ADMIN("129513"), // 관리자에게 입금 확인 요청
     PENALTY_BLOCK_ADMIN("116807"), // 벌금 미납 권한 차단 알림
+    PARTICIPATE_TERMINATE("130695") // 참여여부 투표 종료
     ;
 
     private String id;

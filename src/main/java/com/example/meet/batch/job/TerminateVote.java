@@ -48,7 +48,6 @@ public class TerminateVote extends CommonJob {
         }
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     private void process(Vote vote) {
         VoteItem result;
         List<VoteItem> voteItemList = vote.getVoteItems();
