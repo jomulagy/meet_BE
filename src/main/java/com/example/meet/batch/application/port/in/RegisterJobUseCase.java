@@ -15,4 +15,6 @@ public interface RegisterJobUseCase {
     void checkDepositStatus(Long memberId, Long postId, String postTitle, String memberName, LocalDate checkDate);
 
     void cancelCheckDepositStatus(Long memberId, Long postId, LocalDate checkDate);
+
+    void remindVoteEnd(Vote vote);
 }

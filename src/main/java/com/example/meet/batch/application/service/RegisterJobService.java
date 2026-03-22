@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @Service
 @RequiredArgsConstructor
@@ -131,6 +132,43 @@ public class RegisterJobService implements RegisterJobUseCase {
         Trigger trigger = TriggerBuilder.newTrigger()
                 .forJob(jobDetail)
                 .withIdentity("CheckDepositStatusTrigger_" + memberId + "_" + postId + "_" + checkDate)
+                .withSchedule(CronScheduleBuilder.cronSchedule(cronExpression))
+                .build();
+
+        try {
+            scheduler.scheduleJob(jobDetail, trigger);
+        } catch (SchedulerException e) {
+            throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public void remindVoteEnd(Vote vote) {
+        // 투표 종료(terminateVote) 30분 전에 알림 발송
+        LocalDateTime terminateTime = vote.getEndDate().plusDays(1).toLocalDate().atTime(0, 0, 0);
+        LocalDateTime remindTime = terminateTime.minusMinutes(30);
+
+        // 알림 시간이 현재보다 이전이면 등록하지 않음
+        if (remindTime.isBefore(LocalDateTime.now(ZoneId.systemDefault()))) {
+            return;
+        }
+
+        String cronExpression = String.format("%d %d %d %d %d ? %d",
+                remindTime.getSecond(),
+                remindTime.getMinute(),
+                remindTime.getHour(),
+                remindTime.getDayOfMonth(),
+                remindTime.getMonthValue(),
+                remindTime.getYear());
+
+        JobDetail jobDetail = JobBuilder.newJob(com.example.meet.batch.job.SendVoteEndReminder.class)
+                .withIdentity("SendVoteEndReminder_" + vote.getId())
+                .usingJobData("voteId", vote.getId())
+                .build();
+
+        Trigger trigger = TriggerBuilder.newTrigger()
+                .forJob(jobDetail)
+                .withIdentity("SendVoteEndReminderTrigger_" + vote.getId())
                 .withSchedule(CronScheduleBuilder.cronSchedule(cronExpression))
                 .build();
 

@@ -95,4 +95,16 @@ public class SendMessageService implements SendMessageUseCase {
         Message.DEPOSIT_PENALTY.setTemplateArgs(templateArgs);
         messageManager.sendMe(Message.DEPOSIT_PENALTY).block();
     }
+
+    @Override
+    public void sendVoteEndReminder(String title, String id) {
+        TemplateArgs templateArgs = TemplateArgs.builder()
+                .title(title)
+                .but(id)
+                .scheduleType(null)
+                .build();
+
+        Message.VOTE_END_REMIND.setTemplateArgs(templateArgs);
+        messageManager.sendAll(Message.VOTE_END_REMIND).block();
+    }
 }

@@ -53,5 +53,6 @@ public class CreateVoteService implements CreateVoteUseCase {
         Vote savedVote = createVotePort.create(vote);
 
         registerJobUseCase.terminateVote(savedVote);
+        registerJobUseCase.remindVoteEnd(savedVote);
     }
 }
