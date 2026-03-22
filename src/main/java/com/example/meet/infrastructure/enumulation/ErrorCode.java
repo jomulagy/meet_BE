@@ -50,7 +50,9 @@ public enum ErrorCode {
     //메일
     MAIL_SEND_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "메일 전송중 오류가 발생했습니다."),
 
-    INVALID_INPUT_VALUE(HttpStatus.BAD_REQUEST, "입력값 오류 입니다.");
+    INVALID_INPUT_VALUE(HttpStatus.BAD_REQUEST, "입력값 오류 입니다."),
+
+    INVALID_DATE_FORMAT(HttpStatus.BAD_REQUEST, "날짜 형식이 올바르지 않습니다. (년/월: yyyy-MM, 년/월/일/시간: yyyy-MM-dd + HH:mm, 또는 null)");
 
     private final HttpStatus httpStatus;
     private final String message;

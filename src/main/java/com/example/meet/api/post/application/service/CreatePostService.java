@@ -4,9 +4,11 @@ import com.example.meet.api.auth.application.port.in.GetLogginedInfoUseCase;
 import com.example.meet.batch.application.port.in.RegisterJobUseCase;
 import com.example.meet.api.member.application.domain.entity.Member;
 import com.example.meet.infrastructure.dto.TemplateArgs;
+import com.example.meet.infrastructure.enumulation.ErrorCode;
 import com.example.meet.infrastructure.enumulation.Message;
 import com.example.meet.infrastructure.enumulation.VoteStatus;
 import com.example.meet.infrastructure.enumulation.VoteType;
+import com.example.meet.infrastructure.exception.BusinessException;
 import com.example.meet.infrastructure.utils.MessageManager;
 import com.example.meet.infrastructure.enumulation.PostType;
 import com.example.meet.infrastructure.utils.ScheduleManager;
@@ -27,6 +29,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 @Service
@@ -39,6 +42,7 @@ public class CreatePostService implements CreatePostUseCase {
 
     private final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
+    private final DateTimeFormatter YEAR_MONTH_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM");
 
     @Override
     @Transactional
@@ -49,12 +53,30 @@ public class CreatePostService implements CreatePostUseCase {
 
         LocalDate date = null;
         LocalTime time = null;
+        YearMonth yearMonth = null;
 
-        if(inDto.getDate() != null){
-            date = LocalDate.parse(inDto.getDate(), DATE_FORMATTER);
-        }
-        if(inDto.getTime() != null){
-            time = LocalTime.parse(inDto.getTime(), TIME_FORMATTER);
+        String dateStr = inDto.getDate();
+        String timeStr = inDto.getTime();
+
+        if (dateStr == null && timeStr == null) {
+            // null case: 다음 분기 금/토 자동 생성
+        } else if (dateStr != null && timeStr == null && dateStr.matches("\\d{4}-\\d{2}")) {
+            // 년/월 case: 해당 월의 금/토 생성
+            try {
+                yearMonth = YearMonth.parse(dateStr, YEAR_MONTH_FORMATTER);
+            } catch (DateTimeParseException e) {
+                throw new BusinessException(ErrorCode.INVALID_DATE_FORMAT);
+            }
+        } else if (dateStr != null && timeStr != null && dateStr.matches("\\d{4}-\\d{2}-\\d{2}")) {
+            // 년/월/일/시간 case: 날짜 확정
+            try {
+                date = LocalDate.parse(dateStr, DATE_FORMATTER);
+                time = LocalTime.parse(timeStr, TIME_FORMATTER);
+            } catch (DateTimeParseException e) {
+                throw new BusinessException(ErrorCode.INVALID_DATE_FORMAT);
+            }
+        } else {
+            throw new BusinessException(ErrorCode.INVALID_DATE_FORMAT);
         }
 
         LocalDateTime dateTime = null;
@@ -72,7 +94,11 @@ public class CreatePostService implements CreatePostUseCase {
         //일정 투표 연결
         if(dateTime == null){
             scheduleVote = createScheduleVote(inDto.getVoteDeadline());
-            setScheduleVoteItems(scheduleVote);
+            if (yearMonth != null) {
+                setScheduleVoteItemsByYearMonth(scheduleVote, yearMonth);
+            } else {
+                setScheduleVoteItems(scheduleVote);
+            }
             post.addVote(scheduleVote);
         }
 
@@ -221,6 +247,19 @@ public class CreatePostService implements CreatePostUseCase {
                 .type(VoteType.PLACE)
                 .isDuplicate(true)
                 .build();
+    }
+
+    private void setScheduleVoteItemsByYearMonth(Vote scheduleVote, YearMonth yearMonth) {
+        LocalDate firstDay = yearMonth.atDay(1);
+        LocalDate lastDay = yearMonth.atEndOfMonth();
+
+        List<LocalDateTime> fridaysAndSaturdays = ScheduleManager.getFridaysAndSaturdays(firstDay, lastDay);
+
+        for (LocalDateTime date : fridaysAndSaturdays) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            VoteItem scheduleVoteItem = VoteItem.builder().content(date.format(formatter)).vote(scheduleVote).build();
+            scheduleVote.getVoteItems().add(scheduleVoteItem);
+        }
     }
 
     private void setScheduleVoteItems(Vote scheduleVote) {
