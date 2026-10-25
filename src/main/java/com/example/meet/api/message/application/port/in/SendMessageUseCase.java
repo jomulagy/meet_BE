@@ -15,6 +15,8 @@ public interface SendMessageUseCase {
 
     void sendParticipantInputReminder(String title, Long id);
 
+    void sendMeetNotification(String title, Long id, Member member);
+
     void sendDepositPenalty(Member member, String meetTitle, String deadline);
 
     void sendVoteEndReminder(String title, String id);

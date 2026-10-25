@@ -12,6 +12,8 @@ public interface RegisterJobUseCase {
 
     void updateParticipants(Long postId, LocalDate meetDate);
 
+    void notifyMeetOneWeekBefore(Long postId, LocalDate meetDate);
+
     void checkDepositStatus(Long memberId, Long postId, String postTitle, String memberName, LocalDate checkDate);
 
     void cancelCheckDepositStatus(Long memberId, Long postId, LocalDate checkDate);

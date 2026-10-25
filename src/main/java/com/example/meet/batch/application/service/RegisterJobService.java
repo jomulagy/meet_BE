@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
@@ -103,6 +104,38 @@ public class RegisterJobService implements RegisterJobUseCase {
                 .build();
 
         try {
+            scheduler.scheduleJob(jobDetail, trigger);
+        } catch (SchedulerException e) {
+            throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public void notifyMeetOneWeekBefore(Long postId, LocalDate meetDate) {
+        LocalDateTime reminderDate = meetDate.minusDays(7).atTime(9, 0);
+        JobKey jobKey = JobKey.jobKey("NotifyMeet_" + postId);
+        TriggerKey triggerKey = TriggerKey.triggerKey("NotifyMeetTrigger_" + postId);
+
+        try {
+            if (scheduler.checkExists(jobKey)) {
+                scheduler.deleteJob(jobKey);
+            }
+
+            if (!reminderDate.isAfter(LocalDateTime.now(ZoneId.systemDefault()))) {
+                return;
+            }
+
+            JobDetail jobDetail = JobBuilder.newJob(com.example.meet.batch.job.NotifyMeet.class)
+                    .withIdentity(jobKey)
+                    .usingJobData("postId", postId)
+                    .build();
+
+            Trigger trigger = TriggerBuilder.newTrigger()
+                    .forJob(jobDetail)
+                    .withIdentity(triggerKey)
+                    .startAt(Date.from(reminderDate.atZone(ZoneId.systemDefault()).toInstant()))
+                    .build();
+
             scheduler.scheduleJob(jobDetail, trigger);
         } catch (SchedulerException e) {
             throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR);

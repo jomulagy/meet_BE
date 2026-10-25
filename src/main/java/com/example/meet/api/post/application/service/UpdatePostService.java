@@ -73,5 +73,7 @@ public class UpdatePostService implements UpdatePostUseCase {
 
         // 모임날짜의 다음날 12시에 참여자 입력 알림 배치 작업 등록
         registerJobUseCase.updateParticipants(inDto.getPostId(), inDto.getMeetDate());
+        // 모임 날짜 일주일 전 오전 9시에 모임 알림 배치 작업 등록
+        registerJobUseCase.notifyMeetOneWeekBefore(inDto.getPostId(), inDto.getMeetDate());
     }
 }

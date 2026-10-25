@@ -86,6 +86,18 @@ public class SendMessageService implements SendMessageUseCase {
     }
 
     @Override
+    public void sendMeetNotification(String title, Long id, Member member) {
+        TemplateArgs templateArgs = TemplateArgs.builder()
+                .title(title)
+                .but(String.valueOf(id))
+                .scheduleType(null)
+                .build();
+
+        Message.MEET_NOTIFICATION.setTemplateArgs(templateArgs);
+        messageManager.send(Message.MEET_NOTIFICATION, member).block();
+    }
+
+    @Override
     public void sendDepositPenalty(Member member, String meetTitle, String deadline) {
         TemplateArgs templateArgs = TemplateArgs.builder()
                 .title(meetTitle)
