@@ -16,6 +16,7 @@ import com.example.meet.api.post.application.domain.entity.Post;
 import com.example.meet.api.post.application.port.in.GetPostUseCase;
 import com.example.meet.batch.application.port.in.RegisterJobUseCase;
 import com.example.meet.infrastructure.enumulation.ErrorCode;
+import com.example.meet.infrastructure.enumulation.MemberRole;
 import com.example.meet.infrastructure.exception.BusinessException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +24,10 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -42,25 +45,42 @@ public class SaveAttendanceService implements SaveAttendanceUseCase {
     @Override
     public SaveAttendanceResponseDto saveAttendance(SaveAttendanceRequestDto requestDto) {
         Post post = getPostUseCase.getEntity(requestDto.getPostId());
+        List<Long> attendedMembers = Optional.ofNullable(requestDto.getAttendedMembers()).orElseGet(List::of);
+        List<Long> absentMembers = Optional.ofNullable(requestDto.getAbsentMembers()).orElseGet(List::of);
+        Set<Long> submittedMemberIds = new HashSet<>(attendedMembers);
+        submittedMemberIds.addAll(absentMembers);
 
         List<String> penaltyNotifiedMembers = new ArrayList<>();
 
-        for (Long memberId : requestDto.getAttendedMembers()) {
+        int totalAttended = 0;
+        int totalAbsent = 0;
+
+        for (Long memberId : attendedMembers) {
             Member member = getMemberPort.getMemberById(memberId)
                     .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_EXISTS));
             saveAttendanceRecord(post, member, true, penaltyNotifiedMembers);
+            totalAttended++;
         }
 
-        for (Long memberId : requestDto.getAbsentMembers()) {
+        for (Long memberId : absentMembers) {
             Member member = getMemberPort.getMemberById(memberId)
                     .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_EXISTS));
             saveAttendanceRecord(post, member, false, penaltyNotifiedMembers);
+            totalAbsent++;
+        }
+
+        for (Member member : getMemberPort.getAllMembers()) {
+            if (MemberRole.denied.equals(member.getRole()) || submittedMemberIds.contains(member.getId())) {
+                continue;
+            }
+            saveAttendanceRecord(post, member, false, penaltyNotifiedMembers);
+            totalAbsent++;
         }
 
         return SaveAttendanceResponseDto.builder()
                 .postId(post.getId())
-                .totalAttended(requestDto.getAttendedMembers().size())
-                .totalAbsent(requestDto.getAbsentMembers().size())
+                .totalAttended(totalAttended)
+                .totalAbsent(totalAbsent)
                 .penaltyNotifiedMembers(penaltyNotifiedMembers)
                 .build();
     }

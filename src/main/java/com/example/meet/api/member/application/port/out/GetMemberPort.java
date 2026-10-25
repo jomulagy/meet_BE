@@ -8,6 +8,7 @@ import java.util.Optional;
 public interface GetMemberPort {
     Optional<Member> getMemberById(Long memberId);
 
+    List<Member> getAllMembers();
 
     List<String> getAllUUIDs();
 }

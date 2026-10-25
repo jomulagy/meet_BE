@@ -26,6 +26,11 @@ public class GetMemberAdapter implements GetMemberPort {
     }
 
     @Override
+    public List<Member> getAllMembers() {
+        return memberRepository.findAll();
+    }
+
+    @Override
     public List<String> getAllUUIDs() {
         return jpaQueryFactory
                 .select(member.uuid)
