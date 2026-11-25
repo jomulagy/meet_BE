@@ -71,7 +71,7 @@ public class SendMessageService implements SendMessageUseCase {
                 .build();
 
         Message.PARTICIPATE_TERMINATE.setTemplateArgs(templateArgs);
-        messageManager.sendAll(Message.VOTE_TERMINATE).block();
+        messageManager.sendAll(Message.PARTICIPATE_TERMINATE).block();
     }
 
     @Override
